@@ -121,7 +121,7 @@
         "motion": "add-step",
         "motionProfile": {
           "camera": "static",
-          "emphasis": "ghost-insert",
+          "emphasis": "layout-insert",
           "name": "add-step",
           "pointer": "cursor-click"
         },
@@ -167,7 +167,7 @@
         "motion": "add-step",
         "motionProfile": {
           "camera": "static",
-          "emphasis": "ghost-insert",
+          "emphasis": "layout-insert",
           "name": "add-step",
           "pointer": "cursor-click"
         },
@@ -188,6 +188,6 @@
       }
     ]
   },
-  "generatedAt": "2026-10-06T02:35:31.238Z",
+  "generatedAt": "2026-10-06T02:55:52.943Z",
   "schemaVersion": 1
 }

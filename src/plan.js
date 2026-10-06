@@ -21,7 +21,7 @@ const MOTION_PROFILES = {
   },
   flow: {
     camera: "static",
-    emphasis: "ghost-insert",
+    emphasis: "layout-insert",
     name: "add-step",
     pointer: "cursor-click",
   },

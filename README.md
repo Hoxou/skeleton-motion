@@ -20,6 +20,13 @@ Tool scans source without executing it, ranks visual concepts, extracts light/da
 Batch generation is intentionally deferred. Future mode can use ranked concepts already stored in manifest to create a coordinated asset set.
 The set should share palette, density, geometry, and line treatment while rotating motion profiles; zoom is reserved for moments that benefit from focus.
 
+## Motion rules
+
+- Model meaningful before/after layouts. Insertion moves existing objects apart before the new object settles into the opened space.
+- Never animate a stroke from zero length. Keep connector geometry valid and reveal complete segments with opacity or a non-zero clip.
+- Use motion tokens by role: gentle spring-like settling for layout, quick easing for direct feedback, and smooth in/out travel for pointers.
+- Add only slight overshoot to primary movement. Supporting motion should stay quiet and should not repeat every effect used elsewhere in the set.
+
 ## Install
 
 ```bash

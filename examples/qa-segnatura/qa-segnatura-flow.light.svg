@@ -25,11 +25,15 @@
     <rect x="24" y="22" width="672" height="361" rx="var(--radius)" fill="url(#dots)" opacity=".62" />
 
     <path d="M197.5 128 V277" stroke="var(--border-strong)" stroke-width="2" />
-    <path d="M197.5 128 V277" stroke="var(--accent)" stroke-width="2.5" stroke-dasharray="149" stroke-dashoffset="149">
-      <animate attributeName="stroke-dashoffset" values="149;149;0;0;149" keyTimes="0;.61;.76;.9;1" dur="5s" repeatCount="indefinite" />
+    <path d="M197.5 128 V162.5" stroke="var(--accent)" stroke-width="2.5" opacity="0">
+      <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;.68;.76;.9;1" dur="5s" repeatCount="indefinite" />
+    </path>
+    <path d="M197.5 242.5 V277" stroke="var(--accent)" stroke-width="2.5" opacity="0">
+      <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;.7;.78;.9;1" dur="5s" repeatCount="indefinite" />
     </path>
 
     <g>
+      <animateTransform attributeName="transform" type="translate" values="0 56;0 56;0 -2;0 0;0 0;0 56" keyTimes="0;.31;.42;.47;.88;1" calcMode="spline" keySplines=".22 .8 .2 1;.22 .8 .2 1;.22 .8 .2 1;.22 .8 .2 1;.22 .8 .2 1" dur="5s" repeatCount="indefinite" />
       <rect x="43" y="48" width="309" height="80" rx="var(--radius)" fill="var(--surface)" stroke="var(--border-strong)" />
       <circle cx="79" cy="88" r="15" fill="var(--muted)" />
       <path d="M72 88h14M79 81v14" stroke="var(--ink)" opacity=".4" stroke-width="2.2" stroke-linecap="round" />
@@ -44,7 +48,7 @@
 
     <g id="inserted-card" opacity="0" transform="translate(197.5 202.5)">
       <g>
-        <animateTransform attributeName="transform" type="scale" values=".94;.94;1.025;1;1" keyTimes="0;.34;.41;.48;1" calcMode="spline" keySplines=".22 1 .36 1;.22 1 .36 1;.22 1 .36 1;.22 1 .36 1" dur="5s" repeatCount="indefinite" />
+        <animateTransform attributeName="transform" type="scale" values=".94;.94;1.018;1;1" keyTimes="0;.36;.43;.49;1" calcMode="spline" keySplines=".22 .8 .2 1;.22 .8 .2 1;.22 .8 .2 1;.22 .8 .2 1" dur="5s" repeatCount="indefinite" />
         <g transform="translate(-197.5 -202.5)">
           <rect x="43" y="162.5" width="309" height="80" rx="var(--radius)" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="2" stroke-dasharray="7 6">
             <animate attributeName="opacity" values="1;1;0;0;1" keyTimes="0;.6;.68;.9;1" dur="5s" repeatCount="indefinite" />
@@ -61,17 +65,23 @@
     </g>
 
     <g>
+      <animateTransform attributeName="transform" type="translate" values="0 -56;0 -56;0 2;0 0;0 0;0 -56" keyTimes="0;.31;.42;.47;.88;1" calcMode="spline" keySplines=".22 .8 .2 1;.22 .8 .2 1;.22 .8 .2 1;.22 .8 .2 1;.22 .8 .2 1" dur="5s" repeatCount="indefinite" />
       <rect x="43" y="277" width="309" height="80" rx="var(--radius)" fill="var(--surface)" stroke="var(--border-strong)" />
       <circle cx="79" cy="317" r="15" fill="var(--muted)" />
       <path d="M73 311l12 12M85 311l-12 12" stroke="var(--ink)" opacity=".32" stroke-width="2.2" stroke-linecap="round" />
       <rect x="110" y="304" width="102" height="5" rx="2.5" fill="var(--ink)" opacity="0.2" /><rect x="110" y="318" width="158" height="5" rx="2.5" fill="var(--ink)" opacity="0.1" />
     </g>
 
-    <g>
-      <rect x="368" y="48" width="309" height="309" rx="var(--radius)" fill="var(--surface)" stroke="var(--border)" />
-      <rect x="388" y="68" width="72" height="7" rx="3.5" fill="var(--ink)" opacity=".14" />
-      <rect x="468" y="68" width="42" height="7" rx="3.5" fill="var(--ink)" opacity=".07" />
-      <g><rect x="388" y="91" width="269" height="70" rx="var(--radius)" fill="var(--surface)" stroke="var(--border)"/><rect x="388" y="91" width="269" height="70" rx="var(--radius)" fill="var(--accent-soft)" stroke="var(--accent)" opacity="0"><animate attributeName="opacity" values="0;0;.18;.18;0" keyTimes="0;.45;.52;.64;1" dur="5s" repeatCount="indefinite" /></rect><rect x="406" y="111" width="30" height="30" rx="var(--radius)" fill="var(--accent-soft)"/><rect x="452" y="118" width="104" height="8" rx="4" fill="var(--ink)" opacity=".2"/></g><g><rect x="388" y="171" width="269" height="70" rx="var(--radius)" fill="var(--surface)" stroke="var(--border)"/><rect x="388" y="171" width="269" height="70" rx="var(--radius)" fill="var(--accent-soft)" stroke="var(--accent)" opacity="0"></rect><rect x="406" y="191" width="30" height="30" rx="var(--radius)" fill="var(--muted)"/><rect x="452" y="198" width="82" height="8" rx="4" fill="var(--ink)" opacity=".11"/></g><g><rect x="388" y="251" width="269" height="70" rx="var(--radius)" fill="var(--surface)" stroke="var(--border)"/><rect x="388" y="251" width="269" height="70" rx="var(--radius)" fill="var(--accent-soft)" stroke="var(--accent)" opacity="0"></rect><rect x="406" y="271" width="30" height="30" rx="var(--radius)" fill="var(--muted)"/><rect x="452" y="278" width="82" height="8" rx="4" fill="var(--ink)" opacity=".11"/></g>
+    <g transform="translate(522.5 202.5)">
+      <g>
+        <animateTransform attributeName="transform" type="scale" values=".638;.638;1.006;1;1;.638" keyTimes="0;.31;.42;.47;.88;1" calcMode="spline" keySplines=".22 .8 .2 1;.22 .8 .2 1;.22 .8 .2 1;.22 .8 .2 1;.22 .8 .2 1" dur="5s" repeatCount="indefinite" />
+        <g transform="translate(-522.5 -202.5)">
+          <rect x="368" y="48" width="309" height="309" rx="var(--radius)" fill="var(--surface)" stroke="var(--border)" />
+          <rect x="388" y="68" width="72" height="7" rx="3.5" fill="var(--ink)" opacity=".14" />
+          <rect x="468" y="68" width="42" height="7" rx="3.5" fill="var(--ink)" opacity=".07" />
+          <g><rect x="388" y="91" width="269" height="70" rx="var(--radius)" fill="var(--surface)" stroke="var(--border)"/><rect x="388" y="91" width="269" height="70" rx="var(--radius)" fill="var(--accent-soft)" stroke="var(--accent)" opacity="0"><animate attributeName="opacity" values="0;0;.18;.18;0" keyTimes="0;.45;.52;.64;1" dur="5s" repeatCount="indefinite" /></rect><rect x="406" y="111" width="30" height="30" rx="var(--radius)" fill="var(--accent-soft)"/><rect x="452" y="118" width="104" height="8" rx="4" fill="var(--ink)" opacity=".2"/></g><g><rect x="388" y="171" width="269" height="70" rx="var(--radius)" fill="var(--surface)" stroke="var(--border)"/><rect x="388" y="171" width="269" height="70" rx="var(--radius)" fill="var(--accent-soft)" stroke="var(--accent)" opacity="0"></rect><rect x="406" y="191" width="30" height="30" rx="var(--radius)" fill="var(--muted)"/><rect x="452" y="198" width="82" height="8" rx="4" fill="var(--ink)" opacity=".11"/></g><g><rect x="388" y="251" width="269" height="70" rx="var(--radius)" fill="var(--surface)" stroke="var(--border)"/><rect x="388" y="251" width="269" height="70" rx="var(--radius)" fill="var(--accent-soft)" stroke="var(--accent)" opacity="0"></rect><rect x="406" y="271" width="30" height="30" rx="var(--radius)" fill="var(--muted)"/><rect x="452" y="278" width="82" height="8" rx="4" fill="var(--ink)" opacity=".11"/></g>
+        </g>
+      </g>
     </g>
     
     <g id="cursor" opacity="0">
@@ -84,7 +94,7 @@
   </circle>
       <path d="M2.5 2 V27 L10 19.8 H21.5 Z" fill="var(--accent)" stroke="var(--cursor-outline)" stroke-width="2.2" stroke-linejoin="round" filter="url(#cursor-shadow)" />
       <animate attributeName="opacity" values="0;1;1;0;0" keyTimes="0;.07;.85;.92;1" dur="5s" repeatCount="indefinite" />
-      <animateTransform attributeName="transform" type="translate" values="654 350;654 350;197.5 202.5;197.5 202.5;506 126;506 126;270 202.5;270 202.5;654 350" keyTimes="0;0.07;0.29;0.38;0.53;0.62;0.76;0.87;1" calcMode="spline" keySplines=".22 1 .36 1;.22 1 .36 1;.22 1 .36 1;.22 1 .36 1;.22 1 .36 1;.22 1 .36 1;.22 1 .36 1;.22 1 .36 1" dur="5s" repeatCount="indefinite" />
+      <animateTransform attributeName="transform" type="translate" values="654 350;654 350;197.5 202.5;197.5 202.5;506 126;506 126;270 202.5;270 202.5;654 350" keyTimes="0;0.07;0.29;0.38;0.53;0.62;0.76;0.87;1" calcMode="spline" keySplines=".65 0 .35 1;.65 0 .35 1;.65 0 .35 1;.65 0 .35 1;.65 0 .35 1;.65 0 .35 1;.65 0 .35 1;.65 0 .35 1" dur="5s" repeatCount="indefinite" />
     </g>
   
 </svg>

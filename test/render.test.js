@@ -34,7 +34,10 @@ test("renders a self-contained animated SVG at requested resolution", () => {
   assert.match(svg, /M2\.5 2 V27 L10 19\.8 H21\.5 Z/);
   assert.match(svg, /id="inserted-card"/);
   assert.match(svg, /stroke-dasharray="7 6"/);
-  assert.match(svg, /keySplines="\.22 1 \.36 1/);
+  assert.match(svg, /values="0 56;0 56;0 -2;0 0;0 0;0 56"/);
+  assert.match(svg, /values="\.638;\.638;1\.006;1;1;\.638"/);
+  assert.match(svg, /keySplines="\.22 \.8 \.2 1/);
+  assert.doesNotMatch(svg, /stroke-dashoffset/);
   assert.match(svg, /repeatCount="indefinite"/);
   assert.doesNotMatch(svg, /<script|href="https?:\/\//);
 });
