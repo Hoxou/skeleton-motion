@@ -10,8 +10,8 @@ const analysis = {
     ranked: [{ kind: "flow", score: 80 }],
   },
   palettes: {
-    dark: { accent: "#586df7", background: "#111", border: "#333", foreground: "#fafafa", muted: "#27272a", mutedForeground: "#a1a1aa", radius: "0rem", surface: "#202024" },
-    light: { accent: "#142ce3", background: "#fff", border: "#e5e7eb", foreground: "#171717", muted: "#f4f4f5", mutedForeground: "#71717a", radius: "0rem", surface: "#fff" },
+    dark: { accent: "#586df7", background: "#111", border: "#333", canvas: "#161620", foreground: "#fafafa", muted: "#27272a", mutedForeground: "#a1a1aa", radius: "0rem", surface: "#202024" },
+    light: { accent: "#142ce3", background: "#fff", border: "#e5e7eb", canvas: "#f7f5ff", foreground: "#171717", muted: "#f4f4f5", mutedForeground: "#71717a", radius: "0rem", surface: "#fff" },
   },
   slug: "qa-segnatura",
   source: { input: "/repo", type: "repository" },
@@ -25,6 +25,11 @@ test("plans one compact scene and preserves square geometry", () => {
   assert.equal(scene.containers, 5);
   assert.equal(scene.palette.radius, 0);
   assert.equal(scene.backdrop, "dots");
+  assert.deepEqual(scene.composition, {
+    backgroundOwner: "host",
+    frame: "none",
+    texture: "transparent-overlay",
+  });
 });
 
 test("renders a self-contained animated SVG at requested resolution", () => {
@@ -47,6 +52,7 @@ test("renders a self-contained animated SVG at requested resolution", () => {
   assert.match(svg, /repeatCount="indefinite"/);
   assert.match(svg, /<rect width="720" height="405" fill="url\(#dots\)"/);
   assert.doesNotMatch(svg, /<rect width="1600" height="900" fill="var\(--background\)"/);
+  assert.doesNotMatch(svg, /<rect[^>]+fill="var\(--canvas\)"/);
   assert.doesNotMatch(svg, /x="24" y="22" width="672" height="361"/);
   assert.doesNotMatch(svg, /<script|href="https?:\/\//);
 });
@@ -61,6 +67,7 @@ test("uses ambient flow motion without a cursor or zoom for run views", () => {
   assert.deepEqual(scene.motionProfile, {
     camera: "static",
     emphasis: "path-trace",
+    heroMotion: "traveling-signal",
     name: "route-propagation",
     pointer: "none",
   });
@@ -75,6 +82,8 @@ test("keeps an asset unframed when the source has no authored backdrop", () => {
   const svg = renderSvg(scene);
 
   assert.equal(scene.backdrop, "none");
+  assert.equal(scene.composition.backgroundOwner, "host");
+  assert.equal(scene.composition.texture, "none");
   assert.doesNotMatch(svg, /<rect width="720" height="405" fill="url\(#dots\)"/);
 });
 
@@ -86,8 +95,21 @@ test("uses voice-to-task motion without recycling cursor choreography", () => {
 
   assert.equal(scene.motion, "voice-to-task");
   assert.equal(scene.motionProfile.pointer, "none");
+  assert.equal(scene.motionProfile.heroMotion, "task-reorder");
+  assert.equal(scene.motionProfile.timing, "overlap");
+  assert.equal(scene.motionPhysics.energyPath, "voice-to-task");
+  assert.deepEqual(scene.colorSemantics, {
+    categories: "primary-tints",
+    confirmation: "primary",
+    decorativeCycling: false,
+    signal: "primary",
+  });
   assert.match(svg, /id="voice-control"/);
+  assert.match(svg, /id="voice-waveform"/);
+  assert.doesNotMatch(svg.match(/<g id="voice-waveform">[\s\S]*?<\/g>/)?.[0] || "", /fill="var\(--accent-[234]\)"/);
   assert.match(svg, /id="voice-updated-task"/);
+  assert.match(svg, /values="0 0;0 0;0 4;0 -101;0 -97;0 -97;0 0"/);
+  assert.match(svg, /keyTimes="0;\.125;\.25;\.375;\.5;\.625;\.75;\.875;1"/);
   assert.doesNotMatch(svg, /id="cursor"/);
 });
 

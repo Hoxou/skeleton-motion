@@ -11,6 +11,9 @@ const SIGNALS = {
 
 const FILE_BONUSES = ["page", "view", "canvas", "editor", "dashboard", "library"];
 const FILE_PENALTIES = ["test", "spec", "fixture", "loading", "skeleton", "provider"];
+const CHROMATIC_FAMILIES = new Set([
+  "amber", "blue", "cyan", "emerald", "fuchsia", "green", "indigo", "lime", "orange", "pink", "purple", "red", "rose", "sky", "teal", "violet", "yellow",
+]);
 
 function findBlock(css, selector, fromIndex = 0) {
   const cleanCss = css.replace(/\/\*[\s\S]*?\*\//g, "");
@@ -32,6 +35,14 @@ function parseVariables(block) {
   const variables = {};
   for (const match of block.matchAll(/--([a-zA-Z0-9_-]+)\s*:\s*([^;}{]+)\s*;/g)) {
     variables[match[1]] = match[2].trim();
+  }
+  return variables;
+}
+
+function parseFirstVariables(block) {
+  const variables = {};
+  for (const match of block.matchAll(/--([a-zA-Z0-9_-]+)\s*:\s*([^;}{]+)\s*;/g)) {
+    if (!(match[1] in variables)) variables[match[1]] = match[2].trim();
   }
   return variables;
 }
@@ -58,7 +69,80 @@ function readTheme(cssText, selector, inherited = {}) {
   return { ...inherited, ...parseVariables(block) };
 }
 
-function buildPalette(lightVariables, darkVariables) {
+function uniqueColors(values) {
+  const seen = new Set();
+  return values.filter((value) => {
+    const key = String(value || "").trim().toLowerCase();
+    if (!key || seen.has(key) || /^(?:initial|inherit|none|transparent)$/.test(key)) return false;
+    seen.add(key);
+    return true;
+  });
+}
+
+function hexRgb(value) {
+  const match = String(value || "").trim().match(/^#([0-9a-f]{3}|[0-9a-f]{6})$/i);
+  if (!match) return undefined;
+  const hex = match[1].length === 3 ? [...match[1]].map((digit) => digit + digit).join("") : match[1];
+  return [0, 2, 4].map((offset) => Number.parseInt(hex.slice(offset, offset + 2), 16));
+}
+
+function closestColorIndex(primary, candidates, maxDistance = 96) {
+  const primaryRgb = hexRgb(primary);
+  if (!primaryRgb) return -1;
+  const closest = candidates
+    .map((candidate, index) => {
+      const rgb = hexRgb(candidate);
+      const distance = rgb ? Math.hypot(...rgb.map((value, channel) => value - primaryRgb[channel])) : Number.POSITIVE_INFINITY;
+      return { distance, index };
+    })
+    .sort((a, b) => a.distance - b.distance)[0];
+  return closest?.distance < maxDistance ? closest.index : -1;
+}
+
+function supplementalColors(primary, candidates) {
+  const closest = closestColorIndex(primary, candidates);
+  return closest >= 0 ? candidates.filter((_, index) => index !== closest) : candidates;
+}
+
+function inferColorSystem(sourceText, cssText = "") {
+  const familyCounts = new Map();
+  const classPattern = /(?:^|[^\w-])(?:bg|text|border|from|via|to|ring|shadow)-([a-z]+)-(\d{2,3})(?:\/\d+)?/gi;
+  for (const match of sourceText.matchAll(classPattern)) {
+    const family = match[1].toLowerCase();
+    if (CHROMATIC_FAMILIES.has(family)) familyCounts.set(family, (familyCounts.get(family) || 0) + 1);
+  }
+
+  const variables = parseFirstVariables(cssText);
+  const families = [...familyCounts.entries()]
+    .filter(([, count]) => count >= 2)
+    .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+    .slice(0, 4)
+    .map(([family]) => family);
+  const resolveFamily = (family, shades) => shades
+    .map((shade) => resolveVariable(variables[`color-${family}-${shade}`], variables))
+    .find(Boolean);
+
+  const semanticColors = Object.entries(variables)
+    .filter(([name]) => /(?:^|[-_])(chart|tag|status|success|warning|info)(?:[-_]|$)/i.test(name) && sourceText.includes(`--${name}`))
+    .map(([, value]) => resolveVariable(value, variables));
+  const lightAccents = uniqueColors([
+    ...families.map((family) => resolveFamily(family, [600, 500, 700, 400])),
+    ...semanticColors,
+  ]).slice(0, 4);
+  const darkAccents = uniqueColors([
+    ...families.map((family) => resolveFamily(family, [400, 500, 300, 600])),
+    ...semanticColors,
+  ]).slice(0, 4);
+  const lightPastels = families.map((family, index) => resolveFamily(family, [100, 50, 200]) || `color-mix(in oklab, ${lightAccents[index] || lightAccents[0]} 14%, white)`);
+  const darkPastels = families.map((family, index) => resolveFamily(family, [900, 950, 800]) || `color-mix(in oklab, ${darkAccents[index] || darkAccents[0]} 24%, #18181b)`);
+  const warmFamily = families.find((family) => ["amber", "orange", "yellow"].includes(family));
+  const lightCanvas = warmFamily ? resolveFamily(warmFamily, [50, 100]) : undefined;
+  const mode = uniqueColors([...lightAccents, ...semanticColors]).length >= 3 ? "multicolor" : "monochrome";
+
+  return { darkAccents, darkPastels, families, lightAccents, lightCanvas, lightPastels, mode };
+}
+
+function buildPalette(lightVariables, darkVariables, colorSystem = {}) {
   const light = {
     accent: token(lightVariables, ["primary", "brand", "brand-primary"], "#4f46e5"),
     background: token(lightVariables, ["background", "page", "canvas"], "#ffffff"),
@@ -69,9 +153,10 @@ function buildPalette(lightVariables, darkVariables) {
     radius: token(lightVariables, ["radius", "radius-lg"], "12px"),
     surface: token(lightVariables, ["card", "popover", "surface"], "#ffffff"),
   };
-  const combinedDark = { ...lightVariables, ...darkVariables };
+  const hasSourceDark = Object.keys(darkVariables).length > 0;
+  const combinedDark = hasSourceDark ? { ...lightVariables, ...darkVariables } : {};
   const dark = {
-    accent: token(combinedDark, ["primary", "brand", "brand-primary"], "#818cf8"),
+    accent: token(combinedDark, ["primary", "brand", "brand-primary"], `color-mix(in oklab, ${light.accent} 78%, white)`),
     background: token(combinedDark, ["background", "page", "canvas"], "#111113"),
     border: token(combinedDark, ["border", "input"], "rgb(255 255 255 / 10%)"),
     foreground: token(combinedDark, ["foreground", "text", "card-foreground"], "#fafafa"),
@@ -80,7 +165,28 @@ function buildPalette(lightVariables, darkVariables) {
     radius: token(combinedDark, ["radius", "radius-lg"], light.radius),
     surface: token(combinedDark, ["card", "popover", "surface"], "#202024"),
   };
+  const familyIndex = closestColorIndex(light.accent, colorSystem.lightAccents || []);
+  const lightSupplementals = familyIndex >= 0
+    ? (colorSystem.lightAccents || []).filter((_, index) => index !== familyIndex)
+    : supplementalColors(light.accent, colorSystem.lightAccents || []);
+  const darkSupplementals = familyIndex >= 0
+    ? (colorSystem.darkAccents || []).filter((_, index) => index !== familyIndex)
+    : supplementalColors(dark.accent, colorSystem.darkAccents || []);
+  light.accents = uniqueColors([light.accent, ...lightSupplementals]).slice(0, 4);
+  dark.accents = uniqueColors([dark.accent, ...darkSupplementals]).slice(0, 4);
+  light.pastels = uniqueColors(colorSystem.lightPastels || []);
+  dark.pastels = dark.accents.map((accent) => `color-mix(in oklab, ${accent} 22%, ${dark.surface})`);
+  light.colorMode = colorSystem.mode || "monochrome";
+  dark.colorMode = light.colorMode;
+  light.canvas = colorSystem.lightCanvas;
+  dark.canvas = light.colorMode === "multicolor" && light.canvas
+    ? `color-mix(in oklab, ${dark.background} 92%, ${dark.accents.at(-1) || dark.accent} 8%)`
+    : undefined;
   return { dark, light };
+}
+
+function themeSupport(darkVariables) {
+  return { dark: Object.keys(darkVariables).length > 0 ? "source" : "derived", light: "source" };
 }
 
 function readableFontName(identifier) {
@@ -106,7 +212,7 @@ function inferTypography(cssText, sourceText) {
 }
 
 function inferBackdrop(sourceText) {
-  const hasDotCanvas = /BackgroundVariant\.Dots|background-pattern[^\n]{0,120}\bdots?\b|(?:repeating-)?radial-gradient\s*\([^)]{0,180}\b(?:circle|dot)/i.test(sourceText);
+  const hasDotCanvas = /BackgroundVariant\.Dots|react-flow__background-pattern[^\n]{0,120}\bdots?\b|(?:dot-grid|grid-dots|background-dots|bg-dots)\b/i.test(sourceText);
   return hasDotCanvas ? "dots" : "none";
 }
 
@@ -178,17 +284,33 @@ async function analyzeRepository(source) {
     if (sourceText.length < 2_000_000) sourceText += `\n${content.slice(0, 2_000_000 - sourceText.length)}`;
     if (backdrop === "none") backdrop = inferBackdrop(content);
     if (!voice) voice = inferFeatures(content).voice;
-    files.push({ relative, scores: scoreFile(relative, content) });
+    const colorEvidence = (content.match(/(?:bg|text|border|from|via|to|ring|shadow)-[a-z]+-\d{2,3}(?:\/\d+)?|var\(--[a-zA-Z0-9_-]+\)/g) || []).join(" ");
+    files.push({ colorEvidence, relative, scores: scoreFile(relative, content) });
   }
   const lightVariables = readTheme(cssText, ":root");
   const darkVariables = readTheme(cssText, ".dark");
   const concepts = rankConcepts(files);
+  const colorSystems = Object.fromEntries(Object.keys(SIGNALS).map((kind) => {
+    const evidence = files
+      .filter((file) => file.scores[kind] > 0 && !/(?:^|\/)(?:docs?|research|prototype|tests?|fixtures?)(?:\/|$)/i.test(file.relative))
+      .sort((a, b) => b.scores[kind] - a.scores[kind])
+      .slice(0, 8)
+      .map((file) => file.colorEvidence)
+      .join(" ");
+    return [kind, inferColorSystem(evidence, cssText)];
+  }));
+  const colorSystem = colorSystems[concepts.ranked[0]?.kind] || inferColorSystem("", cssText);
+  const palettesByConcept = Object.fromEntries(Object.entries(colorSystems).map(([kind, system]) => [kind, buildPalette(lightVariables, darkVariables, system)]));
   const typography = inferTypography(cssText, sourceText);
   typography.asset = await findFontAsset(root, typography.family);
   return {
     concepts,
     name: path.basename(root),
-    palettes: buildPalette(lightVariables, darkVariables),
+    colorSystem,
+    colorSystems,
+    palettes: buildPalette(lightVariables, darkVariables, colorSystem),
+    palettesByConcept,
+    themes: themeSupport(darkVariables),
     source: { input: root, scannedFiles: paths.length, type: "repository" },
     features: { voice },
     typography,
@@ -227,14 +349,19 @@ async function analyzeUrl(source) {
   const files = [{ relative: response.url, scores }];
   const typography = inferTypography(cssText, html);
   const features = inferFeatures(html);
+  const colorSystem = inferColorSystem(html, cssText);
+  const palettes = buildPalette(lightVariables, darkVariables, colorSystem);
   return {
+    colorSystem,
     concepts: rankConcepts(files),
     features,
     name: title,
-    palettes: buildPalette(lightVariables, darkVariables),
+    palettes,
+    palettesByConcept: Object.fromEntries(Object.keys(SIGNALS).map((kind) => [kind, palettes])),
+    themes: themeSupport(darkVariables),
     source: { input: response.url, linkedStylesheets: sheets.length, type: "url" },
     typography,
-    visual: { backdrop: inferBackdrop(`${html}\n${cssText}`) },
+    visual: { backdrop: inferBackdrop(html) },
   };
 }
 
@@ -243,4 +370,4 @@ export async function analyzeSource(source) {
   return { ...analysis, slug: slugify(analysis.name) };
 }
 
-export const __testing = { buildPalette, findBlock, inferBackdrop, inferFeatures, inferTypography, parseVariables, rankConcepts, scoreFile };
+export const __testing = { buildPalette, findBlock, inferBackdrop, inferColorSystem, inferFeatures, inferTypography, parseVariables, rankConcepts, scoreFile, themeSupport };

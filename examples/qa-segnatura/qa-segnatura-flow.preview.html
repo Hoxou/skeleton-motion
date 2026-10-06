@@ -11,6 +11,8 @@
     :root {
       color-scheme: light;
       --accent: #142ce3;
+      --accent-2: #142ce3;
+      --accent-3: #142ce3;
       --page: color-mix(in oklab, oklch(1 0 0) 96%, oklch(0.145 0 0) 4%);
       --page-ink: oklch(0.145 0 0);
       --copy: oklch(0.556 0 0);
@@ -26,6 +28,8 @@
     [data-theme="dark"] {
       color-scheme: dark;
       --accent: #586df7;
+      --accent-2: #586df7;
+      --accent-3: #586df7;
       --page: color-mix(in oklab, oklch(0.145 0 0) 96%, oklch(0.985 0 0) 4%);
       --page-ink: oklch(0.985 0 0);
       --copy: oklch(0.708 0 0);
@@ -37,7 +41,7 @@
       --switch-hover: var(--panel);
     }
     html, body { min-height: 100%; }
-    body { margin: 0; min-height: 100vh; overflow-x: hidden; background: radial-gradient(circle at 47% 48%, var(--page-glow), transparent 46%), var(--page); color: var(--page-ink); font-family: "Source Preview", "DM Sans", ui-sans-serif, system-ui, sans-serif; transition: background-color 320ms ease, color 320ms ease; }
+    body { margin: 0; min-height: 100vh; overflow-x: hidden; background: radial-gradient(circle at 36% 48%, color-mix(in oklab, var(--accent-2) 5%, transparent), transparent 40%), radial-gradient(circle at 64% 44%, color-mix(in oklab, var(--accent-3) 4%, transparent), transparent 38%), var(--page); color: var(--page-ink); font-family: "Source Preview", "DM Sans", ui-sans-serif, system-ui, sans-serif; transition: background-color 320ms ease, color 320ms ease; }
     header { position: fixed; z-index: 3; inset: 0 0 auto; padding: 24px 28px; pointer-events: none; }
     .brand { display: flex; align-items: center; gap: 10px; width: max-content; font-size: 11px; font-weight: 650; letter-spacing: .18em; text-transform: uppercase; opacity: .66; }
     .brand::before { content: ""; width: 7px; height: 7px; background: currentColor; box-shadow: 9px 0 0 color-mix(in oklab, currentColor 34%, transparent); }

@@ -78,11 +78,14 @@ export async function run(argv) {
 
   const manifest = {
     analysis: {
+      colorSystem: analysis.colorSystem,
+      colorSystems: analysis.colorSystems,
       concepts: analysis.concepts,
       features: analysis.features,
       name: analysis.name,
       palettes: analysis.palettes,
       source: analysis.source,
+      themes: analysis.themes,
       typography: { ...typography, file: fontFile },
       visual: analysis.visual,
     },
@@ -91,7 +94,7 @@ export async function run(argv) {
       name: assetName,
       oneAssetPerRun: true,
       archive: archiveFile,
-      variants: scenes.map(({ backdrop, evidence, file, motion, motionProfile, palette, theme, typography, viewport }) => ({ backdrop, evidence, file, motion, motionProfile, palette, theme, typography, viewport })),
+      variants: scenes.map(({ backdrop, colorSemantics, composition, evidence, file, motion, motionPhysics, motionProfile, palette, theme, typography, viewport }) => ({ backdrop, colorSemantics, composition, evidence, file, motion, motionPhysics, motionProfile, palette, theme, typography, viewport })),
     },
     generatedAt: new Date().toISOString(),
     schemaVersion: 1,

@@ -21,6 +21,8 @@ export function renderPreview({ assets, fontFile, name, scenes, zipFile }) {
   const fontStack = safeCss(typography.stack, "ui-sans-serif, system-ui, sans-serif");
   const sceneRadius = Math.max(0, Math.min(32, Number.parseFloat(lightPalette.radius) || 0));
   const archive = zipFile || `${name}.assets.zip`;
+  const lightAccents = lightPalette.accents || [lightPalette.accent];
+  const darkAccents = darkPalette.accents || [darkPalette.accent];
 
   function picture(group, label, active = false, switchable = true) {
     const groupLight = group.scenes.find((scene) => scene.theme === "light") || group.scenes[0];
@@ -53,6 +55,8 @@ export function renderPreview({ assets, fontFile, name, scenes, zipFile }) {
     :root {
       color-scheme: light;
       --accent: ${safeCss(lightPalette.accent, "#4f46e5")};
+      --accent-2: ${safeCss(lightAccents[1], lightPalette.accent || "#4f46e5")};
+      --accent-3: ${safeCss(lightAccents[2], lightAccents[1] || lightPalette.accent || "#4f46e5")};
       --page: color-mix(in oklab, ${safeCss(lightPalette.background, "#fff")} 96%, ${safeCss(lightPalette.foreground, "#171717")} 4%);
       --page-ink: ${safeCss(lightPalette.foreground, "#171717")};
       --copy: ${safeCss(lightPalette.mutedForeground, "#71717a")};
@@ -68,6 +72,8 @@ export function renderPreview({ assets, fontFile, name, scenes, zipFile }) {
     [data-theme="dark"] {
       color-scheme: dark;
       --accent: ${safeCss(darkPalette.accent, "#818cf8")};
+      --accent-2: ${safeCss(darkAccents[1], darkPalette.accent || "#818cf8")};
+      --accent-3: ${safeCss(darkAccents[2], darkAccents[1] || darkPalette.accent || "#818cf8")};
       --page: color-mix(in oklab, ${safeCss(darkPalette.background, "#111113")} 96%, ${safeCss(darkPalette.foreground, "#fafafa")} 4%);
       --page-ink: ${safeCss(darkPalette.foreground, "#fafafa")};
       --copy: ${safeCss(darkPalette.mutedForeground, "#a1a1aa")};
@@ -79,7 +85,7 @@ export function renderPreview({ assets, fontFile, name, scenes, zipFile }) {
       --switch-hover: var(--panel);
     }
     html, body { min-height: 100%; }
-    body { margin: 0; min-height: 100vh; overflow-x: hidden; background: radial-gradient(circle at 47% 48%, var(--page-glow), transparent 46%), var(--page); color: var(--page-ink); font-family: ${fontFile ? `"Source Preview", ` : ""}${fontStack}; transition: background-color 320ms ease, color 320ms ease; }
+    body { margin: 0; min-height: 100vh; overflow-x: hidden; background: radial-gradient(circle at 36% 48%, color-mix(in oklab, var(--accent-2) 5%, transparent), transparent 40%), radial-gradient(circle at 64% 44%, color-mix(in oklab, var(--accent-3) 4%, transparent), transparent 38%), var(--page); color: var(--page-ink); font-family: ${fontFile ? `"Source Preview", ` : ""}${fontStack}; transition: background-color 320ms ease, color 320ms ease; }
     header { position: fixed; z-index: 3; inset: 0 0 auto; padding: 24px 28px; pointer-events: none; }
     .brand { display: flex; align-items: center; gap: 10px; width: max-content; font-size: 11px; font-weight: 650; letter-spacing: .18em; text-transform: uppercase; opacity: .66; }
     .brand::before { content: ""; width: 7px; height: 7px; background: currentColor; box-shadow: 9px 0 0 color-mix(in oklab, currentColor 34%, transparent); }

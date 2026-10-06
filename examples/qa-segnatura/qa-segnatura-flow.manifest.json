@@ -1,5 +1,92 @@
 {
   "analysis": {
+    "colorSystem": {
+      "darkAccents": [],
+      "darkPastels": [
+        "color-mix(in oklab, undefined 24%, #18181b)",
+        "color-mix(in oklab, undefined 24%, #18181b)",
+        "color-mix(in oklab, undefined 24%, #18181b)",
+        "color-mix(in oklab, undefined 24%, #18181b)"
+      ],
+      "families": [
+        "red",
+        "yellow",
+        "green",
+        "orange"
+      ],
+      "lightAccents": [],
+      "lightPastels": [
+        "color-mix(in oklab, undefined 14%, white)",
+        "color-mix(in oklab, undefined 14%, white)",
+        "color-mix(in oklab, undefined 14%, white)",
+        "color-mix(in oklab, undefined 14%, white)"
+      ],
+      "mode": "monochrome"
+    },
+    "colorSystems": {
+      "flow": {
+        "darkAccents": [],
+        "darkPastels": [],
+        "families": [],
+        "lightAccents": [],
+        "lightPastels": [],
+        "mode": "monochrome"
+      },
+      "list": {
+        "darkAccents": [],
+        "darkPastels": [
+          "color-mix(in oklab, undefined 24%, #18181b)",
+          "color-mix(in oklab, undefined 24%, #18181b)",
+          "color-mix(in oklab, undefined 24%, #18181b)",
+          "color-mix(in oklab, undefined 24%, #18181b)"
+        ],
+        "families": [
+          "red",
+          "yellow",
+          "green",
+          "orange"
+        ],
+        "lightAccents": [],
+        "lightPastels": [
+          "color-mix(in oklab, undefined 14%, white)",
+          "color-mix(in oklab, undefined 14%, white)",
+          "color-mix(in oklab, undefined 14%, white)",
+          "color-mix(in oklab, undefined 14%, white)"
+        ],
+        "mode": "monochrome"
+      },
+      "dashboard": {
+        "darkAccents": [],
+        "darkPastels": [],
+        "families": [],
+        "lightAccents": [],
+        "lightPastels": [],
+        "mode": "monochrome"
+      },
+      "editor": {
+        "darkAccents": [],
+        "darkPastels": [
+          "color-mix(in oklab, undefined 24%, #18181b)",
+          "color-mix(in oklab, undefined 24%, #18181b)",
+          "color-mix(in oklab, undefined 24%, #18181b)",
+          "color-mix(in oklab, undefined 24%, #18181b)"
+        ],
+        "families": [
+          "red",
+          "yellow",
+          "green",
+          "orange"
+        ],
+        "lightAccents": [],
+        "lightPastels": [
+          "color-mix(in oklab, undefined 14%, white)",
+          "color-mix(in oklab, undefined 14%, white)",
+          "color-mix(in oklab, undefined 14%, white)",
+          "color-mix(in oklab, undefined 14%, white)"
+        ],
+        "mode": "monochrome"
+      }
+    },
     "concepts": {
       "evidence": [
         {
@@ -75,7 +162,14 @@
         "muted": "oklch(0.269 0 0)",
         "mutedForeground": "oklch(0.708 0 0)",
         "radius": "0rem",
-        "surface": "oklch(0.205 0 0)"
+        "surface": "oklch(0.205 0 0)",
+        "accents": [
+          "#586df7"
+        ],
+        "pastels": [
+          "color-mix(in oklab, #586df7 22%, oklch(0.205 0 0))"
+        ],
+        "colorMode": "monochrome"
       },
       "light": {
         "accent": "#142ce3",
@@ -85,13 +179,24 @@
         "muted": "oklch(0.97 0 0)",
         "mutedForeground": "oklch(0.556 0 0)",
         "radius": "0rem",
-        "surface": "oklch(1 0 0)"
+        "surface": "oklch(1 0 0)",
+        "accents": [
+          "#142ce3"
+        ],
+        "pastels": [
+          "color-mix(in oklab, undefined 14%, white)"
+        ],
+        "colorMode": "monochrome"
       }
     },
     "source": {
       "input": "/Users/victor.toupar/Documents/dev/qa-segnatura",
       "scannedFiles": 1864,
       "type": "repository"
+    },
+    "themes": {
+      "dark": "source",
+      "light": "source"
     },
     "typography": {
       "family": "DM Sans",
@@ -110,6 +215,17 @@
     "variants": [
       {
         "backdrop": "dots",
+        "colorSemantics": {
+          "categories": "primary-tints",
+          "confirmation": "primary",
+          "decorativeCycling": false,
+          "signal": "motion-role"
+        },
+        "composition": {
+          "backgroundOwner": "host",
+          "frame": "none",
+          "texture": "transparent-overlay"
+        },
         "evidence": [
           {
             "file": "app/app/[projectSlug]/automations/s/[scenarioSlug]/scenario-canvas.client.tsx",
@@ -134,9 +250,18 @@
         ],
         "file": "qa-segnatura-flow.light.svg",
         "motion": "add-step",
+        "motionPhysics": {
+          "anticipation": "subtle-countermove",
+          "continuity": "preserve-identity",
+          "effects": "no-overshoot",
+          "energyPath": "input-to-layout",
+          "followThrough": "single-settle",
+          "spatial": "gentle-overshoot"
+        },
         "motionProfile": {
           "camera": "static",
           "emphasis": "layout-insert",
+          "heroMotion": "layout-open",
           "name": "add-step",
           "pointer": "cursor-click"
         },
@@ -148,7 +273,12 @@
           "muted": "oklch(0.97 0 0)",
           "mutedForeground": "oklch(0.556 0 0)",
           "radius": 0,
-          "surface": "oklch(1 0 0)"
+          "surface": "oklch(1 0 0)",
+          "accents": [
+            "#142ce3"
+          ],
+          "pastels": [],
+          "colorMode": "monochrome"
         },
         "theme": "light",
         "typography": {
@@ -163,6 +293,17 @@
       },
       {
         "backdrop": "dots",
+        "colorSemantics": {
+          "categories": "primary-tints",
+          "confirmation": "primary",
+          "decorativeCycling": false,
+          "signal": "motion-role"
+        },
+        "composition": {
+          "backgroundOwner": "host",
+          "frame": "none",
+          "texture": "transparent-overlay"
+        },
         "evidence": [
           {
             "file": "app/app/[projectSlug]/automations/s/[scenarioSlug]/scenario-canvas.client.tsx",
@@ -187,9 +328,18 @@
         ],
         "file": "qa-segnatura-flow.dark.svg",
         "motion": "add-step",
+        "motionPhysics": {
+          "anticipation": "subtle-countermove",
+          "continuity": "preserve-identity",
+          "effects": "no-overshoot",
+          "energyPath": "input-to-layout",
+          "followThrough": "single-settle",
+          "spatial": "gentle-overshoot"
+        },
         "motionProfile": {
           "camera": "static",
           "emphasis": "layout-insert",
+          "heroMotion": "layout-open",
           "name": "add-step",
           "pointer": "cursor-click"
         },
@@ -201,7 +351,14 @@
           "muted": "oklch(0.269 0 0)",
           "mutedForeground": "oklch(0.708 0 0)",
           "radius": 0,
-          "surface": "oklch(0.205 0 0)"
+          "surface": "oklch(0.205 0 0)",
+          "accents": [
+            "#586df7"
+          ],
+          "pastels": [
+            "color-mix(in oklab, #586df7 22%, oklch(0.205 0 0))"
+          ],
+          "colorMode": "monochrome"
         },
         "theme": "dark",
         "typography": {
@@ -216,6 +373,6 @@
       }
     ]
   },
-  "generatedAt": "2026-10-06T03:15:31.119Z",
+  "generatedAt": "2026-10-06T03:41:58.674Z",
   "schemaVersion": 1
 }
