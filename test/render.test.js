@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { planScene } from "../src/plan.js";
 import { renderPreview } from "../src/preview.js";
+import { previewInputFromManifest, roomData } from "../src/room-data.js";
 import { renderSvg } from "../src/render-svg.js";
 
 const analysis = {
@@ -36,21 +37,21 @@ test("renders a self-contained animated SVG at requested resolution", () => {
   const scene = planScene(analysis, { concept: "auto", duration: 5, height: 900, width: 1600 }, "dark");
   const svg = renderSvg(scene);
   assert.match(svg, /width="1600" height="900"/);
-  assert.match(svg, /viewBox="0 0 720 405"/);
+  assert.match(svg, /viewBox="0 0 1778 1000"/);
   assert.match(svg, /#586df7/);
   assert.match(svg, /fill="var\(--accent\)" stroke="var\(--cursor-outline\)"/);
   assert.match(svg, /M2\.5 2 V27 L10 19\.8 H21\.5 Z/);
-  assert.match(svg, /id="inserted-card"/);
-  assert.match(svg, /stroke-dasharray="7 6"/);
-  assert.match(svg, /values="0 56;0 56;0 -2;0 0;0 0;0 56"/);
+  assert.match(svg, /id="inserted-step"/);
+  assert.match(svg, /stroke-dasharray="14 12"/);
+  assert.match(svg, /id="add-step"/);
   assert.match(svg, /id="step-picker"/);
-  assert.match(svg, /id="clicked-option"/);
-  assert.match(svg, /values="0;0;\.08;\.42;\.16;0;0"/);
-  assert.doesNotMatch(svg, /type="scale" values="\.638/);
+  assert.match(svg, /id="picked-option"/);
+  assert.doesNotMatch(svg, /type="scale"/);
+  assert.doesNotMatch(svg, /<clipPath|clip-path=/);
   assert.match(svg, /keySplines="\.22 \.8 \.2 1/);
   assert.doesNotMatch(svg, /stroke-dashoffset/);
   assert.match(svg, /repeatCount="indefinite"/);
-  assert.match(svg, /<rect width="720" height="405" fill="url\(#dots\)"/);
+  assert.match(svg, /<rect width="1778" height="1000" fill="url\(#dots\)"/);
   assert.doesNotMatch(svg, /<rect width="1600" height="900" fill="var\(--background\)"/);
   assert.doesNotMatch(svg, /<rect[^>]+fill="var\(--canvas\)"/);
   assert.doesNotMatch(svg, /x="24" y="22" width="672" height="361"/);
@@ -108,39 +109,44 @@ test("uses voice-to-task motion without recycling cursor choreography", () => {
   assert.match(svg, /id="voice-waveform"/);
   assert.doesNotMatch(svg.match(/<g id="voice-waveform">[\s\S]*?<\/g>/)?.[0] || "", /fill="var\(--accent-[234]\)"/);
   assert.match(svg, /id="voice-updated-task"/);
-  assert.match(svg, /values="0 0;0 0;0 4;0 -101;0 -97;0 -97;0 0"/);
+  assert.match(svg.match(/<g id="voice-updated-task">[\s\S]*?<\/g>/)?.[0] || "", /<animate attributeName="y" values="[^"]+"/);
   assert.match(svg, /keyTimes="0;\.125;\.25;\.375;\.5;\.625;\.75;\.875;1"/);
   assert.doesNotMatch(svg, /id="cursor"/);
 });
 
-test("renders display-first landing-page context controls", () => {
-  const light = { file: "flow.light.svg", theme: "light", viewport: { height: 405, width: 720 } };
-  const dark = { file: "flow.dark.svg", theme: "dark", viewport: { height: 405, width: 720 } };
-  const html = renderPreview({ name: "flow", scenes: [light, dark] });
+const roomDataOf = (html) => JSON.parse(html.match(/<script type="application\/json" id="room-data">([^<]*)<\/script>/)[1]);
+const variant = (file, theme, extra = {}) => ({ file, theme, viewport: { height: 405, width: 720 }, ...extra });
 
-  assert.match(html, /data-scene="display"/);
-  assert.match(html, /data-scene-button="display" aria-pressed="true"/);
-  assert.match(html, /data-scene-button="card"/);
-  assert.match(html, /data-scene-button="split"/);
-  assert.match(html, /data-scene-button="bento"/);
-  assert.match(html, /data-asset-button="flow"/);
-  assert.match(html, /href="\.\/flow\.assets\.zip" download/);
-  assert.match(html, /--control-radius: 0px/);
-  assert.match(html, /\.download[^}]*border-radius: var\(--control-radius\)/);
-  assert.match(html, /\.option-button[^}]*background: var\(--panel\)/);
-  assert.match(html, /body \{[^}]*background: var\(--page\)/);
-  assert.doesNotMatch(html, /\.asset-view\s*\{[^}]*background:/);
+test("ships the prebuilt room as one self-contained file with the run's data injected", () => {
+  const html = renderPreview({ name: "flow", scenes: [variant("flow.light.svg", "light"), variant("flow.dark.svg", "dark")] });
+
+  assert.match(html, /<title>Display Room - flow<\/title>/);
+  assert.doesNotMatch(html, /<!--ROOM_DATA-->/);
+  assert.doesNotMatch(html, /<script[^>]+src=|<link[^>]+rel="stylesheet"/);
+  assert.match(html, /<script type="module">/);
+  // Chrome font is inlined, never linked: the room is opened from disk.
+  assert.match(html, /url\(data:font\/woff2;base64,/);
+  assert.deepEqual(roomDataOf(html).assets, [{
+    copy: { description: "A focused product motion composed for a landing-page feature.", eyebrow: "Product motion", title: "Show the useful moment." },
+    id: "flow",
+    label: "Flow",
+    variants: [
+      { file: "flow.light.svg", format: null, height: 405, theme: "light", width: 720 },
+      { file: "flow.dark.svg", format: null, height: 405, theme: "dark", width: 720 },
+    ],
+  }]);
+  assert.equal(roomDataOf(html).archive, "flow.assets.zip");
 });
 
-test("renders asset switching and a combined story without framing each asset", () => {
-  const scene = (file, theme) => ({
-    file,
-    palette: analysis.palettes[theme],
-    theme,
-    typography: analysis.typography,
-    viewport: { height: 405, width: 720 },
-  });
-  const html = renderPreview({
+test("escapes labels so they cannot close the data script", () => {
+  const html = renderPreview({ assets: [{ id: "a", label: "</script><b>x", scenes: [variant("a.light.svg", "light")] }], name: "a" });
+
+  assert.equal(roomDataOf(html).assets[0].label, "</script><b>x");
+});
+
+test("passes source palette, font, and radius through for the stage only", () => {
+  const scene = (file, theme) => variant(file, theme, { palette: analysis.palettes[theme], typography: analysis.typography });
+  const data = roomData({
     assets: [
       { id: "add-step", label: "Add step", scenes: [scene("add.light.svg", "light"), scene("add.dark.svg", "dark")] },
       { id: "run-flow", label: "Run flow", scenes: [scene("run.light.svg", "light"), scene("run.dark.svg", "dark")] },
@@ -150,16 +156,39 @@ test("renders asset switching and a combined story without framing each asset", 
     zipFile: "qa-set.assets.zip",
   });
 
-  assert.match(html, /data-asset-button="run-flow"/);
-  assert.match(html, /data-scene-button="story"/);
-  assert.match(html, /data-scene-button="overview"/);
-  assert.match(html, /data-scene-panel="story"/);
-  assert.match(html, /data-scene-panel="overview"/);
-  assert.equal((html.match(/story row \d/g) || []).length, 2);
-  assert.equal((html.match(/class="set-card"/g) || []).length, 2);
-  assert.match(html, /@font-face \{ font-family: "Source Preview"/);
-  assert.match(html, /--accent: #142ce3/);
-  assert.match(html, /--scene-radius: 0px/);
-  assert.match(html, /href="\.\/qa-set\.assets\.zip" download/);
-  assert.match(html, /\.asset-slot, \.asset-view \{ width: 100%; \}/);
+  assert.equal(data.source.light.accent, "#142ce3");
+  assert.notEqual(data.source.dark, null);
+  assert.equal(data.source.radius, 0);
+  assert.equal(data.source.fontFile, "qa.preview-font.ttf");
+  assert.deepEqual(data.assets.map((asset) => asset.id), ["add-step", "run-flow"]);
+  assert.equal(data.archive, "qa-set.assets.zip");
+});
+
+test("drops dark tokens for a single-theme source and rejects unsafe CSS values", () => {
+  const data = roomData({
+    fontFile: "../evil.ttf",
+    name: "flow",
+    scenes: [variant("flow.light.svg", "light", { palette: { accent: "red;} body{display:none", background: "#fafafa" }, typography: { stack: "Inter</style>" } })],
+  });
+
+  assert.equal(data.source.dark, null);
+  assert.equal(data.source.light.accent, "#4f46e5");
+  assert.equal(data.source.light.page, "#fafafa");
+  assert.equal(data.source.fontStack, "ui-sans-serif, system-ui, sans-serif");
+  assert.equal(data.source.fontFile, null);
+});
+
+test("rebuilds preview input from a set manifest", () => {
+  const manifest = {
+    set: {
+      archive: "s.assets.zip",
+      assets: [{ copy: { title: "T" }, id: "s.one", label: "One", variants: [variant("s.one.light.svg", "light", { format: "16:9" }), variant("s.one.1x1.light.svg", "light", { format: "1:1" })] }],
+      name: "s",
+      preview: "s.preview.html",
+    },
+  };
+  const input = previewInputFromManifest(manifest, "s.manifest.json");
+
+  assert.equal(input.previewFile, "s.preview.html");
+  assert.deepEqual(roomData(input).assets[0].variants.map((item) => item.format), ["16:9", "1:1"]);
 });

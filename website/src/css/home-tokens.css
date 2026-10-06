@@ -1,0 +1,19 @@
+/* Site chrome tokens, shared by the Docusaurus site and the Display Room
+   (tools/preview-shell). */
+:root {
+  --home-page: #fafafa;
+  --home-ink: #111114;
+  --home-muted: #6f7078;
+  --home-soft: #efeff2;
+  --home-soft-hover: #e6e6ea;
+  --home-blue: #1437f5;
+}
+
+[data-theme="dark"] {
+  --home-page: #0f0f11;
+  --home-ink: #f5f5f6;
+  --home-muted: #9a9aa2;
+  --home-soft: #1b1b1f;
+  --home-soft-hover: #24242a;
+  --home-blue: #526cff;
+}

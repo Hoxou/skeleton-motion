@@ -1,0 +1,26 @@
+/* Shared button base + variants. Layer page-specific overrides (e.g.
+   .ctaButton) as an extra class from the page's own module. */
+.actionButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  padding: 0 1rem;
+  border: 0;
+  border-radius: 14px;
+  /* Longhands: Docusaurus' CSS minifier drops this `font` shorthand. */
+  font-family: "Instrument Sans Variable", "Instrument Sans", ui-sans-serif, system-ui, sans-serif;
+  font-size: .92rem;
+  font-weight: 630;
+  line-height: 1;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 160ms ease, color 160ms ease, transform 180ms ease;
+}
+
+.actionButton:hover { transform: translateY(-1px); }
+.actionButton:focus-visible { outline: 3px solid color-mix(in oklab, var(--home-blue) 40%, transparent); outline-offset: 2px; }
+.folderButton { background: transparent; color: var(--home-ink); }
+.folderButton:hover { background: color-mix(in oklab, var(--home-ink) 7%, transparent); }
+.createButton { background: var(--home-blue); color: white; }
+.createButton:hover { background: color-mix(in oklab, var(--home-blue) 90%, black); color: white; text-decoration: none; }

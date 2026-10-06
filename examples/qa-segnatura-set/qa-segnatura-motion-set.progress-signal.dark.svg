@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="720" height="405" viewBox="0 0 1200 675" role="img" aria-labelledby="title description">
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="405" viewBox="0 0 1778 1000" role="img" aria-labelledby="title description">
   <title id="title">qa-segnatura-motion-set.progress-signal — chart-sweep</title>
   <desc id="description">Minimal dashboard product illustration generated from /Users/victor.toupar/Documents/dev/qa-segnatura.</desc>
   <style>
@@ -23,17 +23,68 @@
       --tag-2: color-mix(in oklab, #586df7 14%, oklch(0.205 0 0));
       --tag-3: color-mix(in oklab, #586df7 14%, oklch(0.205 0 0));
       --tag-4: color-mix(in oklab, #586df7 14%, oklch(0.205 0 0));
+      --line-hair: 2.4691; --line-base: 4.9383; --line-strong: 5.5556; --line-heavy: 7.4074; --cursor-scale: 2.1728;
     }
-    * { vector-effect: non-scaling-stroke; }
+    @media (min-width: 0px) { :root { --line-hair: 8.3344; --line-base: 13.8906; --line-strong: 15.5575; --line-heavy: 19.4469; --cursor-scale: 6.223; } }
+    @media (min-width: 192px) { :root { --line-hair: 6.9453; --line-base: 11.5755; --line-strong: 12.9646; --line-heavy: 16.2057; --cursor-scale: 5.1858; } }
+    @media (min-width: 230px) { :root { --line-hair: 5.7978; --line-base: 9.663; --line-strong: 10.8226; --line-heavy: 13.5283; --cursor-scale: 4.329; } }
+    @media (min-width: 276px) { :root { --line-hair: 4.8315; --line-base: 8.0525; --line-strong: 9.0188; --line-heavy: 11.2736; --cursor-scale: 3.6075; } }
+    @media (min-width: 332px) { :root { --line-hair: 4.0166; --line-base: 6.6943; --line-strong: 7.4976; --line-heavy: 9.372; --cursor-scale: 2.999; } }
+    @media (min-width: 398px) { :root { --line-hair: 3.3505; --line-base: 5.5842; --line-strong: 6.2543; --line-heavy: 7.8178; --cursor-scale: 2.5017; } }
+    @media (min-width: 478px) { :root { --line-hair: 2.7897; --line-base: 4.9383; --line-strong: 5.5556; --line-heavy: 7.4074; --cursor-scale: 2.1728; } }
+    @media (min-width: 573px) { :root { --line-hair: 2.4691; --line-base: 4.9383; --line-strong: 5.5556; --line-heavy: 7.4074; --cursor-scale: 2.1728; } }
+    @media (min-width: 688px) { :root { --line-hair: 2.4691; --line-base: 4.9383; --line-strong: 5.5556; --line-heavy: 7.4074; --cursor-scale: 2.1728; } }
+    @media (min-width: 826px) { :root { --line-hair: 2.4691; --line-base: 4.9339; --line-strong: 5.3824; --line-heavy: 7.1766; --cursor-scale: 2.153; } }
+    @media (min-width: 991px) { :root { --line-hair: 2.2431; --line-base: 4.1123; --line-strong: 4.4861; --line-heavy: 5.9815; --cursor-scale: 1.7944; } }
+    @media (min-width: 1189px) { :root { --line-hair: 1.869; --line-base: 3.4264; --line-strong: 3.7379; --line-heavy: 4.9839; --cursor-scale: 1.4952; } }
+    @media (min-width: 1427px) { :root { --line-hair: 1.5578; --line-base: 2.856; --line-strong: 3.1157; --line-heavy: 4.1542; --cursor-scale: 1.2463; } }
+    @media (min-width: 1712px) { :root { --line-hair: 1.2984; --line-base: 2.3805; --line-strong: 2.5969; --line-heavy: 3.4625; --cursor-scale: 1.0388; } }
+    @media (min-width: 2054px) { :root { --line-hair: 1.0819; --line-base: 1.9836; --line-strong: 2.1639; --line-heavy: 2.8852; --cursor-scale: 0.8656; } }
+    @media (min-width: 2465px) { :root { --line-hair: 0.9016; --line-base: 1.653; --line-strong: 1.8032; --line-heavy: 2.4043; --cursor-scale: 0.7213; } }
+    @media (min-width: 2958px) { :root { --line-hair: 0.7513; --line-base: 1.3773; --line-strong: 1.5025; --line-heavy: 2.0034; --cursor-scale: 0.601; } }
+    @media (min-width: 3550px) { :root { --line-hair: 0.6261; --line-base: 1.1478; --line-strong: 1.2521; --line-heavy: 1.6695; --cursor-scale: 0.5008; } }
+    .ln-hair { stroke-width: var(--line-hair); } .ln-base { stroke-width: var(--line-base); } .ln-strong { stroke-width: var(--line-strong); } .ln-heavy { stroke-width: var(--line-heavy); }
+    .ln-mark { stroke-width: 7; }
+    .ln-cursor { stroke-width: 2.2; }
+    .ln-cursor-ripple { stroke-width: 2; }
+    .cursor-glyph { transform: scale(var(--cursor-scale)); }
+    @media (max-width: 399.98px) { .lod-fine, .lod-texture { display: none; } }
     @media (prefers-reduced-motion: reduce) { svg { visibility: visible; } }
   </style>
-  <defs><pattern id="dots" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="1.5" cy="1.5" r="1.25" fill="var(--border)" /></pattern><filter id="cursor-shadow" x="-60%" y="-60%" width="220%" height="220%"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#000" flood-opacity=".28" /></filter></defs>
+  <defs><pattern id="dots" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="1.5" cy="1.5" r="1.25" fill="var(--border)" /></pattern><radialGradient id="glow" cx="50%" cy="38%" r="65%">
+    <stop offset="0%" stop-color="var(--accent)" stop-opacity=".16" />
+    <stop offset="45%" stop-color="var(--accent)" stop-opacity=".07" />
+    <stop offset="100%" stop-color="var(--accent)" stop-opacity="0" />
+  </radialGradient><filter id="cursor-shadow" x="-60%" y="-60%" width="220%" height="220%"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#000" flood-opacity=".28" /></filter></defs>
 
-    <g><rect x="72" y="94" width="278" height="156" rx="var(--radius)" fill="var(--surface)" stroke="var(--border)"/><circle cx="106" cy="130" r="10" fill="var(--tag-1)"/><rect x="130" y="124" width="82" height="8" rx="4" fill="var(--ink)" opacity=".1"/><rect x="100" y="176" width="100" height="22" rx="5" fill="var(--ink)" opacity=".16"/><rect x="100" y="214" width="138" height="5" rx="2.5" fill="var(--ink)" opacity=".07"/></g><g><rect x="386" y="94" width="278" height="156" rx="var(--radius)" fill="var(--surface)" stroke="var(--border)"/><circle cx="420" cy="130" r="10" fill="var(--tag-2)"/><rect x="444" y="124" width="82" height="8" rx="4" fill="var(--ink)" opacity=".1"/><rect x="414" y="176" width="100" height="22" rx="5" fill="var(--ink)" opacity=".16"/><rect x="414" y="214" width="166" height="5" rx="2.5" fill="var(--ink)" opacity=".07"/></g><g><rect x="700" y="94" width="278" height="156" rx="var(--radius)" fill="var(--surface)" stroke="var(--border)"/><circle cx="734" cy="130" r="10" fill="var(--tag-3)"/><rect x="758" y="124" width="82" height="8" rx="4" fill="var(--ink)" opacity=".1"/><rect x="728" y="176" width="100" height="22" rx="5" fill="var(--ink)" opacity=".16"/><rect x="728" y="214" width="194" height="5" rx="2.5" fill="var(--ink)" opacity=".07"/></g>
-    <rect x="72" y="292" width="1056" height="292" rx="var(--radius)" fill="var(--surface)" stroke="var(--border)" />
-    <path d="M118 512 C210 460 240 486 324 410 C400 342 482 476 566 398 C654 318 730 428 812 350 C884 282 964 376 1082 322" fill="none" stroke="var(--border-strong)" stroke-width="3" />
-    <path d="M118 512 C210 460 240 486 324 410 C400 342 482 476 566 398 C654 318 730 428 812 350 C884 282 964 376 1082 322" fill="none" stroke="var(--accent)" stroke-width="3" opacity="0"><animate attributeName="opacity" values="0;0;.82;.82;0" keyTimes="0;.12;.22;.9;1" dur="5s" repeatCount="indefinite"/></path>
-    <line x1="118" y1="540" x2="1082" y2="540" stroke="var(--border)" />
-    <circle r="8" fill="var(--accent)"><animateMotion path="M118 512 C210 460 240 486 324 410 C400 342 482 476 566 398 C654 318 730 428 812 350 C884 282 964 376 1082 322" keyTimes="0;.12;.72;1" keyPoints="0;0;1;1" dur="5s" repeatCount="indefinite"/><animate attributeName="opacity" values="0;1;1;0" keyTimes="0;.12;.82;1" dur="5s" repeatCount="indefinite"/></circle>
-
+    <metadata id="skeleton-layout">{"format":"16:9","regions":{"chart":{"height":482.71604938271605,"width":1578,"x":100,"y":417.28395061728395},"tiles":{"height":217.28395061728395,"width":1578,"x":100,"y":100}}}</metadata>
+    <rect width="1778" height="1000" fill="url(#dots)" opacity=".62" class="lod-texture" />
+    <g>
+    <rect x="100" y="100" width="499.66" height="217.28" rx="0" data-fill="tiles" class="ln-hair" fill="var(--surface)" stroke="var(--border)" />
+    <circle cx="154.32" cy="159.26" r="19.75" fill="var(--tag-1)" />
+    <rect x="193.83" y="150.62" width="158.02" height="17.28" rx="8.64" fill="var(--ink)" opacity=".12" />
+    <rect x="144.44" y="198.77" width="197.53" height="44.44" rx="9.88" fill="var(--ink)" opacity=".16" />
+    <rect class="lod-fine" x="144.44" y="272.84" width="271.6" height="12.35" rx="6.17" fill="var(--ink)" opacity=".07" />
+  </g><g>
+    <rect x="639.17" y="100" width="499.66" height="217.28" rx="0" data-fill="tiles" class="ln-hair" fill="var(--surface)" stroke="var(--border)" />
+    <circle cx="693.49" cy="159.26" r="19.75" fill="var(--tag-2)" />
+    <rect x="733" y="150.62" width="158.02" height="17.28" rx="8.64" fill="var(--ink)" opacity=".12" />
+    <rect x="683.61" y="198.77" width="197.53" height="44.44" rx="9.88" fill="var(--ink)" opacity=".16" />
+    <rect class="lod-fine" x="683.61" y="272.84" width="320.99" height="12.35" rx="6.17" fill="var(--ink)" opacity=".07" />
+  </g><g>
+    <rect x="1178.34" y="100" width="499.66" height="217.28" rx="0" data-fill="tiles" class="ln-hair" fill="var(--surface)" stroke="var(--border)" />
+    <circle cx="1232.66" cy="159.26" r="19.75" fill="var(--tag-3)" />
+    <rect x="1272.16" y="150.62" width="158.02" height="17.28" rx="8.64" fill="var(--ink)" opacity=".12" />
+    <rect x="1222.78" y="198.77" width="197.53" height="44.44" rx="9.88" fill="var(--ink)" opacity=".16" />
+    <rect class="lod-fine" x="1222.78" y="272.84" width="237.04" height="12.35" rx="6.17" fill="var(--ink)" opacity=".07" />
+  </g>
+    <rect x="100" y="417.28" width="1578" height="482.72" rx="0" data-fill="chart" class="ln-hair" fill="var(--surface)" stroke="var(--border)" />
+    <line x1="159.26" y1="476.54" x2="1618.74" y2="476.54" class="ln-hair lod-fine" stroke="var(--border)" stroke-opacity=".6" /><line x1="159.26" y1="567.59" x2="1618.74" y2="567.59" class="ln-hair lod-fine" stroke="var(--border)" stroke-opacity=".6" /><line x1="159.26" y1="658.64" x2="1618.74" y2="658.64" class="ln-hair lod-fine" stroke="var(--border)" stroke-opacity=".6" /><line x1="159.26" y1="749.69" x2="1618.74" y2="749.69" class="ln-hair lod-fine" stroke="var(--border)" stroke-opacity=".6" />
+    <line x1="159.26" y1="840.74" x2="1618.74" y2="840.74" class="ln-hair" stroke="var(--border)" />
+    <path d="M159.26 770.41 C298.49 703.95 344.03 737.18 471.15 640.07 C586.16 553.22 710.36 724.39 837.48 624.74 C970.73 522.53 1085.88 663.08 1209.94 563.43 C1318.96 476.54 1440.1 596.63 1618.74 527.64" fill="none" class="ln-heavy" stroke="var(--border-strong)" />
+    <path opacity="0" d="M159.26 770.41 C298.49 703.95 344.03 737.18 471.15 640.07 C586.16 553.22 710.36 724.39 837.48 624.74 C970.73 522.53 1085.88 663.08 1209.94 563.43 C1318.96 476.54 1440.1 596.63 1618.74 527.64" fill="none" class="ln-heavy" stroke="var(--accent)"><animate attributeName="opacity" values="0;0;.82;.82;0" keyTimes="0;.12;.22;.86;1" calcMode="spline" keySplines=".22 .8 .2 1;.22 .8 .2 1;.22 .8 .2 1;.22 .8 .2 1" dur="7.4s" repeatCount="indefinite" /></path>
+    <circle r="14.81" fill="var(--accent)" opacity="0">
+    <animateMotion path="M159.26 770.41 C298.49 703.95 344.03 737.18 471.15 640.07 C586.16 553.22 710.36 724.39 837.48 624.74 C970.73 522.53 1085.88 663.08 1209.94 563.43 C1318.96 476.54 1440.1 596.63 1618.74 527.64" keyTimes="0;.12;.72;1" keyPoints="0;0;1;1" calcMode="linear" dur="7.4s" repeatCount="indefinite" />
+    <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;.12;.82;1" calcMode="spline" keySplines=".22 .8 .2 1;.22 .8 .2 1;.22 .8 .2 1" dur="7.4s" repeatCount="indefinite" />
+  </circle>
 </svg>

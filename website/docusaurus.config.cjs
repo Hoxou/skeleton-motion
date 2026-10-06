@@ -15,7 +15,13 @@ const config = {
       onBrokenMarkdownLinks: "warn",
     },
   },
-  staticDirectories: ["static", path.resolve(__dirname, "../examples/qa-segnatura-set")],
+  staticDirectories: [
+    "static",
+    path.resolve(__dirname, "../examples/qa-segnatura-set"),
+    path.resolve(__dirname, "../examples/bisonflow"),
+    path.resolve(__dirname, "../examples/skeleton-motion-set"),
+    path.resolve(__dirname, "../examples/studio-set"),
+  ],
   presets: [
     [
       "classic",
@@ -39,8 +45,8 @@ const config = {
     },
     navbar: {
       title: "Skeleton Motion",
-      logo: { alt: "Skeleton Motion", src: "img/logo.svg" },
       items: [
+        { label: "Examples", position: "right", to: "/examples" },
         { label: "Docs", position: "right", to: "/docs" },
         { label: "Roadmap", position: "right", to: "/docs/roadmap" },
         { label: "Support", position: "right", to: "/support" },

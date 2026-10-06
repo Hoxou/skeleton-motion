@@ -1,4 +1,5 @@
 import path from "node:path";
+import { parseAspect } from "./layout/formats.js";
 
 const HELP = `
 skeleton-motion — minimal product-motion assets from a repository or URL
@@ -12,9 +13,10 @@ Options:
   --set                Generate a coordinated multi-asset set
   --count <number>     Assets in a set, from 2 to 4 (default: 4)
   --theme <value>      light, dark, or auto (default: auto)
-  --width <pixels>     Width (default: 720)
-  --height <pixels>    Height (default: 405)
-  --duration <seconds> Loop duration (default: 5)
+  --aspects <values>   Frame shapes, comma-separated (default: 16:9,4:3,1:1,4:5,9:16)
+  --width <pixels>     Exact width; with --height, renders one custom rectangle
+  --height <pixels>    Exact height; with --width, renders one custom rectangle
+  --duration <seconds> Loop duration (default: per motion)
   --concept <value>    auto, flow, list, dashboard, or editor (default: auto)
   --format <values>    svg,html,gif,webm,mp4 or comma-separated (default: svg,html)
   --help               Show help
@@ -23,6 +25,7 @@ Examples:
   skeleton-motion ../qa-segnatura --theme dark --format svg,html
   skeleton-motion ../qa-segnatura --set --out ./motion-set
   skeleton-motion https://example.com --width 1600 --height 900
+  skeleton-motion ../qa-segnatura --set --aspects 16:9,1:1
 `;
 
 function readValue(argv, index, flag) {
@@ -46,12 +49,9 @@ export function parseArgs(argv, cwd = process.cwd()) {
   const options = {
     concept: "auto",
     count: 4,
-    duration: 5,
     formats: ["svg", "html"],
-    height: 405,
     out: path.resolve(cwd, "skeleton-motion-output"),
     theme: "auto",
-    width: 720,
     set: false,
   };
 
@@ -78,6 +78,9 @@ export function parseArgs(argv, cwd = process.cwd()) {
     else if (arg === "--height") options.height = positiveNumber(value, arg);
     else if (arg === "--duration") options.duration = positiveNumber(value, arg);
     else if (arg === "--concept") options.concept = value;
+    else if (arg === "--aspects") {
+      options.aspects = [...new Set(value.split(",").map((item) => item.trim()).filter(Boolean))].map(parseAspect);
+    }
     else if (arg === "--format") {
       options.formats = [...new Set(value.split(",").map((item) => item.trim()).filter(Boolean))];
     } else throw new Error(`unknown option: ${arg}`);

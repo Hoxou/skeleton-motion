@@ -1,0 +1,14 @@
+{
+  "name": "preview-shell",
+  "private": true,
+  "type": "module",
+  "description": "Display Room React app. Dev-time only (see AGENTS.md): `npm run build:preview-shell` at the repo root bundles it into ../../src/preview-shell.html, which the CLI ships. React, Base UI, and the chrome font resolve from the repo root's devDependencies.",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^6.1.2",
+    "vite": "^8.3.3"
+  }
+}

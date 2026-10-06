@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="405" viewBox="0 0 1778 1000" role="img" aria-labelledby="title description">
+  <title id="title">skeleton-motion-studio-set.assign-color — assign-color</title>
+  <desc id="description">Minimal palette product illustration generated from skeleton-motion studio set.</desc>
+  <style>
+    :root {
+      --accent: #526cff;
+      --accent-1: #526cff;
+      --accent-2: #ffc93d;
+      --accent-3: #3fd08a;
+      --accent-4: #f5f5f6;
+      --accent-soft: color-mix(in oklab, #526cff 12%, #202024);
+      --background: #111113;
+      --border: rgb(255 255 255 / 10%);
+      --border-strong: color-mix(in oklab, #fafafa 18%, #202024);
+      --cursor-outline: #111113;
+      --ink: #fafafa;
+      --muted: #27272a;
+      --canvas: #111113;
+      --radius: 12px;
+      --surface: #202024;
+      --tag-1: #526cff;
+      --tag-2: #ffc93d;
+      --tag-3: #3fd08a;
+      --tag-4: #f5f5f6;
+      --line-hair: 2.4691; --line-base: 4.9383; --line-strong: 5.5556; --line-heavy: 7.4074; --cursor-scale: 2.1728;
+    }
+    @media (min-width: 0px) { :root { --line-hair: 8.3344; --line-base: 13.8906; --line-strong: 15.5575; --line-heavy: 19.4469; --cursor-scale: 6.223; } }
+    @media (min-width: 192px) { :root { --line-hair: 6.9453; --line-base: 11.5755; --line-strong: 12.9646; --line-heavy: 16.2057; --cursor-scale: 5.1858; } }
+    @media (min-width: 230px) { :root { --line-hair: 5.7978; --line-base: 9.663; --line-strong: 10.8226; --line-heavy: 13.5283; --cursor-scale: 4.329; } }
+    @media (min-width: 276px) { :root { --line-hair: 4.8315; --line-base: 8.0525; --line-strong: 9.0188; --line-heavy: 11.2736; --cursor-scale: 3.6075; } }
+    @media (min-width: 332px) { :root { --line-hair: 4.0166; --line-base: 6.6943; --line-strong: 7.4976; --line-heavy: 9.372; --cursor-scale: 2.999; } }
+    @media (min-width: 398px) { :root { --line-hair: 3.3505; --line-base: 5.5842; --line-strong: 6.2543; --line-heavy: 7.8178; --cursor-scale: 2.5017; } }
+    @media (min-width: 478px) { :root { --line-hair: 2.7897; --line-base: 4.9383; --line-strong: 5.5556; --line-heavy: 7.4074; --cursor-scale: 2.1728; } }
+    @media (min-width: 573px) { :root { --line-hair: 2.4691; --line-base: 4.9383; --line-strong: 5.5556; --line-heavy: 7.4074; --cursor-scale: 2.1728; } }
+    @media (min-width: 688px) { :root { --line-hair: 2.4691; --line-base: 4.9383; --line-strong: 5.5556; --line-heavy: 7.4074; --cursor-scale: 2.1728; } }
+    @media (min-width: 826px) { :root { --line-hair: 2.4691; --line-base: 4.9339; --line-strong: 5.3824; --line-heavy: 7.1766; --cursor-scale: 2.153; } }
+    @media (min-width: 991px) { :root { --line-hair: 2.2431; --line-base: 4.1123; --line-strong: 4.4861; --line-heavy: 5.9815; --cursor-scale: 1.7944; } }
+    @media (min-width: 1189px) { :root { --line-hair: 1.869; --line-base: 3.4264; --line-strong: 3.7379; --line-heavy: 4.9839; --cursor-scale: 1.4952; } }
+    @media (min-width: 1427px) { :root { --line-hair: 1.5578; --line-base: 2.856; --line-strong: 3.1157; --line-heavy: 4.1542; --cursor-scale: 1.2463; } }
+    @media (min-width: 1712px) { :root { --line-hair: 1.2984; --line-base: 2.3805; --line-strong: 2.5969; --line-heavy: 3.4625; --cursor-scale: 1.0388; } }
+    @media (min-width: 2054px) { :root { --line-hair: 1.0819; --line-base: 1.9836; --line-strong: 2.1639; --line-heavy: 2.8852; --cursor-scale: 0.8656; } }
+    @media (min-width: 2465px) { :root { --line-hair: 0.9016; --line-base: 1.653; --line-strong: 1.8032; --line-heavy: 2.4043; --cursor-scale: 0.7213; } }
+    @media (min-width: 2958px) { :root { --line-hair: 0.7513; --line-base: 1.3773; --line-strong: 1.5025; --line-heavy: 2.0034; --cursor-scale: 0.601; } }
+    @media (min-width: 3550px) { :root { --line-hair: 0.6261; --line-base: 1.1478; --line-strong: 1.2521; --line-heavy: 1.6695; --cursor-scale: 0.5008; } }
+    .ln-hair { stroke-width: var(--line-hair); } .ln-base { stroke-width: var(--line-base); } .ln-strong { stroke-width: var(--line-strong); } .ln-heavy { stroke-width: var(--line-heavy); }
+    .ln-mark { stroke-width: 7; }
+    .ln-cursor { stroke-width: 2.2; }
+    .ln-cursor-ripple { stroke-width: 2; }
+    .cursor-glyph { transform: scale(var(--cursor-scale)); }
+    @media (max-width: 399.98px) { .lod-fine, .lod-texture { display: none; } }
+    @media (prefers-reduced-motion: reduce) { svg { visibility: visible; } }
+  </style>
+  <defs><pattern id="dots" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="1.5" cy="1.5" r="1.25" fill="var(--border)" /></pattern><radialGradient id="glow" cx="50%" cy="38%" r="65%">
+    <stop offset="0%" stop-color="var(--accent)" stop-opacity=".16" />
+    <stop offset="45%" stop-color="var(--accent)" stop-opacity=".07" />
+    <stop offset="100%" stop-color="var(--accent)" stop-opacity="0" />
+  </radialGradient><filter id="cursor-shadow" x="-60%" y="-60%" width="220%" height="220%"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#000" flood-opacity=".28" /></filter></defs>
+
+    <defs><filter id="popover-shadow" x="-20%" y="-20%" width="140%" height="160%"><feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#000" flood-opacity=".1" /></filter></defs>
+    <metadata id="skeleton-layout">{"format":"16:9","regions":{"canvas":{"height":800,"width":934.7901234567902,"x":100,"y":100},"inspector":{"height":800,"width":543.2098765432098,"x":1134.7901234567903,"y":100}}}</metadata>
+    <rect width="1778" height="1000" fill="url(#dots)" opacity=".62" class="lod-texture" />
+    <rect x="100" y="100" width="934.79" height="800" rx="29.63" data-fill="canvas" class="ln-hair" fill="var(--surface)" stroke="var(--border)" />
+    <circle opacity="1" r="240" cx="567.4" cy="500" fill="var(--tag-1)"><animate attributeName="opacity" values="1;1;0;0;1;1" keyTimes="0;.153;.173;.697;.727;1" calcMode="spline" keySplines=".16 1 .3 1;.22 .8 .2 1;.16 1 .3 1;.22 .8 .2 1;.22 .8 .2 1" dur="8.4s" repeatCount="indefinite" /><animate attributeName="r" values="240;240;247.2;240;240;247.2;240;240;247.2;240;240" keyTimes="0;.153;.173;.193;.42;.44;.46;.687;.707;.727;1" calcMode="spline" keySplines=".16 1 .3 1;.22 .8 .2 1;.22 .8 .2 1;.16 1 .3 1;.22 .8 .2 1;.22 .8 .2 1;.16 1 .3 1;.22 .8 .2 1;.22 .8 .2 1;.22 .8 .2 1" dur="8.4s" repeatCount="indefinite" /></circle>
+    <circle opacity="0" r="240" cx="567.4" cy="500" fill="var(--tag-2)"><animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;.163;.193;.42;.44;1" calcMode="spline" keySplines=".16 1 .3 1;.22 .8 .2 1;.16 1 .3 1;.22 .8 .2 1;.22 .8 .2 1" dur="8.4s" repeatCount="indefinite" /><animate attributeName="r" values="240;240;247.2;240;240;247.2;240;240;247.2;240;240" keyTimes="0;.153;.173;.193;.42;.44;.46;.687;.707;.727;1" calcMode="spline" keySplines=".16 1 .3 1;.22 .8 .2 1;.22 .8 .2 1;.16 1 .3 1;.22 .8 .2 1;.22 .8 .2 1;.16 1 .3 1;.22 .8 .2 1;.22 .8 .2 1;.22 .8 .2 1" dur="8.4s" repeatCount="indefinite" /></circle>
+    <circle opacity="0" r="240" cx="567.4" cy="500" fill="var(--tag-3)"><animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;.43;.46;.687;.707;1" calcMode="spline" keySplines=".16 1 .3 1;.22 .8 .2 1;.16 1 .3 1;.22 .8 .2 1;.22 .8 .2 1" dur="8.4s" repeatCount="indefinite" /><animate attributeName="r" values="240;240;247.2;240;240;247.2;240;240;247.2;240;240" keyTimes="0;.153;.173;.193;.42;.44;.46;.687;.707;.727;1" calcMode="spline" keySplines=".16 1 .3 1;.22 .8 .2 1;.22 .8 .2 1;.16 1 .3 1;.22 .8 .2 1;.22 .8 .2 1;.16 1 .3 1;.22 .8 .2 1;.22 .8 .2 1;.22 .8 .2 1" dur="8.4s" repeatCount="indefinite" /></circle>
+    <g id="inspector">
+      <rect x="1134.79" y="100" width="543.21" height="800" rx="29.63" data-fill="inspector" class="ln-hair" fill="var(--surface)" stroke="var(--border)" />
+      <rect x="1184.17" y="149.38" width="177.78" height="17.28" rx="8.64" fill="var(--ink)" opacity=".14" />
+      <rect x="1184.17" y="208.64" width="98.77" height="14.81" rx="7.41" fill="var(--ink)" opacity=".1" />
+      <rect x="1184.17" y="258.02" width="83.95" height="83.95" rx="29.63" fill="var(--tag-1)" class="ln-hair" stroke="var(--border)" />
+    <rect opacity="0" x="1174.3" y="248.15" width="103.7" height="103.7" rx="39.51" fill="none" class="ln-strong" stroke="var(--accent)"><animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;.687;.697;.88;1" calcMode="spline" keySplines=".16 1 .3 1;.16 1 .3 1;.22 .8 .2 1;.22 .8 .2 1" dur="8.4s" repeatCount="indefinite" /></rect><rect x="1304.34" y="258.02" width="83.95" height="83.95" rx="29.63" fill="var(--tag-2)" class="ln-hair" stroke="var(--border)" />
+    <rect opacity="0" x="1294.46" y="248.15" width="103.7" height="103.7" rx="39.51" fill="none" class="ln-strong" stroke="var(--accent)"><animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;.153;.163;.42;.43;1" calcMode="spline" keySplines=".16 1 .3 1;.16 1 .3 1;.16 1 .3 1;.16 1 .3 1;.22 .8 .2 1" dur="8.4s" repeatCount="indefinite" /></rect><rect x="1424.5" y="258.02" width="83.95" height="83.95" rx="29.63" fill="var(--tag-3)" class="ln-hair" stroke="var(--border)" />
+    <rect opacity="0" x="1414.63" y="248.15" width="103.7" height="103.7" rx="39.51" fill="none" class="ln-strong" stroke="var(--accent)"><animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;.42;.43;.687;.697;1" calcMode="spline" keySplines=".16 1 .3 1;.16 1 .3 1;.16 1 .3 1;.16 1 .3 1;.22 .8 .2 1" dur="8.4s" repeatCount="indefinite" /></rect><rect x="1544.67" y="258.02" width="83.95" height="83.95" rx="29.63" fill="var(--tag-4)" class="ln-hair" stroke="var(--border)" />
+
+      <rect x="1184.17" y="391.36" width="444.44" height="64.2" rx="29.63" fill="var(--muted)" />
+        <rect x="1184.17" y="588.89" width="444.44" height="64.2" rx="29.63" fill="var(--muted)" />
+        <rect class="lod-fine" x="1213.8" y="613.58" width="158.02" height="14.81" rx="7.41" fill="var(--ink)" opacity=".1" /><rect x="1184.17" y="786.42" width="444.44" height="64.2" rx="29.63" fill="var(--muted)" />
+        <rect class="lod-fine" x="1213.8" y="811.11" width="118.52" height="14.81" rx="7.41" fill="var(--ink)" opacity=".1" />
+      <circle cx="1216.27" cy="423.46" r="14.81" fill="var(--tag-1)" />
+      <circle opacity="0" cx="1216.27" cy="423.46" r="14.81" fill="var(--tag-2)"><animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;.153;.173;.42;.44;1" calcMode="spline" keySplines=".16 1 .3 1;.22 .8 .2 1;.16 1 .3 1;.22 .8 .2 1;.22 .8 .2 1" dur="8.4s" repeatCount="indefinite" /></circle><circle opacity="0" cx="1216.27" cy="423.46" r="14.81" fill="var(--tag-3)"><animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;.42;.44;.687;.707;1" calcMode="spline" keySplines=".16 1 .3 1;.22 .8 .2 1;.16 1 .3 1;.22 .8 .2 1;.22 .8 .2 1" dur="8.4s" repeatCount="indefinite" /></circle>
+      <rect width="138.27" x="1250.84" y="416.05" height="14.81" rx="7.41" fill="var(--ink)" opacity=".16"><animate attributeName="width" values="138.27;138.27;158.02;158.02;172.84;172.84;138.27;138.27" keyTimes="0;.153;.173;.42;.44;.687;.707;1" calcMode="spline" keySplines=".16 1 .3 1;.22 .8 .2 1;.16 1 .3 1;.22 .8 .2 1;.16 1 .3 1;.22 .8 .2 1;.22 .8 .2 1" dur="8.4s" repeatCount="indefinite" /></rect>
+    </g>
+
+    <g id="cursor" opacity="0">
+      <g class="cursor-glyph">
+        <circle cx="0" cy="0" r="7" fill="none" stroke="var(--accent)" class="ln-cursor-ripple" opacity="0">
+    <animate attributeName="r" values="7;7;24;29;7" keyTimes="0;.128;.171;.238;1" dur="8.4s" repeatCount="indefinite" />
+    <animate attributeName="opacity" values="0;0;.62;0;0" keyTimes="0;.128;.171;.238;1" dur="8.4s" repeatCount="indefinite" />
+  </circle><circle cx="0" cy="0" r="7" fill="none" stroke="var(--accent)" class="ln-cursor-ripple" opacity="0">
+    <animate attributeName="r" values="7;7;24;29;7" keyTimes="0;.395;.438;.505;1" dur="8.4s" repeatCount="indefinite" />
+    <animate attributeName="opacity" values="0;0;.62;0;0" keyTimes="0;.395;.438;.505;1" dur="8.4s" repeatCount="indefinite" />
+  </circle><circle cx="0" cy="0" r="7" fill="none" stroke="var(--accent)" class="ln-cursor-ripple" opacity="0">
+    <animate attributeName="r" values="7;7;24;29;7" keyTimes="0;.662;.705;.772;1" dur="8.4s" repeatCount="indefinite" />
+    <animate attributeName="opacity" values="0;0;.62;0;0" keyTimes="0;.662;.705;.772;1" dur="8.4s" repeatCount="indefinite" />
+  </circle>
+        <path d="M2.5 2 V27 L10 19.8 H21.5 Z" fill="var(--accent)" stroke="var(--cursor-outline)" class="ln-cursor" stroke-linejoin="round" filter="url(#cursor-shadow)" />
+      </g>
+      <animate attributeName="opacity" values="0;1;1;0;0" keyTimes="0;.06;.84;.87;1" dur="8.4s" repeatCount="indefinite" />
+      <animateTransform attributeName="transform" type="translate" values="829.14 756;829.14 756;1346.31 300;1346.31 300;1466.48 300;1466.48 300;1226.15 300;1226.15 300;829.14 756" keyTimes="0;.1;.147;.367;.413;.633;.68;.88;1" calcMode="spline" keySplines=".65 0 .35 1;.65 0 .35 1;.65 0 .35 1;.65 0 .35 1;.65 0 .35 1;.65 0 .35 1;.65 0 .35 1;.65 0 .35 1" dur="8.4s" repeatCount="indefinite" />
+    </g>
+</svg>

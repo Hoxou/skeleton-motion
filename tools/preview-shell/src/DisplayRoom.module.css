@@ -1,0 +1,54 @@
+.room {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 248px;
+  gap: 16px;
+  align-items: start;
+  padding: 88px 30px 30px;
+}
+
+.panel {
+  position: sticky;
+  top: 88px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px;
+  padding: 12px;
+  border-radius: 22px;
+  background: var(--home-soft);
+}
+
+.stage {
+  container-type: inline-size;
+  display: grid;
+  min-height: calc(100vh - 118px);
+  padding: clamp(24px, 4vw, 56px);
+  border: 1px solid var(--home-soft-hover);
+  border-radius: 28px;
+  background: var(--page);
+  color: var(--page-ink);
+  transition: background-color 320ms ease, color 320ms ease;
+}
+
+.scene {
+  display: grid;
+  place-items: center;
+  animation: scene-in 360ms cubic-bezier(.22, 1, .36, 1) both;
+}
+
+@keyframes scene-in {
+  from { opacity: 0; transform: translateY(8px) scale(.992); }
+  to { opacity: 1; transform: none; }
+}
+
+@media (max-width: 900px) {
+  .room { grid-template-columns: 1fr; padding: 80px 22px 22px; }
+  .panel { position: static; order: -1; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto; align-items: end; }
+  .stage { min-height: 0; }
+}
+
+@media (max-width: 560px) {
+  .room { gap: 12px; padding: 112px 14px 14px; }
+  .panel { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .download { grid-column: 1 / -1; }
+  .stage { padding: 18px; border-radius: 22px; }
+}

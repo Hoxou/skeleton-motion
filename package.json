@@ -13,7 +13,10 @@
     "docs:start": "docusaurus start website",
     "test": "node --test",
     "check": "node --check ./bin/skeleton-motion.js && node --test",
-    "verify": "npm run check && npm run docs:build"
+    "verify": "npm run check && npm run docs:build",
+    "audit:fill": "node ./scripts/audit-fill.mjs",
+    "tint:landing": "node ./scripts/tint-landing-assets.mjs",
+    "build:preview-shell": "npm --prefix tools/preview-shell install && npm --prefix tools/preview-shell run build && node scripts/sync-preview-shell.mjs"
   },
   "engines": {
     "node": ">=20"
@@ -22,10 +25,11 @@
     "playwright-core": "^1.55.0"
   },
   "devDependencies": {
+    "@base-ui/react": "^1.8.0",
     "@docusaurus/core": "^3.10.2",
     "@docusaurus/preset-classic": "^3.10.2",
+    "@fontsource-variable/instrument-sans": "^5.3.0",
     "@mdx-js/react": "^3.1.1",
-    "@radix-ui/themes": "^3.3.0",
     "clsx": "^2.1.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"

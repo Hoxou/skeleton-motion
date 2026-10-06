@@ -175,7 +175,14 @@
       "backdrop": "dots"
     }
   },
-  "generatedAt": "2026-10-06T04:00:18.569Z",
+  "formats": [
+    "16:9",
+    "4:3",
+    "1:1",
+    "4:5",
+    "9:16"
+  ],
+  "generatedAt": "2026-10-06T08:23:31.646Z",
   "schemaVersion": 2,
   "set": {
     "archive": "qa-segnatura-motion-set.assets.zip",
@@ -203,6 +210,7 @@
               "frame": "none",
               "texture": "transparent-overlay"
             },
+            "duration": 5.4,
             "evidence": [
               {
                 "file": "app/app/[projectSlug]/test-cases/test-case-table.client.tsx",
@@ -226,6 +234,7 @@
               }
             ],
             "file": "qa-segnatura-motion-set.select-item.light.svg",
+            "format": "16:9",
             "motion": "select-and-reveal",
             "motionPhysics": {
               "anticipation": "subtle-countermove",
@@ -281,6 +290,7 @@
               "frame": "none",
               "texture": "transparent-overlay"
             },
+            "duration": 5.4,
             "evidence": [
               {
                 "file": "app/app/[projectSlug]/test-cases/test-case-table.client.tsx",
@@ -304,6 +314,7 @@
               }
             ],
             "file": "qa-segnatura-motion-set.select-item.dark.svg",
+            "format": "16:9",
             "motion": "select-and-reveal",
             "motionPhysics": {
               "anticipation": "subtle-countermove",
@@ -346,6 +357,654 @@
             "viewport": {
               "height": 405,
               "width": 720
+            }
+          },
+          {
+            "backdrop": "dots",
+            "colorSemantics": {
+              "categories": "primary-tints",
+              "confirmation": "primary",
+              "decorativeCycling": false,
+              "signal": "motion-role"
+            },
+            "composition": {
+              "backgroundOwner": "host",
+              "frame": "none",
+              "texture": "transparent-overlay"
+            },
+            "duration": 5.62,
+            "evidence": [
+              {
+                "file": "app/app/[projectSlug]/test-cases/test-case-table.client.tsx",
+                "kind": "list",
+                "score": 139
+              },
+              {
+                "file": "app/app/[projectSlug]/automations/runs/run-table.client.tsx",
+                "kind": "list",
+                "score": 125
+              },
+              {
+                "file": "app/app/[projectSlug]/automations/scenario-table.client.tsx",
+                "kind": "list",
+                "score": 123
+              },
+              {
+                "file": "app/prototype/automations/scenarios-list.client.tsx",
+                "kind": "list",
+                "score": 123
+              }
+            ],
+            "file": "qa-segnatura-motion-set.select-item.4x3.light.svg",
+            "format": "4:3",
+            "motion": "select-and-reveal",
+            "motionPhysics": {
+              "anticipation": "subtle-countermove",
+              "continuity": "preserve-identity",
+              "effects": "no-overshoot",
+              "energyPath": "selection-to-detail",
+              "followThrough": "single-settle",
+              "spatial": "gentle-overshoot"
+            },
+            "motionProfile": {
+              "camera": "static",
+              "emphasis": "selection-reveal",
+              "heroMotion": "detail-expand",
+              "name": "select-and-reveal",
+              "pointer": "cursor-click"
+            },
+            "palette": {
+              "accent": "#142ce3",
+              "background": "oklch(1 0 0)",
+              "border": "oklch(0.922 0 0)",
+              "foreground": "oklch(0.145 0 0)",
+              "muted": "oklch(0.97 0 0)",
+              "mutedForeground": "oklch(0.556 0 0)",
+              "radius": 0,
+              "surface": "oklch(1 0 0)",
+              "accents": [
+                "#142ce3"
+              ],
+              "pastels": [],
+              "colorMode": "monochrome"
+            },
+            "theme": "light",
+            "typography": {
+              "family": "DM Sans",
+              "stack": "\"DM Sans\", ui-sans-serif, system-ui, sans-serif",
+              "file": "qa-segnatura-motion-set.preview-font.ttf"
+            },
+            "viewport": {
+              "height": 405,
+              "width": 540
+            }
+          },
+          {
+            "backdrop": "dots",
+            "colorSemantics": {
+              "categories": "primary-tints",
+              "confirmation": "primary",
+              "decorativeCycling": false,
+              "signal": "motion-role"
+            },
+            "composition": {
+              "backgroundOwner": "host",
+              "frame": "none",
+              "texture": "transparent-overlay"
+            },
+            "duration": 5.62,
+            "evidence": [
+              {
+                "file": "app/app/[projectSlug]/test-cases/test-case-table.client.tsx",
+                "kind": "list",
+                "score": 139
+              },
+              {
+                "file": "app/app/[projectSlug]/automations/runs/run-table.client.tsx",
+                "kind": "list",
+                "score": 125
+              },
+              {
+                "file": "app/app/[projectSlug]/automations/scenario-table.client.tsx",
+                "kind": "list",
+                "score": 123
+              },
+              {
+                "file": "app/prototype/automations/scenarios-list.client.tsx",
+                "kind": "list",
+                "score": 123
+              }
+            ],
+            "file": "qa-segnatura-motion-set.select-item.4x3.dark.svg",
+            "format": "4:3",
+            "motion": "select-and-reveal",
+            "motionPhysics": {
+              "anticipation": "subtle-countermove",
+              "continuity": "preserve-identity",
+              "effects": "no-overshoot",
+              "energyPath": "selection-to-detail",
+              "followThrough": "single-settle",
+              "spatial": "gentle-overshoot"
+            },
+            "motionProfile": {
+              "camera": "static",
+              "emphasis": "selection-reveal",
+              "heroMotion": "detail-expand",
+              "name": "select-and-reveal",
+              "pointer": "cursor-click"
+            },
+            "palette": {
+              "accent": "#586df7",
+              "background": "oklch(0.145 0 0)",
+              "border": "oklch(1 0 0 / 10%)",
+              "foreground": "oklch(0.985 0 0)",
+              "muted": "oklch(0.269 0 0)",
+              "mutedForeground": "oklch(0.708 0 0)",
+              "radius": 0,
+              "surface": "oklch(0.205 0 0)",
+              "accents": [
+                "#586df7"
+              ],
+              "pastels": [
+                "color-mix(in oklab, #586df7 22%, oklch(0.205 0 0))"
+              ],
+              "colorMode": "monochrome"
+            },
+            "theme": "dark",
+            "typography": {
+              "family": "DM Sans",
+              "stack": "\"DM Sans\", ui-sans-serif, system-ui, sans-serif",
+              "file": "qa-segnatura-motion-set.preview-font.ttf"
+            },
+            "viewport": {
+              "height": 405,
+              "width": 540
+            }
+          },
+          {
+            "backdrop": "dots",
+            "colorSemantics": {
+              "categories": "primary-tints",
+              "confirmation": "primary",
+              "decorativeCycling": false,
+              "signal": "motion-role"
+            },
+            "composition": {
+              "backgroundOwner": "host",
+              "frame": "none",
+              "texture": "transparent-overlay"
+            },
+            "duration": 5.18,
+            "evidence": [
+              {
+                "file": "app/app/[projectSlug]/test-cases/test-case-table.client.tsx",
+                "kind": "list",
+                "score": 139
+              },
+              {
+                "file": "app/app/[projectSlug]/automations/runs/run-table.client.tsx",
+                "kind": "list",
+                "score": 125
+              },
+              {
+                "file": "app/app/[projectSlug]/automations/scenario-table.client.tsx",
+                "kind": "list",
+                "score": 123
+              },
+              {
+                "file": "app/prototype/automations/scenarios-list.client.tsx",
+                "kind": "list",
+                "score": 123
+              }
+            ],
+            "file": "qa-segnatura-motion-set.select-item.1x1.light.svg",
+            "format": "1:1",
+            "motion": "select-and-reveal",
+            "motionPhysics": {
+              "anticipation": "subtle-countermove",
+              "continuity": "preserve-identity",
+              "effects": "no-overshoot",
+              "energyPath": "selection-to-detail",
+              "followThrough": "single-settle",
+              "spatial": "gentle-overshoot"
+            },
+            "motionProfile": {
+              "camera": "static",
+              "emphasis": "selection-reveal",
+              "heroMotion": "detail-expand",
+              "name": "select-and-reveal",
+              "pointer": "cursor-click"
+            },
+            "palette": {
+              "accent": "#142ce3",
+              "background": "oklch(1 0 0)",
+              "border": "oklch(0.922 0 0)",
+              "foreground": "oklch(0.145 0 0)",
+              "muted": "oklch(0.97 0 0)",
+              "mutedForeground": "oklch(0.556 0 0)",
+              "radius": 0,
+              "surface": "oklch(1 0 0)",
+              "accents": [
+                "#142ce3"
+              ],
+              "pastels": [],
+              "colorMode": "monochrome"
+            },
+            "theme": "light",
+            "typography": {
+              "family": "DM Sans",
+              "stack": "\"DM Sans\", ui-sans-serif, system-ui, sans-serif",
+              "file": "qa-segnatura-motion-set.preview-font.ttf"
+            },
+            "viewport": {
+              "height": 405,
+              "width": 405
+            }
+          },
+          {
+            "backdrop": "dots",
+            "colorSemantics": {
+              "categories": "primary-tints",
+              "confirmation": "primary",
+              "decorativeCycling": false,
+              "signal": "motion-role"
+            },
+            "composition": {
+              "backgroundOwner": "host",
+              "frame": "none",
+              "texture": "transparent-overlay"
+            },
+            "duration": 5.18,
+            "evidence": [
+              {
+                "file": "app/app/[projectSlug]/test-cases/test-case-table.client.tsx",
+                "kind": "list",
+                "score": 139
+              },
+              {
+                "file": "app/app/[projectSlug]/automations/runs/run-table.client.tsx",
+                "kind": "list",
+                "score": 125
+              },
+              {
+                "file": "app/app/[projectSlug]/automations/scenario-table.client.tsx",
+                "kind": "list",
+                "score": 123
+              },
+              {
+                "file": "app/prototype/automations/scenarios-list.client.tsx",
+                "kind": "list",
+                "score": 123
+              }
+            ],
+            "file": "qa-segnatura-motion-set.select-item.1x1.dark.svg",
+            "format": "1:1",
+            "motion": "select-and-reveal",
+            "motionPhysics": {
+              "anticipation": "subtle-countermove",
+              "continuity": "preserve-identity",
+              "effects": "no-overshoot",
+              "energyPath": "selection-to-detail",
+              "followThrough": "single-settle",
+              "spatial": "gentle-overshoot"
+            },
+            "motionProfile": {
+              "camera": "static",
+              "emphasis": "selection-reveal",
+              "heroMotion": "detail-expand",
+              "name": "select-and-reveal",
+              "pointer": "cursor-click"
+            },
+            "palette": {
+              "accent": "#586df7",
+              "background": "oklch(0.145 0 0)",
+              "border": "oklch(1 0 0 / 10%)",
+              "foreground": "oklch(0.985 0 0)",
+              "muted": "oklch(0.269 0 0)",
+              "mutedForeground": "oklch(0.708 0 0)",
+              "radius": 0,
+              "surface": "oklch(0.205 0 0)",
+              "accents": [
+                "#586df7"
+              ],
+              "pastels": [
+                "color-mix(in oklab, #586df7 22%, oklch(0.205 0 0))"
+              ],
+              "colorMode": "monochrome"
+            },
+            "theme": "dark",
+            "typography": {
+              "family": "DM Sans",
+              "stack": "\"DM Sans\", ui-sans-serif, system-ui, sans-serif",
+              "file": "qa-segnatura-motion-set.preview-font.ttf"
+            },
+            "viewport": {
+              "height": 405,
+              "width": 405
+            }
+          },
+          {
+            "backdrop": "dots",
+            "colorSemantics": {
+              "categories": "primary-tints",
+              "confirmation": "primary",
+              "decorativeCycling": false,
+              "signal": "motion-role"
+            },
+            "composition": {
+              "backgroundOwner": "host",
+              "frame": "none",
+              "texture": "transparent-overlay"
+            },
+            "duration": 5.83,
+            "evidence": [
+              {
+                "file": "app/app/[projectSlug]/test-cases/test-case-table.client.tsx",
+                "kind": "list",
+                "score": 139
+              },
+              {
+                "file": "app/app/[projectSlug]/automations/runs/run-table.client.tsx",
+                "kind": "list",
+                "score": 125
+              },
+              {
+                "file": "app/app/[projectSlug]/automations/scenario-table.client.tsx",
+                "kind": "list",
+                "score": 123
+              },
+              {
+                "file": "app/prototype/automations/scenarios-list.client.tsx",
+                "kind": "list",
+                "score": 123
+              }
+            ],
+            "file": "qa-segnatura-motion-set.select-item.4x5.light.svg",
+            "format": "4:5",
+            "motion": "select-and-reveal",
+            "motionPhysics": {
+              "anticipation": "subtle-countermove",
+              "continuity": "preserve-identity",
+              "effects": "no-overshoot",
+              "energyPath": "selection-to-detail",
+              "followThrough": "single-settle",
+              "spatial": "gentle-overshoot"
+            },
+            "motionProfile": {
+              "camera": "static",
+              "emphasis": "selection-reveal",
+              "heroMotion": "detail-expand",
+              "name": "select-and-reveal",
+              "pointer": "cursor-click"
+            },
+            "palette": {
+              "accent": "#142ce3",
+              "background": "oklch(1 0 0)",
+              "border": "oklch(0.922 0 0)",
+              "foreground": "oklch(0.145 0 0)",
+              "muted": "oklch(0.97 0 0)",
+              "mutedForeground": "oklch(0.556 0 0)",
+              "radius": 0,
+              "surface": "oklch(1 0 0)",
+              "accents": [
+                "#142ce3"
+              ],
+              "pastels": [],
+              "colorMode": "monochrome"
+            },
+            "theme": "light",
+            "typography": {
+              "family": "DM Sans",
+              "stack": "\"DM Sans\", ui-sans-serif, system-ui, sans-serif",
+              "file": "qa-segnatura-motion-set.preview-font.ttf"
+            },
+            "viewport": {
+              "height": 506,
+              "width": 405
+            }
+          },
+          {
+            "backdrop": "dots",
+            "colorSemantics": {
+              "categories": "primary-tints",
+              "confirmation": "primary",
+              "decorativeCycling": false,
+              "signal": "motion-role"
+            },
+            "composition": {
+              "backgroundOwner": "host",
+              "frame": "none",
+              "texture": "transparent-overlay"
+            },
+            "duration": 5.83,
+            "evidence": [
+              {
+                "file": "app/app/[projectSlug]/test-cases/test-case-table.client.tsx",
+                "kind": "list",
+                "score": 139
+              },
+              {
+                "file": "app/app/[projectSlug]/automations/runs/run-table.client.tsx",
+                "kind": "list",
+                "score": 125
+              },
+              {
+                "file": "app/app/[projectSlug]/automations/scenario-table.client.tsx",
+                "kind": "list",
+                "score": 123
+              },
+              {
+                "file": "app/prototype/automations/scenarios-list.client.tsx",
+                "kind": "list",
+                "score": 123
+              }
+            ],
+            "file": "qa-segnatura-motion-set.select-item.4x5.dark.svg",
+            "format": "4:5",
+            "motion": "select-and-reveal",
+            "motionPhysics": {
+              "anticipation": "subtle-countermove",
+              "continuity": "preserve-identity",
+              "effects": "no-overshoot",
+              "energyPath": "selection-to-detail",
+              "followThrough": "single-settle",
+              "spatial": "gentle-overshoot"
+            },
+            "motionProfile": {
+              "camera": "static",
+              "emphasis": "selection-reveal",
+              "heroMotion": "detail-expand",
+              "name": "select-and-reveal",
+              "pointer": "cursor-click"
+            },
+            "palette": {
+              "accent": "#586df7",
+              "background": "oklch(0.145 0 0)",
+              "border": "oklch(1 0 0 / 10%)",
+              "foreground": "oklch(0.985 0 0)",
+              "muted": "oklch(0.269 0 0)",
+              "mutedForeground": "oklch(0.708 0 0)",
+              "radius": 0,
+              "surface": "oklch(0.205 0 0)",
+              "accents": [
+                "#586df7"
+              ],
+              "pastels": [
+                "color-mix(in oklab, #586df7 22%, oklch(0.205 0 0))"
+              ],
+              "colorMode": "monochrome"
+            },
+            "theme": "dark",
+            "typography": {
+              "family": "DM Sans",
+              "stack": "\"DM Sans\", ui-sans-serif, system-ui, sans-serif",
+              "file": "qa-segnatura-motion-set.preview-font.ttf"
+            },
+            "viewport": {
+              "height": 506,
+              "width": 405
+            }
+          },
+          {
+            "backdrop": "dots",
+            "colorSemantics": {
+              "categories": "primary-tints",
+              "confirmation": "primary",
+              "decorativeCycling": false,
+              "signal": "motion-role"
+            },
+            "composition": {
+              "backgroundOwner": "host",
+              "frame": "none",
+              "texture": "transparent-overlay"
+            },
+            "duration": 6.05,
+            "evidence": [
+              {
+                "file": "app/app/[projectSlug]/test-cases/test-case-table.client.tsx",
+                "kind": "list",
+                "score": 139
+              },
+              {
+                "file": "app/app/[projectSlug]/automations/runs/run-table.client.tsx",
+                "kind": "list",
+                "score": 125
+              },
+              {
+                "file": "app/app/[projectSlug]/automations/scenario-table.client.tsx",
+                "kind": "list",
+                "score": 123
+              },
+              {
+                "file": "app/prototype/automations/scenarios-list.client.tsx",
+                "kind": "list",
+                "score": 123
+              }
+            ],
+            "file": "qa-segnatura-motion-set.select-item.9x16.light.svg",
+            "format": "9:16",
+            "motion": "select-and-reveal",
+            "motionPhysics": {
+              "anticipation": "subtle-countermove",
+              "continuity": "preserve-identity",
+              "effects": "no-overshoot",
+              "energyPath": "selection-to-detail",
+              "followThrough": "single-settle",
+              "spatial": "gentle-overshoot"
+            },
+            "motionProfile": {
+              "camera": "static",
+              "emphasis": "selection-reveal",
+              "heroMotion": "detail-expand",
+              "name": "select-and-reveal",
+              "pointer": "cursor-click"
+            },
+            "palette": {
+              "accent": "#142ce3",
+              "background": "oklch(1 0 0)",
+              "border": "oklch(0.922 0 0)",
+              "foreground": "oklch(0.145 0 0)",
+              "muted": "oklch(0.97 0 0)",
+              "mutedForeground": "oklch(0.556 0 0)",
+              "radius": 0,
+              "surface": "oklch(1 0 0)",
+              "accents": [
+                "#142ce3"
+              ],
+              "pastels": [],
+              "colorMode": "monochrome"
+            },
+            "theme": "light",
+            "typography": {
+              "family": "DM Sans",
+              "stack": "\"DM Sans\", ui-sans-serif, system-ui, sans-serif",
+              "file": "qa-segnatura-motion-set.preview-font.ttf"
+            },
+            "viewport": {
+              "height": 720,
+              "width": 405
+            }
+          },
+          {
+            "backdrop": "dots",
+            "colorSemantics": {
+              "categories": "primary-tints",
+              "confirmation": "primary",
+              "decorativeCycling": false,
+              "signal": "motion-role"
+            },
+            "composition": {
+              "backgroundOwner": "host",
+              "frame": "none",
+              "texture": "transparent-overlay"
+            },
+            "duration": 6.05,
+            "evidence": [
+              {
+                "file": "app/app/[projectSlug]/test-cases/test-case-table.client.tsx",
+                "kind": "list",
+                "score": 139
+              },
+              {
+                "file": "app/app/[projectSlug]/automations/runs/run-table.client.tsx",
+                "kind": "list",
+                "score": 125
+              },
+              {
+                "file": "app/app/[projectSlug]/automations/scenario-table.client.tsx",
+                "kind": "list",
+                "score": 123
+              },
+              {
+                "file": "app/prototype/automations/scenarios-list.client.tsx",
+                "kind": "list",
+                "score": 123
+              }
+            ],
+            "file": "qa-segnatura-motion-set.select-item.9x16.dark.svg",
+            "format": "9:16",
+            "motion": "select-and-reveal",
+            "motionPhysics": {
+              "anticipation": "subtle-countermove",
+              "continuity": "preserve-identity",
+              "effects": "no-overshoot",
+              "energyPath": "selection-to-detail",
+              "followThrough": "single-settle",
+              "spatial": "gentle-overshoot"
+            },
+            "motionProfile": {
+              "camera": "static",
+              "emphasis": "selection-reveal",
+              "heroMotion": "detail-expand",
+              "name": "select-and-reveal",
+              "pointer": "cursor-click"
+            },
+            "palette": {
+              "accent": "#586df7",
+              "background": "oklch(0.145 0 0)",
+              "border": "oklch(1 0 0 / 10%)",
+              "foreground": "oklch(0.985 0 0)",
+              "muted": "oklch(0.269 0 0)",
+              "mutedForeground": "oklch(0.708 0 0)",
+              "radius": 0,
+              "surface": "oklch(0.205 0 0)",
+              "accents": [
+                "#586df7"
+              ],
+              "pastels": [
+                "color-mix(in oklab, #586df7 22%, oklch(0.205 0 0))"
+              ],
+              "colorMode": "monochrome"
+            },
+            "theme": "dark",
+            "typography": {
+              "family": "DM Sans",
+              "stack": "\"DM Sans\", ui-sans-serif, system-ui, sans-serif",
+              "file": "qa-segnatura-motion-set.preview-font.ttf"
+            },
+            "viewport": {
+              "height": 720,
+              "width": 405
             }
           }
         ]
@@ -373,6 +1032,7 @@
               "frame": "none",
               "texture": "transparent-overlay"
             },
+            "duration": 6.2,
             "evidence": [
               {
                 "file": "app/app/[projectSlug]/automations/s/[scenarioSlug]/scenario-canvas.client.tsx",
@@ -396,6 +1056,7 @@
               }
             ],
             "file": "qa-segnatura-motion-set.insert-step.light.svg",
+            "format": "16:9",
             "motion": "add-step",
             "motionPhysics": {
               "anticipation": "subtle-countermove",
@@ -451,6 +1112,7 @@
               "frame": "none",
               "texture": "transparent-overlay"
             },
+            "duration": 6.2,
             "evidence": [
               {
                 "file": "app/app/[projectSlug]/automations/s/[scenarioSlug]/scenario-canvas.client.tsx",
@@ -474,6 +1136,7 @@
               }
             ],
             "file": "qa-segnatura-motion-set.insert-step.dark.svg",
+            "format": "16:9",
             "motion": "add-step",
             "motionPhysics": {
               "anticipation": "subtle-countermove",
@@ -516,6 +1179,654 @@
             "viewport": {
               "height": 405,
               "width": 720
+            }
+          },
+          {
+            "backdrop": "dots",
+            "colorSemantics": {
+              "categories": "primary-tints",
+              "confirmation": "primary",
+              "decorativeCycling": false,
+              "signal": "motion-role"
+            },
+            "composition": {
+              "backgroundOwner": "host",
+              "frame": "none",
+              "texture": "transparent-overlay"
+            },
+            "duration": 6.45,
+            "evidence": [
+              {
+                "file": "app/app/[projectSlug]/automations/s/[scenarioSlug]/scenario-canvas.client.tsx",
+                "kind": "flow",
+                "score": 132
+              },
+              {
+                "file": "docs/features/36-automation-canvas-editor.md",
+                "kind": "flow",
+                "score": 132
+              },
+              {
+                "file": "docs/research/no-code-automation-ui/README.md",
+                "kind": "flow",
+                "score": 131
+              },
+              {
+                "file": "app/app/[projectSlug]/automations/runs/[runId]/run-step-canvas.client.tsx",
+                "kind": "flow",
+                "score": 130
+              }
+            ],
+            "file": "qa-segnatura-motion-set.insert-step.4x3.light.svg",
+            "format": "4:3",
+            "motion": "add-step",
+            "motionPhysics": {
+              "anticipation": "subtle-countermove",
+              "continuity": "preserve-identity",
+              "effects": "no-overshoot",
+              "energyPath": "input-to-layout",
+              "followThrough": "single-settle",
+              "spatial": "gentle-overshoot"
+            },
+            "motionProfile": {
+              "camera": "static",
+              "emphasis": "layout-insert",
+              "heroMotion": "layout-open",
+              "name": "add-step",
+              "pointer": "cursor-click"
+            },
+            "palette": {
+              "accent": "#142ce3",
+              "background": "oklch(1 0 0)",
+              "border": "oklch(0.922 0 0)",
+              "foreground": "oklch(0.145 0 0)",
+              "muted": "oklch(0.97 0 0)",
+              "mutedForeground": "oklch(0.556 0 0)",
+              "radius": 0,
+              "surface": "oklch(1 0 0)",
+              "accents": [
+                "#142ce3"
+              ],
+              "pastels": [],
+              "colorMode": "monochrome"
+            },
+            "theme": "light",
+            "typography": {
+              "family": "DM Sans",
+              "stack": "\"DM Sans\", ui-sans-serif, system-ui, sans-serif",
+              "file": "qa-segnatura-motion-set.preview-font.ttf"
+            },
+            "viewport": {
+              "height": 405,
+              "width": 540
+            }
+          },
+          {
+            "backdrop": "dots",
+            "colorSemantics": {
+              "categories": "primary-tints",
+              "confirmation": "primary",
+              "decorativeCycling": false,
+              "signal": "motion-role"
+            },
+            "composition": {
+              "backgroundOwner": "host",
+              "frame": "none",
+              "texture": "transparent-overlay"
+            },
+            "duration": 6.45,
+            "evidence": [
+              {
+                "file": "app/app/[projectSlug]/automations/s/[scenarioSlug]/scenario-canvas.client.tsx",
+                "kind": "flow",
+                "score": 132
+              },
+              {
+                "file": "docs/features/36-automation-canvas-editor.md",
+                "kind": "flow",
+                "score": 132
+              },
+              {
+                "file": "docs/research/no-code-automation-ui/README.md",
+                "kind": "flow",
+                "score": 131
+              },
+              {
+                "file": "app/app/[projectSlug]/automations/runs/[runId]/run-step-canvas.client.tsx",
+                "kind": "flow",
+                "score": 130
+              }
+            ],
+            "file": "qa-segnatura-motion-set.insert-step.4x3.dark.svg",
+            "format": "4:3",
+            "motion": "add-step",
+            "motionPhysics": {
+              "anticipation": "subtle-countermove",
+              "continuity": "preserve-identity",
+              "effects": "no-overshoot",
+              "energyPath": "input-to-layout",
+              "followThrough": "single-settle",
+              "spatial": "gentle-overshoot"
+            },
+            "motionProfile": {
+              "camera": "static",
+              "emphasis": "layout-insert",
+              "heroMotion": "layout-open",
+              "name": "add-step",
+              "pointer": "cursor-click"
+            },
+            "palette": {
+              "accent": "#586df7",
+              "background": "oklch(0.145 0 0)",
+              "border": "oklch(1 0 0 / 10%)",
+              "foreground": "oklch(0.985 0 0)",
+              "muted": "oklch(0.269 0 0)",
+              "mutedForeground": "oklch(0.708 0 0)",
+              "radius": 0,
+              "surface": "oklch(0.205 0 0)",
+              "accents": [
+                "#586df7"
+              ],
+              "pastels": [
+                "color-mix(in oklab, #586df7 22%, oklch(0.205 0 0))"
+              ],
+              "colorMode": "monochrome"
+            },
+            "theme": "dark",
+            "typography": {
+              "family": "DM Sans",
+              "stack": "\"DM Sans\", ui-sans-serif, system-ui, sans-serif",
+              "file": "qa-segnatura-motion-set.preview-font.ttf"
+            },
+            "viewport": {
+              "height": 405,
+              "width": 540
+            }
+          },
+          {
+            "backdrop": "dots",
+            "colorSemantics": {
+              "categories": "primary-tints",
+              "confirmation": "primary",
+              "decorativeCycling": false,
+              "signal": "motion-role"
+            },
+            "composition": {
+              "backgroundOwner": "host",
+              "frame": "none",
+              "texture": "transparent-overlay"
+            },
+            "duration": 5.95,
+            "evidence": [
+              {
+                "file": "app/app/[projectSlug]/automations/s/[scenarioSlug]/scenario-canvas.client.tsx",
+                "kind": "flow",
+                "score": 132
+              },
+              {
+                "file": "docs/features/36-automation-canvas-editor.md",
+                "kind": "flow",
+                "score": 132
+              },
+              {
+                "file": "docs/research/no-code-automation-ui/README.md",
+                "kind": "flow",
+                "score": 131
+              },
+              {
+                "file": "app/app/[projectSlug]/automations/runs/[runId]/run-step-canvas.client.tsx",
+                "kind": "flow",
+                "score": 130
+              }
+            ],
+            "file": "qa-segnatura-motion-set.insert-step.1x1.light.svg",
+            "format": "1:1",
+            "motion": "add-step",
+            "motionPhysics": {
+              "anticipation": "subtle-countermove",
+              "continuity": "preserve-identity",
+              "effects": "no-overshoot",
+              "energyPath": "input-to-layout",
+              "followThrough": "single-settle",
+              "spatial": "gentle-overshoot"
+            },
+            "motionProfile": {
+              "camera": "static",
+              "emphasis": "layout-insert",
+              "heroMotion": "layout-open",
+              "name": "add-step",
+              "pointer": "cursor-click"
+            },
+            "palette": {
+              "accent": "#142ce3",
+              "background": "oklch(1 0 0)",
+              "border": "oklch(0.922 0 0)",
+              "foreground": "oklch(0.145 0 0)",
+              "muted": "oklch(0.97 0 0)",
+              "mutedForeground": "oklch(0.556 0 0)",
+              "radius": 0,
+              "surface": "oklch(1 0 0)",
+              "accents": [
+                "#142ce3"
+              ],
+              "pastels": [],
+              "colorMode": "monochrome"
+            },
+            "theme": "light",
+            "typography": {
+              "family": "DM Sans",
+              "stack": "\"DM Sans\", ui-sans-serif, system-ui, sans-serif",
+              "file": "qa-segnatura-motion-set.preview-font.ttf"
+            },
+            "viewport": {
+              "height": 405,
+              "width": 405
+            }
+          },
+          {
+            "backdrop": "dots",
+            "colorSemantics": {
+              "categories": "primary-tints",
+              "confirmation": "primary",
+              "decorativeCycling": false,
+              "signal": "motion-role"
+            },
+            "composition": {
+              "backgroundOwner": "host",
+              "frame": "none",
+              "texture": "transparent-overlay"
+            },
+            "duration": 5.95,
+            "evidence": [
+              {
+                "file": "app/app/[projectSlug]/automations/s/[scenarioSlug]/scenario-canvas.client.tsx",
+                "kind": "flow",
+                "score": 132
+              },
+              {
+                "file": "docs/features/36-automation-canvas-editor.md",
+                "kind": "flow",
+                "score": 132
+              },
+              {
+                "file": "docs/research/no-code-automation-ui/README.md",
+                "kind": "flow",
+                "score": 131
+              },
+              {
+                "file": "app/app/[projectSlug]/automations/runs/[runId]/run-step-canvas.client.tsx",
+                "kind": "flow",
+                "score": 130
+              }
+            ],
+            "file": "qa-segnatura-motion-set.insert-step.1x1.dark.svg",
+            "format": "1:1",
+            "motion": "add-step",
+            "motionPhysics": {
+              "anticipation": "subtle-countermove",
+              "continuity": "preserve-identity",
+              "effects": "no-overshoot",
+              "energyPath": "input-to-layout",
+              "followThrough": "single-settle",
+              "spatial": "gentle-overshoot"
+            },
+            "motionProfile": {
+              "camera": "static",
+              "emphasis": "layout-insert",
+              "heroMotion": "layout-open",
+              "name": "add-step",
+              "pointer": "cursor-click"
+            },
+            "palette": {
+              "accent": "#586df7",
+              "background": "oklch(0.145 0 0)",
+              "border": "oklch(1 0 0 / 10%)",
+              "foreground": "oklch(0.985 0 0)",
+              "muted": "oklch(0.269 0 0)",
+              "mutedForeground": "oklch(0.708 0 0)",
+              "radius": 0,
+              "surface": "oklch(0.205 0 0)",
+              "accents": [
+                "#586df7"
+              ],
+              "pastels": [
+                "color-mix(in oklab, #586df7 22%, oklch(0.205 0 0))"
+              ],
+              "colorMode": "monochrome"
+            },
+            "theme": "dark",
+            "typography": {
+              "family": "DM Sans",
+              "stack": "\"DM Sans\", ui-sans-serif, system-ui, sans-serif",
+              "file": "qa-segnatura-motion-set.preview-font.ttf"
+            },
+            "viewport": {
+              "height": 405,
+              "width": 405
+            }
+          },
+          {
+            "backdrop": "dots",
+            "colorSemantics": {
+              "categories": "primary-tints",
+              "confirmation": "primary",
+              "decorativeCycling": false,
+              "signal": "motion-role"
+            },
+            "composition": {
+              "backgroundOwner": "host",
+              "frame": "none",
+              "texture": "transparent-overlay"
+            },
+            "duration": 6.7,
+            "evidence": [
+              {
+                "file": "app/app/[projectSlug]/automations/s/[scenarioSlug]/scenario-canvas.client.tsx",
+                "kind": "flow",
+                "score": 132
+              },
+              {
+                "file": "docs/features/36-automation-canvas-editor.md",
+                "kind": "flow",
+                "score": 132
+              },
+              {
+                "file": "docs/research/no-code-automation-ui/README.md",
+                "kind": "flow",
+                "score": 131
+              },
+              {
+                "file": "app/app/[projectSlug]/automations/runs/[runId]/run-step-canvas.client.tsx",
+                "kind": "flow",
+                "score": 130
+              }
+            ],
+            "file": "qa-segnatura-motion-set.insert-step.4x5.light.svg",
+            "format": "4:5",
+            "motion": "add-step",
+            "motionPhysics": {
+              "anticipation": "subtle-countermove",
+              "continuity": "preserve-identity",
+              "effects": "no-overshoot",
+              "energyPath": "input-to-layout",
+              "followThrough": "single-settle",
+              "spatial": "gentle-overshoot"
+            },
+            "motionProfile": {
+              "camera": "static",
+              "emphasis": "layout-insert",
+              "heroMotion": "layout-open",
+              "name": "add-step",
+              "pointer": "cursor-click"
+            },
+            "palette": {
+              "accent": "#142ce3",
+              "background": "oklch(1 0 0)",
+              "border": "oklch(0.922 0 0)",
+              "foreground": "oklch(0.145 0 0)",
+              "muted": "oklch(0.97 0 0)",
+              "mutedForeground": "oklch(0.556 0 0)",
+              "radius": 0,
+              "surface": "oklch(1 0 0)",
+              "accents": [
+                "#142ce3"
+              ],
+              "pastels": [],
+              "colorMode": "monochrome"
+            },
+            "theme": "light",
+            "typography": {
+              "family": "DM Sans",
+              "stack": "\"DM Sans\", ui-sans-serif, system-ui, sans-serif",
+              "file": "qa-segnatura-motion-set.preview-font.ttf"
+            },
+            "viewport": {
+              "height": 506,
+              "width": 405
+            }
+          },
+          {
+            "backdrop": "dots",
+            "colorSemantics": {
+              "categories": "primary-tints",
+              "confirmation": "primary",
+              "decorativeCycling": false,
+              "signal": "motion-role"
+            },
+            "composition": {
+              "backgroundOwner": "host",
+              "frame": "none",
+              "texture": "transparent-overlay"
+            },
+            "duration": 6.7,
+            "evidence": [
+              {
+                "file": "app/app/[projectSlug]/automations/s/[scenarioSlug]/scenario-canvas.client.tsx",
+                "kind": "flow",
+                "score": 132
+              },
+              {
+                "file": "docs/features/36-automation-canvas-editor.md",
+                "kind": "flow",
+                "score": 132
+              },
+              {
+                "file": "docs/research/no-code-automation-ui/README.md",
+                "kind": "flow",
+                "score": 131
+              },
+              {
+                "file": "app/app/[projectSlug]/automations/runs/[runId]/run-step-canvas.client.tsx",
+                "kind": "flow",
+                "score": 130
+              }
+            ],
+            "file": "qa-segnatura-motion-set.insert-step.4x5.dark.svg",
+            "format": "4:5",
+            "motion": "add-step",
+            "motionPhysics": {
+              "anticipation": "subtle-countermove",
+              "continuity": "preserve-identity",
+              "effects": "no-overshoot",
+              "energyPath": "input-to-layout",
+              "followThrough": "single-settle",
+              "spatial": "gentle-overshoot"
+            },
+            "motionProfile": {
+              "camera": "static",
+              "emphasis": "layout-insert",
+              "heroMotion": "layout-open",
+              "name": "add-step",
+              "pointer": "cursor-click"
+            },
+            "palette": {
+              "accent": "#586df7",
+              "background": "oklch(0.145 0 0)",
+              "border": "oklch(1 0 0 / 10%)",
+              "foreground": "oklch(0.985 0 0)",
+              "muted": "oklch(0.269 0 0)",
+              "mutedForeground": "oklch(0.708 0 0)",
+              "radius": 0,
+              "surface": "oklch(0.205 0 0)",
+              "accents": [
+                "#586df7"
+              ],
+              "pastels": [
+                "color-mix(in oklab, #586df7 22%, oklch(0.205 0 0))"
+              ],
+              "colorMode": "monochrome"
+            },
+            "theme": "dark",
+            "typography": {
+              "family": "DM Sans",
+              "stack": "\"DM Sans\", ui-sans-serif, system-ui, sans-serif",
+              "file": "qa-segnatura-motion-set.preview-font.ttf"
+            },
+            "viewport": {
+              "height": 506,
+              "width": 405
+            }
+          },
+          {
+            "backdrop": "dots",
+            "colorSemantics": {
+              "categories": "primary-tints",
+              "confirmation": "primary",
+              "decorativeCycling": false,
+              "signal": "motion-role"
+            },
+            "composition": {
+              "backgroundOwner": "host",
+              "frame": "none",
+              "texture": "transparent-overlay"
+            },
+            "duration": 6.94,
+            "evidence": [
+              {
+                "file": "app/app/[projectSlug]/automations/s/[scenarioSlug]/scenario-canvas.client.tsx",
+                "kind": "flow",
+                "score": 132
+              },
+              {
+                "file": "docs/features/36-automation-canvas-editor.md",
+                "kind": "flow",
+                "score": 132
+              },
+              {
+                "file": "docs/research/no-code-automation-ui/README.md",
+                "kind": "flow",
+                "score": 131
+              },
+              {
+                "file": "app/app/[projectSlug]/automations/runs/[runId]/run-step-canvas.client.tsx",
+                "kind": "flow",
+                "score": 130
+              }
+            ],
+            "file": "qa-segnatura-motion-set.insert-step.9x16.light.svg",
+            "format": "9:16",
+            "motion": "add-step",
+            "motionPhysics": {
+              "anticipation": "subtle-countermove",
+              "continuity": "preserve-identity",
+              "effects": "no-overshoot",
+              "energyPath": "input-to-layout",
+              "followThrough": "single-settle",
+              "spatial": "gentle-overshoot"
+            },
+            "motionProfile": {
+              "camera": "static",
+              "emphasis": "layout-insert",
+              "heroMotion": "layout-open",
+              "name": "add-step",
+              "pointer": "cursor-click"
+            },
+            "palette": {
+              "accent": "#142ce3",
+              "background": "oklch(1 0 0)",
+              "border": "oklch(0.922 0 0)",
+              "foreground": "oklch(0.145 0 0)",
+              "muted": "oklch(0.97 0 0)",
+              "mutedForeground": "oklch(0.556 0 0)",
+              "radius": 0,
+              "surface": "oklch(1 0 0)",
+              "accents": [
+                "#142ce3"
+              ],
+              "pastels": [],
+              "colorMode": "monochrome"
+            },
+            "theme": "light",
+            "typography": {
+              "family": "DM Sans",
+              "stack": "\"DM Sans\", ui-sans-serif, system-ui, sans-serif",
+              "file": "qa-segnatura-motion-set.preview-font.ttf"
+            },
+            "viewport": {
+              "height": 720,
+              "width": 405
+            }
+          },
+          {
+            "backdrop": "dots",
+            "colorSemantics": {
+              "categories": "primary-tints",
+              "confirmation": "primary",
+              "decorativeCycling": false,
+              "signal": "motion-role"
+            },
+            "composition": {
+              "backgroundOwner": "host",
+              "frame": "none",
+              "texture": "transparent-overlay"
+            },
+            "duration": 6.94,
+            "evidence": [
+              {
+                "file": "app/app/[projectSlug]/automations/s/[scenarioSlug]/scenario-canvas.client.tsx",
+                "kind": "flow",
+                "score": 132
+              },
+              {
+                "file": "docs/features/36-automation-canvas-editor.md",
+                "kind": "flow",
+                "score": 132
+              },
+              {
+                "file": "docs/research/no-code-automation-ui/README.md",
+                "kind": "flow",
+                "score": 131
+              },
+              {
+                "file": "app/app/[projectSlug]/automations/runs/[runId]/run-step-canvas.client.tsx",
+                "kind": "flow",
+                "score": 130
+              }
+            ],
+            "file": "qa-segnatura-motion-set.insert-step.9x16.dark.svg",
+            "format": "9:16",
+            "motion": "add-step",
+            "motionPhysics": {
+              "anticipation": "subtle-countermove",
+              "continuity": "preserve-identity",
+              "effects": "no-overshoot",
+              "energyPath": "input-to-layout",
+              "followThrough": "single-settle",
+              "spatial": "gentle-overshoot"
+            },
+            "motionProfile": {
+              "camera": "static",
+              "emphasis": "layout-insert",
+              "heroMotion": "layout-open",
+              "name": "add-step",
+              "pointer": "cursor-click"
+            },
+            "palette": {
+              "accent": "#586df7",
+              "background": "oklch(0.145 0 0)",
+              "border": "oklch(1 0 0 / 10%)",
+              "foreground": "oklch(0.985 0 0)",
+              "muted": "oklch(0.269 0 0)",
+              "mutedForeground": "oklch(0.708 0 0)",
+              "radius": 0,
+              "surface": "oklch(0.205 0 0)",
+              "accents": [
+                "#586df7"
+              ],
+              "pastels": [
+                "color-mix(in oklab, #586df7 22%, oklch(0.205 0 0))"
+              ],
+              "colorMode": "monochrome"
+            },
+            "theme": "dark",
+            "typography": {
+              "family": "DM Sans",
+              "stack": "\"DM Sans\", ui-sans-serif, system-ui, sans-serif",
+              "file": "qa-segnatura-motion-set.preview-font.ttf"
+            },
+            "viewport": {
+              "height": 720,
+              "width": 405
             }
           }
         ]
@@ -543,8 +1854,10 @@
               "frame": "none",
               "texture": "transparent-overlay"
             },
+            "duration": 4.6,
             "evidence": [],
             "file": "qa-segnatura-motion-set.confirm-edit.light.svg",
+            "format": "16:9",
             "motion": "focus-and-confirm",
             "motionPhysics": {
               "anticipation": "subtle-countermove",
@@ -600,8 +1913,10 @@
               "frame": "none",
               "texture": "transparent-overlay"
             },
+            "duration": 4.6,
             "evidence": [],
             "file": "qa-segnatura-motion-set.confirm-edit.dark.svg",
+            "format": "16:9",
             "motion": "focus-and-confirm",
             "motionPhysics": {
               "anticipation": "subtle-countermove",
@@ -644,6 +1959,486 @@
             "viewport": {
               "height": 405,
               "width": 720
+            }
+          },
+          {
+            "backdrop": "dots",
+            "colorSemantics": {
+              "categories": "primary-tints",
+              "confirmation": "primary",
+              "decorativeCycling": false,
+              "signal": "motion-role"
+            },
+            "composition": {
+              "backgroundOwner": "host",
+              "frame": "none",
+              "texture": "transparent-overlay"
+            },
+            "duration": 4.78,
+            "evidence": [],
+            "file": "qa-segnatura-motion-set.confirm-edit.4x3.light.svg",
+            "format": "4:3",
+            "motion": "focus-and-confirm",
+            "motionPhysics": {
+              "anticipation": "subtle-countermove",
+              "continuity": "preserve-identity",
+              "effects": "no-overshoot",
+              "energyPath": "selection-to-preview",
+              "followThrough": "single-settle",
+              "spatial": "gentle-overshoot"
+            },
+            "motionProfile": {
+              "camera": "static",
+              "emphasis": "confirm-draw",
+              "heroMotion": "preview-expand",
+              "name": "focus-and-confirm",
+              "pointer": "cursor-click"
+            },
+            "palette": {
+              "accent": "#142ce3",
+              "background": "oklch(1 0 0)",
+              "border": "oklch(0.922 0 0)",
+              "foreground": "oklch(0.145 0 0)",
+              "muted": "oklch(0.97 0 0)",
+              "mutedForeground": "oklch(0.556 0 0)",
+              "radius": 0,
+              "surface": "oklch(1 0 0)",
+              "accents": [
+                "#142ce3"
+              ],
+              "pastels": [],
+              "colorMode": "monochrome"
+            },
+            "theme": "light",
+            "typography": {
+              "family": "DM Sans",
+              "stack": "\"DM Sans\", ui-sans-serif, system-ui, sans-serif",
+              "file": "qa-segnatura-motion-set.preview-font.ttf"
+            },
+            "viewport": {
+              "height": 405,
+              "width": 540
+            }
+          },
+          {
+            "backdrop": "dots",
+            "colorSemantics": {
+              "categories": "primary-tints",
+              "confirmation": "primary",
+              "decorativeCycling": false,
+              "signal": "motion-role"
+            },
+            "composition": {
+              "backgroundOwner": "host",
+              "frame": "none",
+              "texture": "transparent-overlay"
+            },
+            "duration": 4.78,
+            "evidence": [],
+            "file": "qa-segnatura-motion-set.confirm-edit.4x3.dark.svg",
+            "format": "4:3",
+            "motion": "focus-and-confirm",
+            "motionPhysics": {
+              "anticipation": "subtle-countermove",
+              "continuity": "preserve-identity",
+              "effects": "no-overshoot",
+              "energyPath": "selection-to-preview",
+              "followThrough": "single-settle",
+              "spatial": "gentle-overshoot"
+            },
+            "motionProfile": {
+              "camera": "static",
+              "emphasis": "confirm-draw",
+              "heroMotion": "preview-expand",
+              "name": "focus-and-confirm",
+              "pointer": "cursor-click"
+            },
+            "palette": {
+              "accent": "#586df7",
+              "background": "oklch(0.145 0 0)",
+              "border": "oklch(1 0 0 / 10%)",
+              "foreground": "oklch(0.985 0 0)",
+              "muted": "oklch(0.269 0 0)",
+              "mutedForeground": "oklch(0.708 0 0)",
+              "radius": 0,
+              "surface": "oklch(0.205 0 0)",
+              "accents": [
+                "#586df7"
+              ],
+              "pastels": [
+                "color-mix(in oklab, #586df7 22%, oklch(0.205 0 0))"
+              ],
+              "colorMode": "monochrome"
+            },
+            "theme": "dark",
+            "typography": {
+              "family": "DM Sans",
+              "stack": "\"DM Sans\", ui-sans-serif, system-ui, sans-serif",
+              "file": "qa-segnatura-motion-set.preview-font.ttf"
+            },
+            "viewport": {
+              "height": 405,
+              "width": 540
+            }
+          },
+          {
+            "backdrop": "dots",
+            "colorSemantics": {
+              "categories": "primary-tints",
+              "confirmation": "primary",
+              "decorativeCycling": false,
+              "signal": "motion-role"
+            },
+            "composition": {
+              "backgroundOwner": "host",
+              "frame": "none",
+              "texture": "transparent-overlay"
+            },
+            "duration": 4.42,
+            "evidence": [],
+            "file": "qa-segnatura-motion-set.confirm-edit.1x1.light.svg",
+            "format": "1:1",
+            "motion": "focus-and-confirm",
+            "motionPhysics": {
+              "anticipation": "subtle-countermove",
+              "continuity": "preserve-identity",
+              "effects": "no-overshoot",
+              "energyPath": "selection-to-preview",
+              "followThrough": "single-settle",
+              "spatial": "gentle-overshoot"
+            },
+            "motionProfile": {
+              "camera": "static",
+              "emphasis": "confirm-draw",
+              "heroMotion": "preview-expand",
+              "name": "focus-and-confirm",
+              "pointer": "cursor-click"
+            },
+            "palette": {
+              "accent": "#142ce3",
+              "background": "oklch(1 0 0)",
+              "border": "oklch(0.922 0 0)",
+              "foreground": "oklch(0.145 0 0)",
+              "muted": "oklch(0.97 0 0)",
+              "mutedForeground": "oklch(0.556 0 0)",
+              "radius": 0,
+              "surface": "oklch(1 0 0)",
+              "accents": [
+                "#142ce3"
+              ],
+              "pastels": [],
+              "colorMode": "monochrome"
+            },
+            "theme": "light",
+            "typography": {
+              "family": "DM Sans",
+              "stack": "\"DM Sans\", ui-sans-serif, system-ui, sans-serif",
+              "file": "qa-segnatura-motion-set.preview-font.ttf"
+            },
+            "viewport": {
+              "height": 405,
+              "width": 405
+            }
+          },
+          {
+            "backdrop": "dots",
+            "colorSemantics": {
+              "categories": "primary-tints",
+              "confirmation": "primary",
+              "decorativeCycling": false,
+              "signal": "motion-role"
+            },
+            "composition": {
+              "backgroundOwner": "host",
+              "frame": "none",
+              "texture": "transparent-overlay"
+            },
+            "duration": 4.42,
+            "evidence": [],
+            "file": "qa-segnatura-motion-set.confirm-edit.1x1.dark.svg",
+            "format": "1:1",
+            "motion": "focus-and-confirm",
+            "motionPhysics": {
+              "anticipation": "subtle-countermove",
+              "continuity": "preserve-identity",
+              "effects": "no-overshoot",
+              "energyPath": "selection-to-preview",
+              "followThrough": "single-settle",
+              "spatial": "gentle-overshoot"
+            },
+            "motionProfile": {
+              "camera": "static",
+              "emphasis": "confirm-draw",
+              "heroMotion": "preview-expand",
+              "name": "focus-and-confirm",
+              "pointer": "cursor-click"
+            },
+            "palette": {
+              "accent": "#586df7",
+              "background": "oklch(0.145 0 0)",
+              "border": "oklch(1 0 0 / 10%)",
+              "foreground": "oklch(0.985 0 0)",
+              "muted": "oklch(0.269 0 0)",
+              "mutedForeground": "oklch(0.708 0 0)",
+              "radius": 0,
+              "surface": "oklch(0.205 0 0)",
+              "accents": [
+                "#586df7"
+              ],
+              "pastels": [
+                "color-mix(in oklab, #586df7 22%, oklch(0.205 0 0))"
+              ],
+              "colorMode": "monochrome"
+            },
+            "theme": "dark",
+            "typography": {
+              "family": "DM Sans",
+              "stack": "\"DM Sans\", ui-sans-serif, system-ui, sans-serif",
+              "file": "qa-segnatura-motion-set.preview-font.ttf"
+            },
+            "viewport": {
+              "height": 405,
+              "width": 405
+            }
+          },
+          {
+            "backdrop": "dots",
+            "colorSemantics": {
+              "categories": "primary-tints",
+              "confirmation": "primary",
+              "decorativeCycling": false,
+              "signal": "motion-role"
+            },
+            "composition": {
+              "backgroundOwner": "host",
+              "frame": "none",
+              "texture": "transparent-overlay"
+            },
+            "duration": 4.97,
+            "evidence": [],
+            "file": "qa-segnatura-motion-set.confirm-edit.4x5.light.svg",
+            "format": "4:5",
+            "motion": "focus-and-confirm",
+            "motionPhysics": {
+              "anticipation": "subtle-countermove",
+              "continuity": "preserve-identity",
+              "effects": "no-overshoot",
+              "energyPath": "selection-to-preview",
+              "followThrough": "single-settle",
+              "spatial": "gentle-overshoot"
+            },
+            "motionProfile": {
+              "camera": "static",
+              "emphasis": "confirm-draw",
+              "heroMotion": "preview-expand",
+              "name": "focus-and-confirm",
+              "pointer": "cursor-click"
+            },
+            "palette": {
+              "accent": "#142ce3",
+              "background": "oklch(1 0 0)",
+              "border": "oklch(0.922 0 0)",
+              "foreground": "oklch(0.145 0 0)",
+              "muted": "oklch(0.97 0 0)",
+              "mutedForeground": "oklch(0.556 0 0)",
+              "radius": 0,
+              "surface": "oklch(1 0 0)",
+              "accents": [
+                "#142ce3"
+              ],
+              "pastels": [],
+              "colorMode": "monochrome"
+            },
+            "theme": "light",
+            "typography": {
+              "family": "DM Sans",
+              "stack": "\"DM Sans\", ui-sans-serif, system-ui, sans-serif",
+              "file": "qa-segnatura-motion-set.preview-font.ttf"
+            },
+            "viewport": {
+              "height": 506,
+              "width": 405
+            }
+          },
+          {
+            "backdrop": "dots",
+            "colorSemantics": {
+              "categories": "primary-tints",
+              "confirmation": "primary",
+              "decorativeCycling": false,
+              "signal": "motion-role"
+            },
+            "composition": {
+              "backgroundOwner": "host",
+              "frame": "none",
+              "texture": "transparent-overlay"
+            },
+            "duration": 4.97,
+            "evidence": [],
+            "file": "qa-segnatura-motion-set.confirm-edit.4x5.dark.svg",
+            "format": "4:5",
+            "motion": "focus-and-confirm",
+            "motionPhysics": {
+              "anticipation": "subtle-countermove",
+              "continuity": "preserve-identity",
+              "effects": "no-overshoot",
+              "energyPath": "selection-to-preview",
+              "followThrough": "single-settle",
+              "spatial": "gentle-overshoot"
+            },
+            "motionProfile": {
+              "camera": "static",
+              "emphasis": "confirm-draw",
+              "heroMotion": "preview-expand",
+              "name": "focus-and-confirm",
+              "pointer": "cursor-click"
+            },
+            "palette": {
+              "accent": "#586df7",
+              "background": "oklch(0.145 0 0)",
+              "border": "oklch(1 0 0 / 10%)",
+              "foreground": "oklch(0.985 0 0)",
+              "muted": "oklch(0.269 0 0)",
+              "mutedForeground": "oklch(0.708 0 0)",
+              "radius": 0,
+              "surface": "oklch(0.205 0 0)",
+              "accents": [
+                "#586df7"
+              ],
+              "pastels": [
+                "color-mix(in oklab, #586df7 22%, oklch(0.205 0 0))"
+              ],
+              "colorMode": "monochrome"
+            },
+            "theme": "dark",
+            "typography": {
+              "family": "DM Sans",
+              "stack": "\"DM Sans\", ui-sans-serif, system-ui, sans-serif",
+              "file": "qa-segnatura-motion-set.preview-font.ttf"
+            },
+            "viewport": {
+              "height": 506,
+              "width": 405
+            }
+          },
+          {
+            "backdrop": "dots",
+            "colorSemantics": {
+              "categories": "primary-tints",
+              "confirmation": "primary",
+              "decorativeCycling": false,
+              "signal": "motion-role"
+            },
+            "composition": {
+              "backgroundOwner": "host",
+              "frame": "none",
+              "texture": "transparent-overlay"
+            },
+            "duration": 5.15,
+            "evidence": [],
+            "file": "qa-segnatura-motion-set.confirm-edit.9x16.light.svg",
+            "format": "9:16",
+            "motion": "focus-and-confirm",
+            "motionPhysics": {
+              "anticipation": "subtle-countermove",
+              "continuity": "preserve-identity",
+              "effects": "no-overshoot",
+              "energyPath": "selection-to-preview",
+              "followThrough": "single-settle",
+              "spatial": "gentle-overshoot"
+            },
+            "motionProfile": {
+              "camera": "static",
+              "emphasis": "confirm-draw",
+              "heroMotion": "preview-expand",
+              "name": "focus-and-confirm",
+              "pointer": "cursor-click"
+            },
+            "palette": {
+              "accent": "#142ce3",
+              "background": "oklch(1 0 0)",
+              "border": "oklch(0.922 0 0)",
+              "foreground": "oklch(0.145 0 0)",
+              "muted": "oklch(0.97 0 0)",
+              "mutedForeground": "oklch(0.556 0 0)",
+              "radius": 0,
+              "surface": "oklch(1 0 0)",
+              "accents": [
+                "#142ce3"
+              ],
+              "pastels": [],
+              "colorMode": "monochrome"
+            },
+            "theme": "light",
+            "typography": {
+              "family": "DM Sans",
+              "stack": "\"DM Sans\", ui-sans-serif, system-ui, sans-serif",
+              "file": "qa-segnatura-motion-set.preview-font.ttf"
+            },
+            "viewport": {
+              "height": 720,
+              "width": 405
+            }
+          },
+          {
+            "backdrop": "dots",
+            "colorSemantics": {
+              "categories": "primary-tints",
+              "confirmation": "primary",
+              "decorativeCycling": false,
+              "signal": "motion-role"
+            },
+            "composition": {
+              "backgroundOwner": "host",
+              "frame": "none",
+              "texture": "transparent-overlay"
+            },
+            "duration": 5.15,
+            "evidence": [],
+            "file": "qa-segnatura-motion-set.confirm-edit.9x16.dark.svg",
+            "format": "9:16",
+            "motion": "focus-and-confirm",
+            "motionPhysics": {
+              "anticipation": "subtle-countermove",
+              "continuity": "preserve-identity",
+              "effects": "no-overshoot",
+              "energyPath": "selection-to-preview",
+              "followThrough": "single-settle",
+              "spatial": "gentle-overshoot"
+            },
+            "motionProfile": {
+              "camera": "static",
+              "emphasis": "confirm-draw",
+              "heroMotion": "preview-expand",
+              "name": "focus-and-confirm",
+              "pointer": "cursor-click"
+            },
+            "palette": {
+              "accent": "#586df7",
+              "background": "oklch(0.145 0 0)",
+              "border": "oklch(1 0 0 / 10%)",
+              "foreground": "oklch(0.985 0 0)",
+              "muted": "oklch(0.269 0 0)",
+              "mutedForeground": "oklch(0.708 0 0)",
+              "radius": 0,
+              "surface": "oklch(0.205 0 0)",
+              "accents": [
+                "#586df7"
+              ],
+              "pastels": [
+                "color-mix(in oklab, #586df7 22%, oklch(0.205 0 0))"
+              ],
+              "colorMode": "monochrome"
+            },
+            "theme": "dark",
+            "typography": {
+              "family": "DM Sans",
+              "stack": "\"DM Sans\", ui-sans-serif, system-ui, sans-serif",
+              "file": "qa-segnatura-motion-set.preview-font.ttf"
+            },
+            "viewport": {
+              "height": 720,
+              "width": 405
             }
           }
         ]
@@ -671,8 +2466,10 @@
               "frame": "none",
               "texture": "transparent-overlay"
             },
+            "duration": 7.4,
             "evidence": [],
             "file": "qa-segnatura-motion-set.progress-signal.light.svg",
+            "format": "16:9",
             "motion": "chart-sweep",
             "motionPhysics": {
               "anticipation": "subtle-countermove",
@@ -728,8 +2525,10 @@
               "frame": "none",
               "texture": "transparent-overlay"
             },
+            "duration": 7.4,
             "evidence": [],
             "file": "qa-segnatura-motion-set.progress-signal.dark.svg",
+            "format": "16:9",
             "motion": "chart-sweep",
             "motionPhysics": {
               "anticipation": "subtle-countermove",
@@ -772,6 +2571,486 @@
             "viewport": {
               "height": 405,
               "width": 720
+            }
+          },
+          {
+            "backdrop": "dots",
+            "colorSemantics": {
+              "categories": "primary-tints",
+              "confirmation": "primary",
+              "decorativeCycling": false,
+              "signal": "motion-role"
+            },
+            "composition": {
+              "backgroundOwner": "host",
+              "frame": "none",
+              "texture": "transparent-overlay"
+            },
+            "duration": 7.7,
+            "evidence": [],
+            "file": "qa-segnatura-motion-set.progress-signal.4x3.light.svg",
+            "format": "4:3",
+            "motion": "chart-sweep",
+            "motionPhysics": {
+              "anticipation": "subtle-countermove",
+              "continuity": "preserve-identity",
+              "effects": "no-overshoot",
+              "energyPath": "path-to-marker",
+              "followThrough": "single-settle",
+              "spatial": "gentle-overshoot"
+            },
+            "motionProfile": {
+              "camera": "static",
+              "emphasis": "path-trace",
+              "heroMotion": "traveling-marker",
+              "name": "chart-sweep",
+              "pointer": "none"
+            },
+            "palette": {
+              "accent": "#142ce3",
+              "background": "oklch(1 0 0)",
+              "border": "oklch(0.922 0 0)",
+              "foreground": "oklch(0.145 0 0)",
+              "muted": "oklch(0.97 0 0)",
+              "mutedForeground": "oklch(0.556 0 0)",
+              "radius": 0,
+              "surface": "oklch(1 0 0)",
+              "accents": [
+                "#142ce3"
+              ],
+              "pastels": [],
+              "colorMode": "monochrome"
+            },
+            "theme": "light",
+            "typography": {
+              "family": "DM Sans",
+              "stack": "\"DM Sans\", ui-sans-serif, system-ui, sans-serif",
+              "file": "qa-segnatura-motion-set.preview-font.ttf"
+            },
+            "viewport": {
+              "height": 405,
+              "width": 540
+            }
+          },
+          {
+            "backdrop": "dots",
+            "colorSemantics": {
+              "categories": "primary-tints",
+              "confirmation": "primary",
+              "decorativeCycling": false,
+              "signal": "motion-role"
+            },
+            "composition": {
+              "backgroundOwner": "host",
+              "frame": "none",
+              "texture": "transparent-overlay"
+            },
+            "duration": 7.7,
+            "evidence": [],
+            "file": "qa-segnatura-motion-set.progress-signal.4x3.dark.svg",
+            "format": "4:3",
+            "motion": "chart-sweep",
+            "motionPhysics": {
+              "anticipation": "subtle-countermove",
+              "continuity": "preserve-identity",
+              "effects": "no-overshoot",
+              "energyPath": "path-to-marker",
+              "followThrough": "single-settle",
+              "spatial": "gentle-overshoot"
+            },
+            "motionProfile": {
+              "camera": "static",
+              "emphasis": "path-trace",
+              "heroMotion": "traveling-marker",
+              "name": "chart-sweep",
+              "pointer": "none"
+            },
+            "palette": {
+              "accent": "#586df7",
+              "background": "oklch(0.145 0 0)",
+              "border": "oklch(1 0 0 / 10%)",
+              "foreground": "oklch(0.985 0 0)",
+              "muted": "oklch(0.269 0 0)",
+              "mutedForeground": "oklch(0.708 0 0)",
+              "radius": 0,
+              "surface": "oklch(0.205 0 0)",
+              "accents": [
+                "#586df7"
+              ],
+              "pastels": [
+                "color-mix(in oklab, #586df7 22%, oklch(0.205 0 0))"
+              ],
+              "colorMode": "monochrome"
+            },
+            "theme": "dark",
+            "typography": {
+              "family": "DM Sans",
+              "stack": "\"DM Sans\", ui-sans-serif, system-ui, sans-serif",
+              "file": "qa-segnatura-motion-set.preview-font.ttf"
+            },
+            "viewport": {
+              "height": 405,
+              "width": 540
+            }
+          },
+          {
+            "backdrop": "dots",
+            "colorSemantics": {
+              "categories": "primary-tints",
+              "confirmation": "primary",
+              "decorativeCycling": false,
+              "signal": "motion-role"
+            },
+            "composition": {
+              "backgroundOwner": "host",
+              "frame": "none",
+              "texture": "transparent-overlay"
+            },
+            "duration": 7.1,
+            "evidence": [],
+            "file": "qa-segnatura-motion-set.progress-signal.1x1.light.svg",
+            "format": "1:1",
+            "motion": "chart-sweep",
+            "motionPhysics": {
+              "anticipation": "subtle-countermove",
+              "continuity": "preserve-identity",
+              "effects": "no-overshoot",
+              "energyPath": "path-to-marker",
+              "followThrough": "single-settle",
+              "spatial": "gentle-overshoot"
+            },
+            "motionProfile": {
+              "camera": "static",
+              "emphasis": "path-trace",
+              "heroMotion": "traveling-marker",
+              "name": "chart-sweep",
+              "pointer": "none"
+            },
+            "palette": {
+              "accent": "#142ce3",
+              "background": "oklch(1 0 0)",
+              "border": "oklch(0.922 0 0)",
+              "foreground": "oklch(0.145 0 0)",
+              "muted": "oklch(0.97 0 0)",
+              "mutedForeground": "oklch(0.556 0 0)",
+              "radius": 0,
+              "surface": "oklch(1 0 0)",
+              "accents": [
+                "#142ce3"
+              ],
+              "pastels": [],
+              "colorMode": "monochrome"
+            },
+            "theme": "light",
+            "typography": {
+              "family": "DM Sans",
+              "stack": "\"DM Sans\", ui-sans-serif, system-ui, sans-serif",
+              "file": "qa-segnatura-motion-set.preview-font.ttf"
+            },
+            "viewport": {
+              "height": 405,
+              "width": 405
+            }
+          },
+          {
+            "backdrop": "dots",
+            "colorSemantics": {
+              "categories": "primary-tints",
+              "confirmation": "primary",
+              "decorativeCycling": false,
+              "signal": "motion-role"
+            },
+            "composition": {
+              "backgroundOwner": "host",
+              "frame": "none",
+              "texture": "transparent-overlay"
+            },
+            "duration": 7.1,
+            "evidence": [],
+            "file": "qa-segnatura-motion-set.progress-signal.1x1.dark.svg",
+            "format": "1:1",
+            "motion": "chart-sweep",
+            "motionPhysics": {
+              "anticipation": "subtle-countermove",
+              "continuity": "preserve-identity",
+              "effects": "no-overshoot",
+              "energyPath": "path-to-marker",
+              "followThrough": "single-settle",
+              "spatial": "gentle-overshoot"
+            },
+            "motionProfile": {
+              "camera": "static",
+              "emphasis": "path-trace",
+              "heroMotion": "traveling-marker",
+              "name": "chart-sweep",
+              "pointer": "none"
+            },
+            "palette": {
+              "accent": "#586df7",
+              "background": "oklch(0.145 0 0)",
+              "border": "oklch(1 0 0 / 10%)",
+              "foreground": "oklch(0.985 0 0)",
+              "muted": "oklch(0.269 0 0)",
+              "mutedForeground": "oklch(0.708 0 0)",
+              "radius": 0,
+              "surface": "oklch(0.205 0 0)",
+              "accents": [
+                "#586df7"
+              ],
+              "pastels": [
+                "color-mix(in oklab, #586df7 22%, oklch(0.205 0 0))"
+              ],
+              "colorMode": "monochrome"
+            },
+            "theme": "dark",
+            "typography": {
+              "family": "DM Sans",
+              "stack": "\"DM Sans\", ui-sans-serif, system-ui, sans-serif",
+              "file": "qa-segnatura-motion-set.preview-font.ttf"
+            },
+            "viewport": {
+              "height": 405,
+              "width": 405
+            }
+          },
+          {
+            "backdrop": "dots",
+            "colorSemantics": {
+              "categories": "primary-tints",
+              "confirmation": "primary",
+              "decorativeCycling": false,
+              "signal": "motion-role"
+            },
+            "composition": {
+              "backgroundOwner": "host",
+              "frame": "none",
+              "texture": "transparent-overlay"
+            },
+            "duration": 7.99,
+            "evidence": [],
+            "file": "qa-segnatura-motion-set.progress-signal.4x5.light.svg",
+            "format": "4:5",
+            "motion": "chart-sweep",
+            "motionPhysics": {
+              "anticipation": "subtle-countermove",
+              "continuity": "preserve-identity",
+              "effects": "no-overshoot",
+              "energyPath": "path-to-marker",
+              "followThrough": "single-settle",
+              "spatial": "gentle-overshoot"
+            },
+            "motionProfile": {
+              "camera": "static",
+              "emphasis": "path-trace",
+              "heroMotion": "traveling-marker",
+              "name": "chart-sweep",
+              "pointer": "none"
+            },
+            "palette": {
+              "accent": "#142ce3",
+              "background": "oklch(1 0 0)",
+              "border": "oklch(0.922 0 0)",
+              "foreground": "oklch(0.145 0 0)",
+              "muted": "oklch(0.97 0 0)",
+              "mutedForeground": "oklch(0.556 0 0)",
+              "radius": 0,
+              "surface": "oklch(1 0 0)",
+              "accents": [
+                "#142ce3"
+              ],
+              "pastels": [],
+              "colorMode": "monochrome"
+            },
+            "theme": "light",
+            "typography": {
+              "family": "DM Sans",
+              "stack": "\"DM Sans\", ui-sans-serif, system-ui, sans-serif",
+              "file": "qa-segnatura-motion-set.preview-font.ttf"
+            },
+            "viewport": {
+              "height": 506,
+              "width": 405
+            }
+          },
+          {
+            "backdrop": "dots",
+            "colorSemantics": {
+              "categories": "primary-tints",
+              "confirmation": "primary",
+              "decorativeCycling": false,
+              "signal": "motion-role"
+            },
+            "composition": {
+              "backgroundOwner": "host",
+              "frame": "none",
+              "texture": "transparent-overlay"
+            },
+            "duration": 7.99,
+            "evidence": [],
+            "file": "qa-segnatura-motion-set.progress-signal.4x5.dark.svg",
+            "format": "4:5",
+            "motion": "chart-sweep",
+            "motionPhysics": {
+              "anticipation": "subtle-countermove",
+              "continuity": "preserve-identity",
+              "effects": "no-overshoot",
+              "energyPath": "path-to-marker",
+              "followThrough": "single-settle",
+              "spatial": "gentle-overshoot"
+            },
+            "motionProfile": {
+              "camera": "static",
+              "emphasis": "path-trace",
+              "heroMotion": "traveling-marker",
+              "name": "chart-sweep",
+              "pointer": "none"
+            },
+            "palette": {
+              "accent": "#586df7",
+              "background": "oklch(0.145 0 0)",
+              "border": "oklch(1 0 0 / 10%)",
+              "foreground": "oklch(0.985 0 0)",
+              "muted": "oklch(0.269 0 0)",
+              "mutedForeground": "oklch(0.708 0 0)",
+              "radius": 0,
+              "surface": "oklch(0.205 0 0)",
+              "accents": [
+                "#586df7"
+              ],
+              "pastels": [
+                "color-mix(in oklab, #586df7 22%, oklch(0.205 0 0))"
+              ],
+              "colorMode": "monochrome"
+            },
+            "theme": "dark",
+            "typography": {
+              "family": "DM Sans",
+              "stack": "\"DM Sans\", ui-sans-serif, system-ui, sans-serif",
+              "file": "qa-segnatura-motion-set.preview-font.ttf"
+            },
+            "viewport": {
+              "height": 506,
+              "width": 405
+            }
+          },
+          {
+            "backdrop": "dots",
+            "colorSemantics": {
+              "categories": "primary-tints",
+              "confirmation": "primary",
+              "decorativeCycling": false,
+              "signal": "motion-role"
+            },
+            "composition": {
+              "backgroundOwner": "host",
+              "frame": "none",
+              "texture": "transparent-overlay"
+            },
+            "duration": 8.29,
+            "evidence": [],
+            "file": "qa-segnatura-motion-set.progress-signal.9x16.light.svg",
+            "format": "9:16",
+            "motion": "chart-sweep",
+            "motionPhysics": {
+              "anticipation": "subtle-countermove",
+              "continuity": "preserve-identity",
+              "effects": "no-overshoot",
+              "energyPath": "path-to-marker",
+              "followThrough": "single-settle",
+              "spatial": "gentle-overshoot"
+            },
+            "motionProfile": {
+              "camera": "static",
+              "emphasis": "path-trace",
+              "heroMotion": "traveling-marker",
+              "name": "chart-sweep",
+              "pointer": "none"
+            },
+            "palette": {
+              "accent": "#142ce3",
+              "background": "oklch(1 0 0)",
+              "border": "oklch(0.922 0 0)",
+              "foreground": "oklch(0.145 0 0)",
+              "muted": "oklch(0.97 0 0)",
+              "mutedForeground": "oklch(0.556 0 0)",
+              "radius": 0,
+              "surface": "oklch(1 0 0)",
+              "accents": [
+                "#142ce3"
+              ],
+              "pastels": [],
+              "colorMode": "monochrome"
+            },
+            "theme": "light",
+            "typography": {
+              "family": "DM Sans",
+              "stack": "\"DM Sans\", ui-sans-serif, system-ui, sans-serif",
+              "file": "qa-segnatura-motion-set.preview-font.ttf"
+            },
+            "viewport": {
+              "height": 720,
+              "width": 405
+            }
+          },
+          {
+            "backdrop": "dots",
+            "colorSemantics": {
+              "categories": "primary-tints",
+              "confirmation": "primary",
+              "decorativeCycling": false,
+              "signal": "motion-role"
+            },
+            "composition": {
+              "backgroundOwner": "host",
+              "frame": "none",
+              "texture": "transparent-overlay"
+            },
+            "duration": 8.29,
+            "evidence": [],
+            "file": "qa-segnatura-motion-set.progress-signal.9x16.dark.svg",
+            "format": "9:16",
+            "motion": "chart-sweep",
+            "motionPhysics": {
+              "anticipation": "subtle-countermove",
+              "continuity": "preserve-identity",
+              "effects": "no-overshoot",
+              "energyPath": "path-to-marker",
+              "followThrough": "single-settle",
+              "spatial": "gentle-overshoot"
+            },
+            "motionProfile": {
+              "camera": "static",
+              "emphasis": "path-trace",
+              "heroMotion": "traveling-marker",
+              "name": "chart-sweep",
+              "pointer": "none"
+            },
+            "palette": {
+              "accent": "#586df7",
+              "background": "oklch(0.145 0 0)",
+              "border": "oklch(1 0 0 / 10%)",
+              "foreground": "oklch(0.985 0 0)",
+              "muted": "oklch(0.269 0 0)",
+              "mutedForeground": "oklch(0.708 0 0)",
+              "radius": 0,
+              "surface": "oklch(0.205 0 0)",
+              "accents": [
+                "#586df7"
+              ],
+              "pastels": [
+                "color-mix(in oklab, #586df7 22%, oklch(0.205 0 0))"
+              ],
+              "colorMode": "monochrome"
+            },
+            "theme": "dark",
+            "typography": {
+              "family": "DM Sans",
+              "stack": "\"DM Sans\", ui-sans-serif, system-ui, sans-serif",
+              "file": "qa-segnatura-motion-set.preview-font.ttf"
+            },
+            "viewport": {
+              "height": 720,
+              "width": 405
             }
           }
         ]

@@ -35,6 +35,11 @@ The set shares palette, density, geometry, and line treatment while rotating mot
 - Never animate a stroke from zero length. Keep connector geometry valid and reveal complete segments with opacity or a non-zero clip.
 - Use motion tokens by role: gentle spring-like settling for layout, quick easing for direct feedback, and smooth in/out travel for pointers.
 - Add only slight overshoot to primary movement. Supporting motion should stay quiet and should not repeat every effect used elsewhere in the set.
+- Lay out the rectangle first, then animate between layouts. Every region stays full at every instant; shapes change size and position as solved layouts instead of sliding into empty space. Zoom and crop are computed geometry, never clip masks.
+- Compose each story natively for 16:9, 4:3, 1:1, 4:5, and 9:16. Each shape gets its own arrangement and timing for the same story, not a resize: side by side, stacked, a popover, or a strip.
+- Keep source proportions and one type scale across the set. Rows and cards have a natural height and stretch only where the product would; a bigger frame never means more stuff on screen.
+- Scale lines with the artwork, within limits. Each SVG embeds size tiers that pick stroke widths and cursor size from its rendered width, clamped so small embeds stay crisp and large heroes keep their outlines. Below 400px, fine secondary lines and texture drop out.
+- Give every motion its own loop length and beat map. Durations default per motion, and step timing is remapped per motion, so a set never moves in lockstep.
 - Keep every generated asset transparent and floating by default. Detecting a canvas color only makes it available as a palette role; the exporter never paints a solid artboard behind the animation.
 - Treat any emitted backdrop as an explicit art-direction choice. Add a source-specific texture such as a dot grid only when it contributes recognizable product personality, and keep the texture itself transparent so the embedding page still owns the background color.
 - Assume landing pages will place assets inside cards or sections. Do not add an automatic outer plate around the animation and avoid redundant containers inside containers.
@@ -79,8 +84,10 @@ skeleton-motion ../my-app --concept dashboard
 
 ```text
 output/
-  project-motion-set.insert-step.light.svg
+  project-motion-set.insert-step.light.svg        # 16:9, the primary shape
   project-motion-set.insert-step.dark.svg
+  project-motion-set.insert-step.1x1.light.svg    # one file per extra shape
+  project-motion-set.insert-step.9x16.dark.svg
   project-motion-set.select-item.light.svg
   project-motion-set.select-item.dark.svg
   project-motion-set.preview.html
