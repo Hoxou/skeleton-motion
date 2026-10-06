@@ -21,49 +21,57 @@
   <defs><pattern id="dots" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="1.5" cy="1.5" r="1.25" fill="var(--border)" /></pattern><filter id="cursor-shadow" x="-60%" y="-60%" width="220%" height="220%"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#000" flood-opacity=".28" /></filter></defs>
   <rect width="720" height="405" fill="var(--background)" />
   
-    <g transform="translate(260 229)">
-      <g>
-        <animateTransform attributeName="transform" type="scale" values="1;1;1.055;1.055;1" keyTimes="0;.62;.71;.87;1" calcMode="spline" keySplines=".22 1 .36 1;.22 1 .36 1;.22 1 .36 1;.22 1 .36 1" dur="5s" repeatCount="indefinite" />
-        <g transform="translate(-260 -229)">
     <rect x="24" y="22" width="672" height="361" rx="var(--radius)" fill="var(--surface)" stroke="var(--border)" />
     <rect x="24" y="22" width="672" height="361" rx="var(--radius)" fill="url(#dots)" opacity=".62" />
 
-    <path d="M260 137 V278" stroke="var(--border-strong)" stroke-width="2" />
-    <path d="M260 137 V278" stroke="var(--accent)" stroke-width="2.5" stroke-dasharray="141" stroke-dashoffset="141">
-      <animate attributeName="stroke-dashoffset" values="141;141;0;0;141" keyTimes="0;.63;.8;.9;1" dur="5s" repeatCount="indefinite" />
+    <path d="M197.5 128 V277" stroke="var(--border-strong)" stroke-width="2" />
+    <path d="M197.5 128 V277" stroke="var(--accent)" stroke-width="2.5" stroke-dasharray="149" stroke-dashoffset="149">
+      <animate attributeName="stroke-dashoffset" values="149;149;0;0;149" keyTimes="0;.61;.76;.9;1" dur="5s" repeatCount="indefinite" />
     </path>
 
     <g>
-      <rect x="78" y="58" width="364" height="79" rx="var(--radius)" fill="var(--surface)" stroke="var(--border-strong)" />
-      <circle cx="116" cy="97.5" r="16" fill="var(--muted)" />
-      <path d="M109 97.5h14M116 90.5v14" stroke="var(--ink)" opacity=".4" stroke-width="2.2" stroke-linecap="round" />
-      <rect x="148" y="84" width="122" height="5" rx="2.5" fill="var(--ink)" opacity="0.2" /><rect x="148" y="98" width="174" height="5" rx="2.5" fill="var(--ink)" opacity="0.1" />
+      <rect x="43" y="48" width="309" height="80" rx="var(--radius)" fill="var(--surface)" stroke="var(--border-strong)" />
+      <circle cx="79" cy="88" r="15" fill="var(--muted)" />
+      <path d="M72 88h14M79 81v14" stroke="var(--ink)" opacity=".4" stroke-width="2.2" stroke-linecap="round" />
+      <rect x="110" y="75" width="110" height="5" rx="2.5" fill="var(--ink)" opacity="0.2" /><rect x="110" y="89" width="166" height="5" rx="2.5" fill="var(--ink)" opacity="0.1" />
     </g>
 
-    <circle cx="260" cy="171" r="17" fill="var(--surface)" stroke="var(--border-strong)" />
-    <path d="M253 171h14M260 164v14" stroke="var(--ink)" opacity=".45" stroke-width="2.2" stroke-linecap="round" />
-
-    <g id="inserted-card" opacity="0">
-      <rect x="78" y="190" width="364" height="79" rx="var(--radius)" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="2" />
-      <circle cx="116" cy="229.5" r="16" fill="var(--accent-soft)" stroke="var(--accent)" stroke-opacity=".35" />
-      <path d="M109 229.5h14" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" />
-      <rect x="148" y="216" width="142" height="5" rx="2.5" fill="var(--ink)" opacity="0.2" /><rect x="148" y="230" width="92" height="5" rx="2.5" fill="var(--ink)" opacity="0.1" />
-      <animate attributeName="opacity" values="0;0;.42;.42;1;1;0" keyTimes="0;.32;.38;.57;.64;.9;1" dur="5s" repeatCount="indefinite" />
+    <g opacity="0">
+      <circle cx="197.5" cy="202.5" r="17" fill="var(--surface)" stroke="var(--accent)" />
+      <path d="M190.5 202.5h14M197.5 195.5v14" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" />
+      <animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;.17;.23;.31;.37;1" dur="5s" repeatCount="indefinite" />
     </g>
 
-    <g>
-      <rect x="78" y="278" width="364" height="79" rx="var(--radius)" fill="var(--surface)" stroke="var(--border-strong)" />
-      <circle cx="116" cy="317.5" r="16" fill="var(--muted)" />
-      <path d="M110 311.5l12 12M122 311.5l-12 12" stroke="var(--ink)" opacity=".32" stroke-width="2.2" stroke-linecap="round" />
-      <rect x="148" y="304" width="110" height="5" rx="2.5" fill="var(--ink)" opacity="0.2" /><rect x="148" y="318" width="160" height="5" rx="2.5" fill="var(--ink)" opacity="0.1" />
-    </g>
-
-    <g>
-      <rect x="472" y="78" width="188" height="184" rx="var(--radius)" fill="var(--surface)" stroke="var(--border)" />
-      <g><rect x="490" y="98" width="152" height="39" rx="var(--radius)" fill="var(--accent-soft)" stroke="var(--accent)" stroke-opacity=".65"/><rect x="503" y="108" width="19" height="19" rx="var(--radius)" fill="var(--accent)" opacity=".18"/><rect x="535" y="114" width="72" height="7" rx="3.5" fill="var(--ink)" opacity=".22"/></g><g><rect x="490" y="149" width="152" height="39" rx="var(--radius)" fill="var(--surface)" stroke="var(--border)" stroke-opacity="1"/><rect x="503" y="159" width="19" height="19" rx="var(--radius)" fill="var(--muted)" opacity="1"/><rect x="535" y="165" width="58" height="7" rx="3.5" fill="var(--ink)" opacity=".12"/></g><g><rect x="490" y="200" width="152" height="39" rx="var(--radius)" fill="var(--surface)" stroke="var(--border)" stroke-opacity="1"/><rect x="503" y="210" width="19" height="19" rx="var(--radius)" fill="var(--muted)" opacity="1"/><rect x="535" y="216" width="58" height="7" rx="3.5" fill="var(--ink)" opacity=".12"/></g>
-    </g>
+    <g id="inserted-card" opacity="0" transform="translate(197.5 202.5)">
+      <g>
+        <animateTransform attributeName="transform" type="scale" values=".94;.94;1.025;1;1" keyTimes="0;.34;.41;.48;1" calcMode="spline" keySplines=".22 1 .36 1;.22 1 .36 1;.22 1 .36 1;.22 1 .36 1" dur="5s" repeatCount="indefinite" />
+        <g transform="translate(-197.5 -202.5)">
+          <rect x="43" y="162.5" width="309" height="80" rx="var(--radius)" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="2" stroke-dasharray="7 6">
+            <animate attributeName="opacity" values="1;1;0;0;1" keyTimes="0;.6;.68;.9;1" dur="5s" repeatCount="indefinite" />
+          </rect>
+          <rect x="43" y="162.5" width="309" height="80" rx="var(--radius)" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="2" opacity="0">
+            <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;.61;.69;.9;1" dur="5s" repeatCount="indefinite" />
+          </rect>
+          <circle cx="79" cy="202.5" r="15" fill="var(--accent-soft)" stroke="var(--accent)" stroke-opacity=".42" />
+          <path d="M72 202.5h14" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" />
+          <rect x="110" y="189.5" width="134" height="5" rx="2.5" fill="var(--ink)" opacity="0.2" /><rect x="110" y="203.5" width="86" height="5" rx="2.5" fill="var(--ink)" opacity="0.1" />
         </g>
       </g>
+      <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;.34;.39;.9;1" dur="5s" repeatCount="indefinite" />
+    </g>
+
+    <g>
+      <rect x="43" y="277" width="309" height="80" rx="var(--radius)" fill="var(--surface)" stroke="var(--border-strong)" />
+      <circle cx="79" cy="317" r="15" fill="var(--muted)" />
+      <path d="M73 311l12 12M85 311l-12 12" stroke="var(--ink)" opacity=".32" stroke-width="2.2" stroke-linecap="round" />
+      <rect x="110" y="304" width="102" height="5" rx="2.5" fill="var(--ink)" opacity="0.2" /><rect x="110" y="318" width="158" height="5" rx="2.5" fill="var(--ink)" opacity="0.1" />
+    </g>
+
+    <g>
+      <rect x="368" y="48" width="309" height="309" rx="var(--radius)" fill="var(--surface)" stroke="var(--border)" />
+      <rect x="388" y="68" width="72" height="7" rx="3.5" fill="var(--ink)" opacity=".14" />
+      <rect x="468" y="68" width="42" height="7" rx="3.5" fill="var(--ink)" opacity=".07" />
+      <g><rect x="388" y="91" width="269" height="70" rx="var(--radius)" fill="var(--surface)" stroke="var(--border)"/><rect x="388" y="91" width="269" height="70" rx="var(--radius)" fill="var(--accent-soft)" stroke="var(--accent)" opacity="0"><animate attributeName="opacity" values="0;0;.18;.18;0" keyTimes="0;.45;.52;.64;1" dur="5s" repeatCount="indefinite" /></rect><rect x="406" y="111" width="30" height="30" rx="var(--radius)" fill="var(--accent-soft)"/><rect x="452" y="118" width="104" height="8" rx="4" fill="var(--ink)" opacity=".2"/></g><g><rect x="388" y="171" width="269" height="70" rx="var(--radius)" fill="var(--surface)" stroke="var(--border)"/><rect x="388" y="171" width="269" height="70" rx="var(--radius)" fill="var(--accent-soft)" stroke="var(--accent)" opacity="0"></rect><rect x="406" y="191" width="30" height="30" rx="var(--radius)" fill="var(--muted)"/><rect x="452" y="198" width="82" height="8" rx="4" fill="var(--ink)" opacity=".11"/></g><g><rect x="388" y="251" width="269" height="70" rx="var(--radius)" fill="var(--surface)" stroke="var(--border)"/><rect x="388" y="251" width="269" height="70" rx="var(--radius)" fill="var(--accent-soft)" stroke="var(--accent)" opacity="0"></rect><rect x="406" y="271" width="30" height="30" rx="var(--radius)" fill="var(--muted)"/><rect x="452" y="278" width="82" height="8" rx="4" fill="var(--ink)" opacity=".11"/></g>
     </g>
     
     <g id="cursor" opacity="0">
@@ -71,12 +79,12 @@
     <animate attributeName="r" values="7;7;24;29;7" keyTimes="0;0.285;0.328;0.395;1" dur="5s" repeatCount="indefinite" />
     <animate attributeName="opacity" values="0;0;.62;0;0" keyTimes="0;0.285;0.328;0.395;1" dur="5s" repeatCount="indefinite" />
   </circle><circle cx="0" cy="0" r="7" fill="none" stroke="var(--accent)" stroke-width="2" opacity="0">
-    <animate attributeName="r" values="7;7;24;29;7" keyTimes="0;0.535;0.5780000000000001;0.645;1" dur="5s" repeatCount="indefinite" />
-    <animate attributeName="opacity" values="0;0;.62;0;0" keyTimes="0;0.535;0.5780000000000001;0.645;1" dur="5s" repeatCount="indefinite" />
+    <animate attributeName="r" values="7;7;24;29;7" keyTimes="0;0.5549999999999999;0.598;0.6649999999999999;1" dur="5s" repeatCount="indefinite" />
+    <animate attributeName="opacity" values="0;0;.62;0;0" keyTimes="0;0.5549999999999999;0.598;0.6649999999999999;1" dur="5s" repeatCount="indefinite" />
   </circle>
-      <path d="M2.5 1.5 V28 L9.4 21.4 L15.4 34.8 L21.4 32.1 L15.4 18.8 L27 18.1 Z" fill="var(--accent)" stroke="var(--cursor-outline)" stroke-width="2.2" stroke-linejoin="round" filter="url(#cursor-shadow)" />
+      <path d="M2.5 2 V27 L10 19.8 H21.5 Z" fill="var(--accent)" stroke="var(--cursor-outline)" stroke-width="2.2" stroke-linejoin="round" filter="url(#cursor-shadow)" />
       <animate attributeName="opacity" values="0;1;1;0;0" keyTimes="0;.07;.85;.92;1" dur="5s" repeatCount="indefinite" />
-      <animateTransform attributeName="transform" type="translate" values="654 350;654 350;260 171;260 171;548 117;548 117;360 229;360 229;654 350" keyTimes="0;0.07;0.29;0.38;0.54;0.63;0.75;0.87;1" calcMode="spline" keySplines=".22 1 .36 1;.22 1 .36 1;.22 1 .36 1;.22 1 .36 1;.22 1 .36 1;.22 1 .36 1;.22 1 .36 1;.22 1 .36 1" dur="5s" repeatCount="indefinite" />
+      <animateTransform attributeName="transform" type="translate" values="654 350;654 350;197.5 202.5;197.5 202.5;506 126;506 126;270 202.5;270 202.5;654 350" keyTimes="0;0.07;0.29;0.38;0.53;0.62;0.76;0.87;1" calcMode="spline" keySplines=".22 1 .36 1;.22 1 .36 1;.22 1 .36 1;.22 1 .36 1;.22 1 .36 1;.22 1 .36 1;.22 1 .36 1;.22 1 .36 1" dur="5s" repeatCount="indefinite" />
     </g>
   
 </svg>

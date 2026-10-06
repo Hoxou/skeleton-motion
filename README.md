@@ -15,6 +15,7 @@ Tool scans source without executing it, ranks visual concepts, extracts light/da
 - Shared visual grammar, varied choreography: camera, pointer, and emphasis are selected per story instead of applied globally.
 - Exact `--width`, `--height`, and `--duration` controls.
 - Analysis manifest explains selected concept and source evidence.
+- Display preview with light/dark switching and Display, Card, Split, and Bento landing-page contexts.
 
 Batch generation is intentionally deferred. Future mode can use ranked concepts already stored in manifest to create a coordinated asset set.
 The set should share palette, density, geometry, and line treatment while rotating motion profiles; zoom is reserved for moments that benefit from focus.

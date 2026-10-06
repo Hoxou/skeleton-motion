@@ -20,8 +20,8 @@ const MOTION_PROFILES = {
     pointer: "cursor-click",
   },
   flow: {
-    camera: "focus-zoom",
-    emphasis: "click-ripple",
+    camera: "static",
+    emphasis: "ghost-insert",
     name: "add-step",
     pointer: "cursor-click",
   },

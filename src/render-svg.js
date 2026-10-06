@@ -22,7 +22,7 @@ function cursor(duration, frames, clicks = []) {
   return `
     <g id="cursor" opacity="0">
       ${clicks.map((at) => clickRipple(duration, at)).join("")}
-      <path d="M2.5 1.5 V28 L9.4 21.4 L15.4 34.8 L21.4 32.1 L15.4 18.8 L27 18.1 Z" fill="var(--accent)" stroke="var(--cursor-outline)" stroke-width="2.2" stroke-linejoin="round" filter="url(#cursor-shadow)" />
+      <path d="M2.5 2 V27 L10 19.8 H21.5 Z" fill="var(--accent)" stroke="var(--cursor-outline)" stroke-width="2.2" stroke-linejoin="round" filter="url(#cursor-shadow)" />
       <animate attributeName="opacity" values="0;1;1;0;0" keyTimes="0;.07;.85;.92;1" dur="${duration}s" repeatCount="indefinite" />
       <animateTransform attributeName="transform" type="translate" values="${values}" keyTimes="${keyTimes}" calcMode="spline" keySplines="${keySplines}" dur="${duration}s" repeatCount="indefinite" />
     </g>`;
@@ -38,64 +38,71 @@ function skeletonLines(x, y, widths = [88, 132]) {
 
 function flowScene(scene) {
   const duration = scene.duration;
-  const focused = scene.motionProfile?.camera === "focus-zoom";
   const pointer = scene.motionProfile?.pointer !== "none";
   return `
-    <g transform="translate(260 229)">
-      <g>
-        ${focused ? `<animateTransform attributeName="transform" type="scale" values="1;1;1.055;1.055;1" keyTimes="0;.62;.71;.87;1" calcMode="spline" keySplines=".22 1 .36 1;.22 1 .36 1;.22 1 .36 1;.22 1 .36 1" dur="${duration}s" repeatCount="indefinite" />` : ""}
-        <g transform="translate(-260 -229)">
     <rect x="24" y="22" width="672" height="361" rx="var(--radius)" fill="var(--surface)" stroke="var(--border)" />
     <rect x="24" y="22" width="672" height="361" rx="var(--radius)" fill="url(#dots)" opacity=".62" />
 
-    <path d="M260 137 V278" stroke="var(--border-strong)" stroke-width="2" />
-    <path d="M260 137 V278" stroke="var(--accent)" stroke-width="2.5" stroke-dasharray="141" stroke-dashoffset="141">
-      <animate attributeName="stroke-dashoffset" values="141;141;0;0;141" keyTimes="0;.63;.8;.9;1" dur="${duration}s" repeatCount="indefinite" />
+    <path d="M197.5 128 V277" stroke="var(--border-strong)" stroke-width="2" />
+    <path d="M197.5 128 V277" stroke="var(--accent)" stroke-width="2.5" stroke-dasharray="149" stroke-dashoffset="149">
+      <animate attributeName="stroke-dashoffset" values="149;149;0;0;149" keyTimes="0;.61;.76;.9;1" dur="${duration}s" repeatCount="indefinite" />
     </path>
 
     <g>
-      <rect x="78" y="58" width="364" height="79" rx="var(--radius)" fill="var(--surface)" stroke="var(--border-strong)" />
-      <circle cx="116" cy="97.5" r="16" fill="var(--muted)" />
-      <path d="M109 97.5h14M116 90.5v14" stroke="var(--ink)" opacity=".4" stroke-width="2.2" stroke-linecap="round" />
-      ${skeletonLines(148, 84, [122, 174])}
+      <rect x="43" y="48" width="309" height="80" rx="var(--radius)" fill="var(--surface)" stroke="var(--border-strong)" />
+      <circle cx="79" cy="88" r="15" fill="var(--muted)" />
+      <path d="M72 88h14M79 81v14" stroke="var(--ink)" opacity=".4" stroke-width="2.2" stroke-linecap="round" />
+      ${skeletonLines(110, 75, [110, 166])}
     </g>
 
-    <circle cx="260" cy="171" r="17" fill="var(--surface)" stroke="var(--border-strong)" />
-    <path d="M253 171h14M260 164v14" stroke="var(--ink)" opacity=".45" stroke-width="2.2" stroke-linecap="round" />
-
-    <g id="inserted-card" opacity="${pointer ? "0" : "1"}">
-      <rect x="78" y="190" width="364" height="79" rx="var(--radius)" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="2" />
-      <circle cx="116" cy="229.5" r="16" fill="var(--accent-soft)" stroke="var(--accent)" stroke-opacity=".35" />
-      <path d="M109 229.5h14" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" />
-      ${skeletonLines(148, 216, [142, 92])}
-      ${pointer ? `<animate attributeName="opacity" values="0;0;.42;.42;1;1;0" keyTimes="0;.32;.38;.57;.64;.9;1" dur="${duration}s" repeatCount="indefinite" />` : `<animate attributeName="opacity" values="1;1;.72;1;1" keyTimes="0;.56;.66;.78;1" dur="${duration}s" repeatCount="indefinite" />`}
+    <g opacity="0">
+      <circle cx="197.5" cy="202.5" r="17" fill="var(--surface)" stroke="var(--accent)" />
+      <path d="M190.5 202.5h14M197.5 195.5v14" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" />
+      <animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;.17;.23;.31;.37;1" dur="${duration}s" repeatCount="indefinite" />
     </g>
 
-    <g>
-      <rect x="78" y="278" width="364" height="79" rx="var(--radius)" fill="var(--surface)" stroke="var(--border-strong)" />
-      <circle cx="116" cy="317.5" r="16" fill="var(--muted)" />
-      <path d="M110 311.5l12 12M122 311.5l-12 12" stroke="var(--ink)" opacity=".32" stroke-width="2.2" stroke-linecap="round" />
-      ${skeletonLines(148, 304, [110, 160])}
-    </g>
-
-    <g>
-      <rect x="472" y="78" width="188" height="184" rx="var(--radius)" fill="var(--surface)" stroke="var(--border)" />
-      ${[98, 149, 200].map((y, index) => `<g><rect x="490" y="${y}" width="152" height="39" rx="var(--radius)" fill="${index === 0 ? "var(--accent-soft)" : "var(--surface)"}" stroke="${index === 0 ? "var(--accent)" : "var(--border)"}" stroke-opacity="${index === 0 ? ".65" : "1"}"/><rect x="503" y="${y + 10}" width="19" height="19" rx="var(--radius)" fill="${index === 0 ? "var(--accent)" : "var(--muted)"}" opacity="${index === 0 ? ".18" : "1"}"/><rect x="535" y="${y + 16}" width="${index === 0 ? 72 : 58}" height="7" rx="3.5" fill="var(--ink)" opacity="${index === 0 ? ".22" : ".12"}"/></g>`).join("")}
-    </g>
+    <g id="inserted-card" opacity="${pointer ? "0" : "1"}" transform="translate(197.5 202.5)">
+      <g>
+        ${pointer ? `<animateTransform attributeName="transform" type="scale" values=".94;.94;1.025;1;1" keyTimes="0;.34;.41;.48;1" calcMode="spline" keySplines=".22 1 .36 1;.22 1 .36 1;.22 1 .36 1;.22 1 .36 1" dur="${duration}s" repeatCount="indefinite" />` : ""}
+        <g transform="translate(-197.5 -202.5)">
+          <rect x="43" y="162.5" width="309" height="80" rx="var(--radius)" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="2" stroke-dasharray="7 6">
+            ${pointer ? `<animate attributeName="opacity" values="1;1;0;0;1" keyTimes="0;.6;.68;.9;1" dur="${duration}s" repeatCount="indefinite" />` : ""}
+          </rect>
+          <rect x="43" y="162.5" width="309" height="80" rx="var(--radius)" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="2" opacity="${pointer ? "0" : "1"}">
+            ${pointer ? `<animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;.61;.69;.9;1" dur="${duration}s" repeatCount="indefinite" />` : ""}
+          </rect>
+          <circle cx="79" cy="202.5" r="15" fill="var(--accent-soft)" stroke="var(--accent)" stroke-opacity=".42" />
+          <path d="M72 202.5h14" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" />
+          ${skeletonLines(110, 189.5, [134, 86])}
         </g>
       </g>
+      ${pointer ? `<animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;.34;.39;.9;1" dur="${duration}s" repeatCount="indefinite" />` : `<animate attributeName="opacity" values="1;1;.76;1;1" keyTimes="0;.56;.66;.78;1" dur="${duration}s" repeatCount="indefinite" />`}
+    </g>
+
+    <g>
+      <rect x="43" y="277" width="309" height="80" rx="var(--radius)" fill="var(--surface)" stroke="var(--border-strong)" />
+      <circle cx="79" cy="317" r="15" fill="var(--muted)" />
+      <path d="M73 311l12 12M85 311l-12 12" stroke="var(--ink)" opacity=".32" stroke-width="2.2" stroke-linecap="round" />
+      ${skeletonLines(110, 304, [102, 158])}
+    </g>
+
+    <g>
+      <rect x="368" y="48" width="309" height="309" rx="var(--radius)" fill="var(--surface)" stroke="var(--border)" />
+      <rect x="388" y="68" width="72" height="7" rx="3.5" fill="var(--ink)" opacity=".14" />
+      <rect x="468" y="68" width="42" height="7" rx="3.5" fill="var(--ink)" opacity=".07" />
+      ${[91, 171, 251].map((y, index) => `<g><rect x="388" y="${y}" width="269" height="70" rx="var(--radius)" fill="var(--surface)" stroke="var(--border)"/><rect x="388" y="${y}" width="269" height="70" rx="var(--radius)" fill="var(--accent-soft)" stroke="var(--accent)" opacity="0">${index === 0 ? `<animate attributeName="opacity" values="0;0;.18;.18;0" keyTimes="0;.45;.52;.64;1" dur="${duration}s" repeatCount="indefinite" />` : ""}</rect><rect x="406" y="${y + 20}" width="30" height="30" rx="var(--radius)" fill="${index === 0 ? "var(--accent-soft)" : "var(--muted)"}"/><rect x="452" y="${y + 27}" width="${index === 0 ? 104 : 82}" height="8" rx="4" fill="var(--ink)" opacity="${index === 0 ? ".2" : ".11"}"/></g>`).join("")}
     </g>
     ${pointer ? cursor(duration, [
       { at: 0, x: 654, y: 350 },
       { at: 0.07, x: 654, y: 350 },
-      { at: 0.29, x: 260, y: 171 },
-      { at: 0.38, x: 260, y: 171 },
-      { at: 0.54, x: 548, y: 117 },
-      { at: 0.63, x: 548, y: 117 },
-      { at: 0.75, x: 360, y: 229 },
-      { at: 0.87, x: 360, y: 229 },
+      { at: 0.29, x: 197.5, y: 202.5 },
+      { at: 0.38, x: 197.5, y: 202.5 },
+      { at: 0.53, x: 506, y: 126 },
+      { at: 0.62, x: 506, y: 126 },
+      { at: 0.76, x: 270, y: 202.5 },
+      { at: 0.87, x: 270, y: 202.5 },
       { at: 1, x: 654, y: 350 },
-    ], [0.31, 0.56]) : ""}
+    ], [0.31, 0.58]) : ""}
   `;
 }
 

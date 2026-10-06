@@ -120,8 +120,8 @@
         "file": "qa-segnatura-flow.light.svg",
         "motion": "add-step",
         "motionProfile": {
-          "camera": "focus-zoom",
-          "emphasis": "click-ripple",
+          "camera": "static",
+          "emphasis": "ghost-insert",
           "name": "add-step",
           "pointer": "cursor-click"
         },
@@ -166,8 +166,8 @@
         "file": "qa-segnatura-flow.dark.svg",
         "motion": "add-step",
         "motionProfile": {
-          "camera": "focus-zoom",
-          "emphasis": "click-ripple",
+          "camera": "static",
+          "emphasis": "ghost-insert",
           "name": "add-step",
           "pointer": "cursor-click"
         },
@@ -188,6 +188,6 @@
       }
     ]
   },
-  "generatedAt": "2026-10-06T02:21:40.722Z",
+  "generatedAt": "2026-10-06T02:35:31.238Z",
   "schemaVersion": 1
 }
