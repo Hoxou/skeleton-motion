@@ -5,29 +5,170 @@ export function renderPreview({ name, scenes }) {
   const dark = scenes.find((scene) => scene.theme === "dark") || scenes[0];
   const hasBoth = light !== dark;
   return `<!doctype html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>${escapeXml(name)} preview</title>
+  <title>Display — ${escapeXml(name)}</title>
   <style>
     * { box-sizing: border-box; }
-    html { color-scheme: light dark; }
-    body { margin: 0; min-height: 100vh; display: grid; place-items: center; background: #ececf0; font-family: ui-sans-serif, system-ui, sans-serif; }
-    main { width: min(94vw, 1200px); }
-    img { display: block; width: 100%; height: auto; box-shadow: 0 24px 80px rgb(0 0 0 / .12); }
+    :root {
+      color-scheme: light;
+      --page: #f1f0ec;
+      --page-ink: #18181b;
+      --panel-border: rgb(24 24 27 / .09);
+      --panel-shadow: 0 32px 100px rgb(24 24 27 / .12), 0 2px 8px rgb(24 24 27 / .04);
+      --switch: rgb(255 255 255 / .72);
+      --switch-hover: rgb(255 255 255 / .96);
+    }
+    [data-theme="dark"] {
+      color-scheme: dark;
+      --page: #121214;
+      --page-ink: #f4f4f5;
+      --panel-border: rgb(255 255 255 / .08);
+      --panel-shadow: 0 36px 110px rgb(0 0 0 / .42), 0 2px 10px rgb(0 0 0 / .22);
+      --switch: rgb(38 38 42 / .78);
+      --switch-hover: rgb(46 46 51 / .96);
+    }
+    html, body { min-height: 100%; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 50% 48%, color-mix(in oklab, var(--page-ink) 3%, transparent) 0, transparent 44%),
+        var(--page);
+      color: var(--page-ink);
+      font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      transition: background-color 320ms ease, color 320ms ease;
+    }
+    header {
+      position: fixed;
+      z-index: 2;
+      inset: 0 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 24px 28px;
+      pointer-events: none;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: inherit;
+      font-size: 11px;
+      font-weight: 650;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      opacity: .66;
+    }
+    .brand::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      background: currentColor;
+      box-shadow: 9px 0 0 color-mix(in oklab, currentColor 34%, transparent);
+    }
+    button {
+      pointer-events: auto;
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      min-height: 38px;
+      padding: 0 13px;
+      border: 1px solid var(--panel-border);
+      border-radius: 999px;
+      background: var(--switch);
+      color: inherit;
+      box-shadow: 0 8px 30px rgb(0 0 0 / .07);
+      font: inherit;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      backdrop-filter: blur(18px);
+      transition: background 180ms ease, transform 180ms ease, border-color 180ms ease;
+    }
+    button:hover { background: var(--switch-hover); transform: translateY(-1px); }
+    button:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
+    button svg { width: 15px; height: 15px; }
+    .moon { display: block; }
+    .sun { display: none; }
+    [data-theme="dark"] .moon { display: none; }
+    [data-theme="dark"] .sun { display: block; }
+    main {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 88px 5vw 56px;
+    }
+    .display {
+      position: relative;
+      width: min(88vw, 1120px);
+      overflow: hidden;
+      border: 1px solid var(--panel-border);
+      border-radius: 18px;
+      box-shadow: var(--panel-shadow);
+      transform: translateZ(0);
+      transition: border-color 320ms ease, box-shadow 320ms ease;
+    }
+    .display::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      box-shadow: inset 0 1px 0 rgb(255 255 255 / .12);
+      pointer-events: none;
+    }
+    img { display: block; width: 100%; height: auto; }
     .dark { display: none; }
-    @media (prefers-color-scheme: dark) {
-      body { background: #0b0b0d; }
-      ${hasBoth ? ".light { display: none; } .dark { display: block; }" : ""}
+    [data-theme="dark"] .light { display: none; }
+    [data-theme="dark"] .dark { display: block; }
+    @media (max-width: 640px) {
+      header { padding: 18px; }
+      .brand span { display: none; }
+      main { padding-inline: 18px; }
+      .display { width: 100%; border-radius: 12px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { transition-duration: .01ms !important; }
     }
   </style>
 </head>
 <body>
+  <header>
+    <div class="brand"><span>Display</span></div>
+    ${hasBoth ? `<button id="theme-toggle" type="button" aria-label="Switch to dark mode" aria-pressed="false">
+      <svg class="moon" aria-hidden="true" viewBox="0 0 24 24" fill="none"><path d="M20.2 15.2A8.5 8.5 0 0 1 8.8 3.8 8.5 8.5 0 1 0 20.2 15.2Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <svg class="sun" aria-hidden="true" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3.5" stroke="currentColor" stroke-width="1.8"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      <span id="theme-label">Dark</span>
+    </button>` : ""}
+  </header>
   <main>
-    <img class="light" src="./${escapeXml(light.file)}" width="${light.viewport.width}" height="${light.viewport.height}" alt="${escapeXml(name)} product motion, light theme">
-    ${hasBoth ? `<img class="dark" src="./${escapeXml(dark.file)}" width="${dark.viewport.width}" height="${dark.viewport.height}" alt="${escapeXml(name)} product motion, dark theme">` : ""}
+    <section class="display" aria-label="${escapeXml(name)} animation preview">
+      <img class="light" src="./${escapeXml(light.file)}" width="${light.viewport.width}" height="${light.viewport.height}" alt="${escapeXml(name)} product motion, light theme">
+      ${hasBoth ? `<img class="dark" src="./${escapeXml(dark.file)}" width="${dark.viewport.width}" height="${dark.viewport.height}" alt="${escapeXml(name)} product motion, dark theme">` : ""}
+    </section>
   </main>
+  ${hasBoth ? `<script>
+    const root = document.documentElement;
+    const toggle = document.querySelector("#theme-toggle");
+    const label = document.querySelector("#theme-label");
+    const stored = localStorage.getItem("display-theme");
+    const preferred = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+
+    function setTheme(theme) {
+      const dark = theme === "dark";
+      root.dataset.theme = theme;
+      toggle.setAttribute("aria-pressed", String(dark));
+      toggle.setAttribute("aria-label", dark ? "Switch to light mode" : "Switch to dark mode");
+      label.textContent = dark ? "Light" : "Dark";
+      localStorage.setItem("display-theme", theme);
+    }
+
+    setTheme(stored || preferred);
+    toggle.addEventListener("click", () => setTheme(root.dataset.theme === "dark" ? "light" : "dark"));
+  </script>` : ""}
 </body>
 </html>`;
 }
