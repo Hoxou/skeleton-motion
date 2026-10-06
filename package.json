@@ -1,0 +1,21 @@
+{
+  "name": "skeleton-motion",
+  "version": "0.1.0",
+  "description": "Generate one minimal, branded product-motion asset from a repository or URL.",
+  "type": "module",
+  "bin": {
+    "skeleton-motion": "./bin/skeleton-motion.js"
+  },
+  "scripts": {
+    "generate": "node ./bin/skeleton-motion.js",
+    "test": "node --test",
+    "check": "node --check ./bin/skeleton-motion.js && node --test"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "playwright-core": "^1.55.0"
+  },
+  "license": "MIT"
+}

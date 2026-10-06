@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675" role="img" aria-labelledby="title description">
+  <title id="title">qa-segnatura-flow — add-step</title>
+  <desc id="description">Minimal flow product illustration generated from /Users/victor.toupar/Documents/dev/qa-segnatura.</desc>
+  <style>
+    :root {
+      --accent: #142ce3;
+      --accent-soft: color-mix(in oklab, #142ce3 12%, oklch(1 0 0));
+      --background: oklch(1 0 0);
+      --border: oklch(0.922 0 0);
+      --border-strong: color-mix(in oklab, oklch(0.145 0 0) 18%, oklch(1 0 0));
+      --cursor-fill: oklch(0.145 0 0);
+      --cursor-stroke: oklch(1 0 0);
+      --ink: oklch(0.145 0 0);
+      --muted: oklch(0.97 0 0);
+      --radius: 0px;
+      --surface: oklch(1 0 0);
+    }
+    * { vector-effect: non-scaling-stroke; }
+    @media (prefers-reduced-motion: reduce) { svg { visibility: visible; } }
+  </style>
+  <defs><pattern id="dots" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="1.5" cy="1.5" r="1.25" fill="var(--border)" /></pattern></defs>
+  <rect width="1200" height="675" fill="var(--background)" />
+  
+    <rect x="64" y="58" width="804" height="558" rx="var(--radius)" fill="var(--surface)" stroke="var(--border)" />
+    <rect x="64" y="58" width="804" height="558" rx="var(--radius)" fill="url(#dots)" opacity=".72" />
+
+    <path d="M452 222 V306" stroke="var(--border-strong)" stroke-width="2" />
+    <path d="M452 394 V478" stroke="var(--border-strong)" stroke-width="2" />
+    <path d="M452 222 V306" stroke="var(--accent)" stroke-width="2.5" stroke-dasharray="84" stroke-dashoffset="84">
+      <animate attributeName="stroke-dashoffset" values="84;84;0;0;84" keyTimes="0;.52;.68;.86;1" dur="5s" repeatCount="indefinite" />
+    </path>
+    <path d="M452 394 V478" stroke="var(--accent)" stroke-width="2.5" stroke-dasharray="84" stroke-dashoffset="84">
+      <animate attributeName="stroke-dashoffset" values="84;84;0;0;84" keyTimes="0;.66;.8;.9;1" dur="5s" repeatCount="indefinite" />
+    </path>
+
+    <g>
+      <rect x="264" y="132" width="376" height="90" rx="var(--radius)" fill="var(--surface)" stroke="var(--border-strong)" />
+      <circle cx="302" cy="177" r="15" fill="var(--muted)" />
+      <path d="M296 177h12M302 171v12" stroke="var(--ink)" opacity=".38" stroke-width="2" stroke-linecap="round" />
+      <rect x="332" y="164" width="104" height="5" rx="2.5" fill="var(--ink)" opacity="0.2" /><rect x="332" y="178" width="154" height="5" rx="2.5" fill="var(--ink)" opacity="0.1" />
+      <circle cx="607" cy="177" r="5" fill="var(--ink)" opacity=".15" />
+    </g>
+
+    <g id="middle-card">
+      <rect x="264" y="306" width="376" height="88" rx="var(--radius)" fill="var(--surface)" stroke="var(--border-strong)" />
+      <rect x="264" y="306" width="376" height="88" rx="var(--radius)" fill="var(--accent-soft)" opacity="0">
+        <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;.49;.56;.9;1" dur="5s" repeatCount="indefinite" />
+      </rect>
+      <rect x="264" y="306" width="376" height="88" rx="var(--radius)" fill="none" stroke="var(--accent)" stroke-width="2" opacity="0">
+        <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;.49;.53;.91;1" dur="5s" repeatCount="indefinite" />
+      </rect>
+      <circle cx="302" cy="350" r="15" fill="var(--muted)" />
+      <path d="M296 350h12" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" />
+      <rect x="332" y="337" width="126" height="5" rx="2.5" fill="var(--ink)" opacity="0.2" /><rect x="332" y="351" width="82" height="5" rx="2.5" fill="var(--ink)" opacity="0.1" />
+      <rect x="574" y="340" width="34" height="20" rx="10" fill="var(--muted)" />
+      <circle cx="584" cy="350" r="6" fill="var(--ink)" opacity=".18">
+        <animate attributeName="cx" values="584;584;598;598;584" keyTimes="0;.57;.65;.91;1" dur="5s" repeatCount="indefinite" />
+        <animate attributeName="fill" values="var(--ink);var(--ink);var(--accent);var(--accent);var(--ink)" keyTimes="0;.57;.65;.91;1" dur="5s" repeatCount="indefinite" />
+      </circle>
+    </g>
+
+    <g>
+      <rect x="264" y="478" width="376" height="88" rx="var(--radius)" fill="var(--surface)" stroke="var(--border-strong)" />
+      <circle cx="302" cy="522" r="15" fill="var(--muted)" />
+      <path d="M296 516l12 12M308 516l-12 12" stroke="var(--ink)" opacity=".3" stroke-width="2" stroke-linecap="round" />
+      <rect x="332" y="509" width="92" height="5" rx="2.5" fill="var(--ink)" opacity="0.2" /><rect x="332" y="523" width="142" height="5" rx="2.5" fill="var(--ink)" opacity="0.1" />
+      <circle cx="607" cy="522" r="5" fill="var(--ink)" opacity=".15" />
+    </g>
+
+    <circle cx="452" cy="264" r="15" fill="var(--surface)" stroke="var(--border-strong)" />
+    <path d="M446 264h12M452 258v12" stroke="var(--ink)" opacity=".42" stroke-width="2" stroke-linecap="round" />
+
+    <g>
+      <rect x="912" y="146" width="224" height="356" rx="var(--radius)" fill="var(--surface)" stroke="var(--border)" />
+      <rect x="938" y="174" width="172" height="28" rx="var(--radius)" fill="var(--muted)" />
+      <circle cx="958" cy="188" r="6" fill="var(--ink)" opacity=".17" />
+      <rect x="974" y="185" width="62" height="6" rx="3" fill="var(--ink)" opacity=".12" />
+      <g><rect x="938" y="230" width="172" height="46" rx="var(--radius)" fill="var(--surface)" stroke="var(--accent)" stroke-opacity=".55"/><rect x="952" y="242" width="22" height="22" rx="var(--radius)" fill="var(--accent-soft)"/><rect x="987" y="242" width="74" height="5" rx="2.5" fill="var(--ink)" opacity="0.2" /><rect x="987" y="256" width="48" height="5" rx="2.5" fill="var(--ink)" opacity="0.1" /></g><g><rect x="938" y="294" width="172" height="46" rx="var(--radius)" fill="var(--surface)" stroke="var(--border)" stroke-opacity="1"/><rect x="952" y="306" width="22" height="22" rx="var(--radius)" fill="var(--muted)"/><rect x="987" y="306" width="74" height="5" rx="2.5" fill="var(--ink)" opacity="0.2" /><rect x="987" y="320" width="48" height="5" rx="2.5" fill="var(--ink)" opacity="0.1" /></g><g><rect x="938" y="358" width="172" height="46" rx="var(--radius)" fill="var(--surface)" stroke="var(--border)" stroke-opacity="1"/><rect x="952" y="370" width="22" height="22" rx="var(--radius)" fill="var(--muted)"/><rect x="987" y="370" width="74" height="5" rx="2.5" fill="var(--ink)" opacity="0.2" /><rect x="987" y="384" width="48" height="5" rx="2.5" fill="var(--ink)" opacity="0.1" /></g>
+      <rect x="938" y="432" width="104" height="5" rx="2.5" fill="var(--ink)" opacity=".08" />
+      <rect x="938" y="446" width="146" height="5" rx="2.5" fill="var(--ink)" opacity=".06" />
+    </g>
+    
+    <g id="cursor" opacity="0">
+      <circle cx="0" cy="0" r="22" fill="none" stroke="var(--accent)" stroke-width="2" opacity="0">
+        <animate attributeName="r" values="8;8;30;34;8" keyTimes="0;0.43000000000000005;0.48000000000000004;0.54;1" dur="5s" repeatCount="indefinite" />
+        <animate attributeName="opacity" values="0;0;.65;0;0" keyTimes="0;0.43000000000000005;0.48000000000000004;0.54;1" dur="5s" repeatCount="indefinite" />
+      </circle>
+      <path d="M0 0 L0 28 L7.5 20 L14 34 L20 31 L13.5 17 L24 16 Z" fill="var(--cursor-fill)" stroke="var(--cursor-stroke)" stroke-width="2" stroke-linejoin="round" />
+      <animate attributeName="opacity" values="0;1;1;0;0" keyTimes="0;.08;.84;.94;1" dur="5s" repeatCount="indefinite" />
+      <animateMotion path="M780 560 C690 520 560 370 452 264 C600 250 805 190 986 252 C880 290 730 340 604 350 C690 420 760 520 780 560" keyTimes="0;.12;.42;.58;.78;1" keyPoints="0;.12;.47;.58;.88;1" calcMode="spline" keySplines=".22 1 .36 1;.22 1 .36 1;.22 1 .36 1;.22 1 .36 1;.22 1 .36 1" dur="5s" repeatCount="indefinite" />
+    </g>
+  
+</svg>

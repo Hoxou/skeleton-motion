@@ -1,0 +1,181 @@
+{
+  "analysis": {
+    "concepts": {
+      "evidence": [
+        {
+          "file": "app/app/[projectSlug]/test-cases/test-case-table.client.tsx",
+          "kind": "list",
+          "score": 139
+        },
+        {
+          "file": "app/app/[projectSlug]/automations/s/[scenarioSlug]/scenario-canvas.client.tsx",
+          "kind": "flow",
+          "score": 132
+        },
+        {
+          "file": "docs/features/36-automation-canvas-editor.md",
+          "kind": "flow",
+          "score": 132
+        },
+        {
+          "file": "docs/research/no-code-automation-ui/README.md",
+          "kind": "flow",
+          "score": 131
+        },
+        {
+          "file": "app/app/[projectSlug]/automations/runs/[runId]/run-step-canvas.client.tsx",
+          "kind": "flow",
+          "score": 130
+        },
+        {
+          "file": "app/app/[projectSlug]/automations/runs/run-table.client.tsx",
+          "kind": "list",
+          "score": 125
+        },
+        {
+          "file": "app/app/[projectSlug]/automations/scenario-table.client.tsx",
+          "kind": "list",
+          "score": 123
+        },
+        {
+          "file": "app/prototype/automations/scenarios-list.client.tsx",
+          "kind": "list",
+          "score": 123
+        }
+      ],
+      "ranked": [
+        {
+          "kind": "list",
+          "score": 40507
+        },
+        {
+          "kind": "flow",
+          "score": 22434
+        },
+        {
+          "kind": "editor",
+          "score": 16877
+        },
+        {
+          "kind": "dashboard",
+          "score": 16628
+        }
+      ]
+    },
+    "name": "qa-segnatura",
+    "palettes": {
+      "dark": {
+        "accent": "#586df7",
+        "background": "oklch(0.145 0 0)",
+        "border": "oklch(1 0 0 / 10%)",
+        "foreground": "oklch(0.985 0 0)",
+        "muted": "oklch(0.269 0 0)",
+        "radius": "0rem",
+        "surface": "oklch(0.205 0 0)"
+      },
+      "light": {
+        "accent": "#142ce3",
+        "background": "oklch(1 0 0)",
+        "border": "oklch(0.922 0 0)",
+        "foreground": "oklch(0.145 0 0)",
+        "muted": "oklch(0.97 0 0)",
+        "radius": "0rem",
+        "surface": "oklch(1 0 0)"
+      }
+    },
+    "source": {
+      "input": "/Users/victor.toupar/Documents/dev/qa-segnatura",
+      "scannedFiles": 1864,
+      "type": "repository"
+    }
+  },
+  "asset": {
+    "concept": "flow",
+    "name": "qa-segnatura-flow",
+    "oneAssetPerRun": true,
+    "variants": [
+      {
+        "evidence": [
+          {
+            "file": "app/app/[projectSlug]/automations/s/[scenarioSlug]/scenario-canvas.client.tsx",
+            "kind": "flow",
+            "score": 132
+          },
+          {
+            "file": "docs/features/36-automation-canvas-editor.md",
+            "kind": "flow",
+            "score": 132
+          },
+          {
+            "file": "docs/research/no-code-automation-ui/README.md",
+            "kind": "flow",
+            "score": 131
+          },
+          {
+            "file": "app/app/[projectSlug]/automations/runs/[runId]/run-step-canvas.client.tsx",
+            "kind": "flow",
+            "score": 130
+          }
+        ],
+        "file": "qa-segnatura-flow.light.svg",
+        "motion": "add-step",
+        "palette": {
+          "accent": "#142ce3",
+          "background": "oklch(1 0 0)",
+          "border": "oklch(0.922 0 0)",
+          "foreground": "oklch(0.145 0 0)",
+          "muted": "oklch(0.97 0 0)",
+          "radius": 0,
+          "surface": "oklch(1 0 0)"
+        },
+        "theme": "light",
+        "viewport": {
+          "height": 675,
+          "width": 1200
+        }
+      },
+      {
+        "evidence": [
+          {
+            "file": "app/app/[projectSlug]/automations/s/[scenarioSlug]/scenario-canvas.client.tsx",
+            "kind": "flow",
+            "score": 132
+          },
+          {
+            "file": "docs/features/36-automation-canvas-editor.md",
+            "kind": "flow",
+            "score": 132
+          },
+          {
+            "file": "docs/research/no-code-automation-ui/README.md",
+            "kind": "flow",
+            "score": 131
+          },
+          {
+            "file": "app/app/[projectSlug]/automations/runs/[runId]/run-step-canvas.client.tsx",
+            "kind": "flow",
+            "score": 130
+          }
+        ],
+        "file": "qa-segnatura-flow.dark.svg",
+        "motion": "add-step",
+        "palette": {
+          "accent": "#586df7",
+          "background": "oklch(0.145 0 0)",
+          "border": "oklch(1 0 0 / 10%)",
+          "foreground": "oklch(0.985 0 0)",
+          "muted": "oklch(0.269 0 0)",
+          "radius": 0,
+          "surface": "oklch(0.205 0 0)"
+        },
+        "theme": "dark",
+        "viewport": {
+          "height": 675,
+          "width": 1200
+        }
+      }
+    ]
+  },
+  "generatedAt": "2026-10-06T01:55:44.363Z",
+  "schemaVersion": 1
+}
