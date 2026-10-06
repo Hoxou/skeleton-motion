@@ -133,8 +133,12 @@ function inferColorSystem(sourceText, cssText = "") {
     ...families.map((family) => resolveFamily(family, [400, 500, 300, 600])),
     ...semanticColors,
   ]).slice(0, 4);
-  const lightPastels = families.map((family, index) => resolveFamily(family, [100, 50, 200]) || `color-mix(in oklab, ${lightAccents[index] || lightAccents[0]} 14%, white)`);
-  const darkPastels = families.map((family, index) => resolveFamily(family, [900, 950, 800]) || `color-mix(in oklab, ${darkAccents[index] || darkAccents[0]} 24%, #18181b)`);
+  const lightPastels = families
+    .map((family, index) => resolveFamily(family, [100, 50, 200]) || (lightAccents[index] || lightAccents[0] ? `color-mix(in oklab, ${lightAccents[index] || lightAccents[0]} 14%, white)` : undefined))
+    .filter(Boolean);
+  const darkPastels = families
+    .map((family, index) => resolveFamily(family, [900, 950, 800]) || (darkAccents[index] || darkAccents[0] ? `color-mix(in oklab, ${darkAccents[index] || darkAccents[0]} 24%, #18181b)` : undefined))
+    .filter(Boolean);
   const warmFamily = families.find((family) => ["amber", "orange", "yellow"].includes(family));
   const lightCanvas = warmFamily ? resolveFamily(warmFamily, [50, 100]) : undefined;
   const mode = uniqueColors([...lightAccents, ...semanticColors]).length >= 3 ? "multicolor" : "monochrome";

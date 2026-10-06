@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="en" data-theme="light" data-scene="display" data-asset="qa-segnatura-motion-set.select-item">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="data:,">
+  <title>Display — qa-segnatura-motion-set</title>
+  <style>
+    @font-face { font-family: "Source Preview"; src: url("./qa-segnatura-motion-set.preview-font.ttf"); font-display: swap; }
+    * { box-sizing: border-box; }
+    :root {
+      color-scheme: light;
+      --accent: #142ce3;
+      --accent-2: #142ce3;
+      --accent-3: #142ce3;
+      --page: oklch(1 0 0);
+      --page-ink: oklch(0.145 0 0);
+      --copy: oklch(0.556 0 0);
+      --panel: oklch(1 0 0);
+      --panel-solid: oklch(0.97 0 0);
+      --panel-border: oklch(0.922 0 0);
+      --control-radius: 0px;
+      --scene-radius: 0px;
+      --switch: var(--panel);
+      --switch-hover: var(--panel-solid);
+    }
+    [data-theme="dark"] {
+      color-scheme: dark;
+      --accent: #586df7;
+      --accent-2: #586df7;
+      --accent-3: #586df7;
+      --page: oklch(0.145 0 0);
+      --page-ink: oklch(0.985 0 0);
+      --copy: oklch(0.708 0 0);
+      --panel: oklch(0.205 0 0);
+      --panel-solid: oklch(0.269 0 0);
+      --panel-border: oklch(1 0 0 / 10%);
+      --switch: var(--panel);
+      --switch-hover: var(--panel-solid);
+    }
+    html, body { min-height: 100%; }
+    body { margin: 0; min-height: 100vh; overflow-x: hidden; background: var(--page); color: var(--page-ink); font-family: "Source Preview", "DM Sans", ui-sans-serif, system-ui, sans-serif; transition: background-color 320ms ease, color 320ms ease; }
+    header { position: fixed; z-index: 3; inset: 0 0 auto; padding: 24px 28px; pointer-events: none; }
+    .brand { display: flex; align-items: center; gap: 10px; width: max-content; font-size: 11px; font-weight: 650; letter-spacing: .18em; text-transform: uppercase; opacity: .66; }
+    .brand::before { content: ""; width: 7px; height: 7px; background: currentColor; box-shadow: 9px 0 0 color-mix(in oklab, currentColor 34%, transparent); }
+    .controls { position: fixed; z-index: 4; top: 24px; right: 28px; display: grid; width: 116px; justify-items: stretch; gap: 8px; }
+    button, .download { border: 1px solid var(--panel-border); background: var(--switch); color: inherit; font: inherit; cursor: pointer; backdrop-filter: blur(18px); transition: background 180ms ease, transform 180ms ease, border-color 180ms ease; }
+    button:hover, .download:hover { background: var(--switch-hover); transform: translateY(-1px); }
+    button:focus-visible, .download:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+    .theme-toggle { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 38px; padding: 0 12px; border-radius: var(--control-radius); font-size: 12px; font-weight: 600; }
+    .theme-toggle svg { width: 15px; height: 15px; }
+    .moon { display: block; } .sun { display: none; }
+    [data-theme="dark"] .moon { display: none; } [data-theme="dark"] .sun { display: block; }
+    .option-group { display: grid; gap: 4px; padding: 5px; border: 1px solid var(--panel-border); border-radius: var(--control-radius); background: var(--switch); backdrop-filter: blur(18px); }
+    .group-label { padding: 4px 7px 2px; color: var(--copy); font-size: 9px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+    .option-button { min-width: 0; padding: 7px 9px; border-color: color-mix(in oklab, var(--panel-border) 72%, transparent); border-radius: var(--control-radius); background: var(--panel); box-shadow: none; color: var(--copy); font-size: 11px; font-weight: 620; text-align: left; }
+    .option-button[aria-pressed="true"] { border-color: color-mix(in oklab, var(--accent) 24%, var(--panel-border)); background: color-mix(in oklab, var(--accent) 8%, var(--switch-hover)); color: var(--page-ink); }
+    [data-scene="story"] [aria-label="Animation"], [data-scene="overview"] [aria-label="Animation"] { opacity: .42; pointer-events: none; }
+    .download { display: flex; align-items: center; justify-content: center; min-height: 38px; padding: 0 10px; border-radius: var(--control-radius); font-size: 11px; font-weight: 650; text-decoration: none; }
+    main { min-height: 100vh; padding: 92px 166px 56px 5vw; }
+    .scene { display: none; min-height: calc(100vh - 148px); place-items: center; animation: scene-in 360ms cubic-bezier(.22, 1, .36, 1) both; }
+    .scene.is-active { display: grid; }
+    @keyframes scene-in { from { opacity: 0; transform: translateY(8px) scale(.992); } to { opacity: 1; transform: none; } }
+    .asset-slot, .asset-view { width: 100%; }
+    .asset-view { display: none; }
+    .asset-view.is-active, .asset-view:not([data-asset-view]) { display: block; }
+    .copy-view { display: none; }
+    .copy-view.is-active { display: block; }
+    img { display: block; width: 100%; height: auto; }
+    .dark { display: none; }
+    [data-theme="dark"] .light { display: none; }
+    [data-theme="dark"] .dark { display: block; }
+    .display-scene .asset-slot { width: min(82vw, 760px); }
+    .feature-card { width: min(82vw, 900px); display: grid; grid-template-columns: .72fr 1.28fr; align-items: center; gap: 36px; padding: 34px; border: 1px solid var(--panel-border); border-radius: var(--scene-radius); background: var(--panel); }
+    .eyebrow { margin: 0 0 14px; color: var(--copy); font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; }
+    h1, h2, p { margin-top: 0; }
+    h1, h2 { margin-bottom: 14px; max-width: 12ch; font-size: clamp(28px, 3.4vw, 50px); line-height: .98; letter-spacing: -.045em; }
+    p { max-width: 38ch; margin-bottom: 0; color: var(--copy); font-size: 14px; line-height: 1.55; }
+    .split-layout { width: min(88vw, 1020px); display: grid; grid-template-columns: .8fr 1.2fr; align-items: center; gap: clamp(42px, 7vw, 94px); }
+    .bento-layout { width: min(86vw, 960px); display: grid; grid-template-columns: 1.42fr .58fr; grid-template-rows: 1fr 1fr; gap: 14px; }
+    .bento-cell { min-height: 180px; overflow: hidden; border: 1px solid var(--panel-border); border-radius: var(--scene-radius); background: var(--panel); }
+    .bento-asset { grid-row: 1 / 3; display: grid; align-items: center; padding: 22px; }
+    .bento-copy { padding: 26px; display: flex; flex-direction: column; justify-content: end; }
+    .bento-copy h2 { max-width: 8ch; margin: 0; font-size: 30px; }
+    .bento-detail { position: relative; padding: 26px; }
+    .bento-detail::before { content: ""; position: absolute; width: 54px; height: 54px; border: 1px solid var(--panel-border); border-radius: var(--scene-radius); background: var(--panel-solid); }
+    .bento-detail::after { content: ""; position: absolute; left: 42px; bottom: 32px; width: 52%; height: 8px; background: var(--page-ink); opacity: .1; box-shadow: 0 18px 0 color-mix(in oklab, var(--page-ink) 55%, transparent); }
+    .story-layout { width: min(86vw, 980px); display: grid; gap: clamp(54px, 8vh, 88px); }
+    .story-row { display: grid; grid-template-columns: .78fr 1.22fr; align-items: center; gap: clamp(38px, 7vw, 88px); }
+    .story-row.reverse { grid-template-columns: 1.22fr .78fr; }
+    .story-row h2 { font-size: clamp(28px, 3vw, 44px); }
+    .set-grid { width: min(80vw, 1000px); display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+    .set-card { position: relative; min-height: 280px; display: grid; align-items: center; padding: 22px; overflow: hidden; border: 1px solid var(--panel-border); border-radius: var(--scene-radius); background: var(--panel); }
+    .set-card-label { position: absolute; top: 18px; left: 20px; z-index: 1; color: var(--copy); font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+    @media (max-width: 900px) {
+      main { padding: 100px 138px 36px 24px; }
+      .feature-card, .split-layout, .story-row, .story-row.reverse { grid-template-columns: 1fr; gap: 26px; }
+      .feature-card, .split-layout, .story-layout { width: min(70vw, 640px); }
+      .bento-layout { width: min(70vw, 640px); grid-template-columns: 1fr; grid-template-rows: auto; }
+      .set-grid { width: min(74vw, 720px); grid-template-columns: 1fr; }
+      .bento-asset { grid-row: auto; } .bento-copy, .bento-detail { display: none; }
+    }
+    @media (max-width: 640px) {
+      header { padding: 18px; } .brand span { display: none; }
+      .controls { top: 18px; right: 18px; width: 104px; }
+      .option-group { display: none; }
+      main { padding: 88px 18px 30px; }
+      .display-scene .asset-slot, .feature-card, .split-layout, .bento-layout, .story-layout, .set-grid { width: 100%; }
+      .feature-card { padding: 18px; }
+    }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; } }
+  </style>
+</head>
+<body>
+  <header><div class="brand"><span>Display</span></div></header>
+  <aside class="controls" aria-label="Display controls">
+    <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Switch to dark mode" aria-pressed="false"><svg class="moon" aria-hidden="true" viewBox="0 0 24 24" fill="none"><path d="M20.2 15.2A8.5 8.5 0 0 1 8.8 3.8 8.5 8.5 0 1 0 20.2 15.2Z" stroke="currentColor" stroke-width="1.8"/></svg><svg class="sun" aria-hidden="true" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3.5" stroke="currentColor" stroke-width="1.8"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2" stroke="currentColor" stroke-width="1.8"/></svg><span id="theme-label">Dark</span></button>
+    <nav class="option-group" aria-label="Animation"><span class="group-label">Animation</span><button class="option-button" type="button" data-asset-button="qa-segnatura-motion-set.select-item" aria-pressed="true">Select item</button><button class="option-button" type="button" data-asset-button="qa-segnatura-motion-set.insert-step" aria-pressed="false">Insert step</button><button class="option-button" type="button" data-asset-button="qa-segnatura-motion-set.confirm-edit" aria-pressed="false">Confirm edit</button><button class="option-button" type="button" data-asset-button="qa-segnatura-motion-set.progress-signal" aria-pressed="false">Progress signal</button></nav>
+    <nav class="option-group" aria-label="Preview scene"><span class="group-label">Scene</span><button class="option-button" type="button" data-scene-button="display" aria-pressed="true">Display</button><button class="option-button" type="button" data-scene-button="card" aria-pressed="false">Card</button><button class="option-button" type="button" data-scene-button="split" aria-pressed="false">Split</button><button class="option-button" type="button" data-scene-button="bento" aria-pressed="false">Bento</button><button class="option-button" type="button" data-scene-button="story" aria-pressed="false">Story</button><button class="option-button" type="button" data-scene-button="overview" aria-pressed="false">Set</button></nav>
+    <a class="download" href="./qa-segnatura-motion-set.assets.zip" download>Download ZIP</a>
+  </aside>
+  <main>
+    <section class="scene display-scene is-active" data-scene-panel="display"><div class="asset-slot"><div class="asset-view is-active" data-asset-view="qa-segnatura-motion-set.select-item" aria-label="Select item animation in display view">
+      <img class="light" src="./qa-segnatura-motion-set.select-item.light.svg" width="720" height="405" alt="Select item product motion, light theme">
+      <img class="dark" src="./qa-segnatura-motion-set.select-item.dark.svg" width="720" height="405" alt="Select item product motion, dark theme">
+    </div><div class="asset-view" data-asset-view="qa-segnatura-motion-set.insert-step" aria-label="Insert step animation in display view">
+      <img class="light" src="./qa-segnatura-motion-set.insert-step.light.svg" width="720" height="405" alt="Insert step product motion, light theme">
+      <img class="dark" src="./qa-segnatura-motion-set.insert-step.dark.svg" width="720" height="405" alt="Insert step product motion, dark theme">
+    </div><div class="asset-view" data-asset-view="qa-segnatura-motion-set.confirm-edit" aria-label="Confirm edit animation in display view">
+      <img class="light" src="./qa-segnatura-motion-set.confirm-edit.light.svg" width="720" height="405" alt="Confirm edit product motion, light theme">
+      <img class="dark" src="./qa-segnatura-motion-set.confirm-edit.dark.svg" width="720" height="405" alt="Confirm edit product motion, dark theme">
+    </div><div class="asset-view" data-asset-view="qa-segnatura-motion-set.progress-signal" aria-label="Progress signal animation in display view">
+      <img class="light" src="./qa-segnatura-motion-set.progress-signal.light.svg" width="720" height="405" alt="Progress signal product motion, light theme">
+      <img class="dark" src="./qa-segnatura-motion-set.progress-signal.dark.svg" width="720" height="405" alt="Progress signal product motion, dark theme">
+    </div></div></section>
+    <section class="scene" data-scene-panel="card"><article class="feature-card"><div class="copy-stack"><div class="copy-view is-active" data-asset-copy="qa-segnatura-motion-set.select-item"><div><p class="eyebrow">Test cases</p><h2>Move from list to detail.</h2><p>Select one item and reveal its useful context without losing the surrounding list.</p></div></div><div class="copy-view" data-asset-copy="qa-segnatura-motion-set.insert-step"><div><p class="eyebrow">Automation canvas</p><h2>Insert a step in place.</h2><p>Open space between two steps and insert the next action exactly where it belongs.</p></div></div><div class="copy-view" data-asset-copy="qa-segnatura-motion-set.confirm-edit"><div><p class="eyebrow">Focused editing</p><h2>Confirm the change.</h2><p>Focus a field, confirm the change, and let the resulting state settle into view.</p></div></div><div class="copy-view" data-asset-copy="qa-segnatura-motion-set.progress-signal"><div><p class="eyebrow">Run insight</p><h2>See progress move.</h2><p>Let one live signal travel through the data while the surrounding metrics stay calm.</p></div></div></div><div class="asset-slot"><div class="asset-view is-active" data-asset-view="qa-segnatura-motion-set.select-item" aria-label="Select item animation in feature card">
+      <img class="light" src="./qa-segnatura-motion-set.select-item.light.svg" width="720" height="405" alt="Select item product motion, light theme">
+      <img class="dark" src="./qa-segnatura-motion-set.select-item.dark.svg" width="720" height="405" alt="Select item product motion, dark theme">
+    </div><div class="asset-view" data-asset-view="qa-segnatura-motion-set.insert-step" aria-label="Insert step animation in feature card">
+      <img class="light" src="./qa-segnatura-motion-set.insert-step.light.svg" width="720" height="405" alt="Insert step product motion, light theme">
+      <img class="dark" src="./qa-segnatura-motion-set.insert-step.dark.svg" width="720" height="405" alt="Insert step product motion, dark theme">
+    </div><div class="asset-view" data-asset-view="qa-segnatura-motion-set.confirm-edit" aria-label="Confirm edit animation in feature card">
+      <img class="light" src="./qa-segnatura-motion-set.confirm-edit.light.svg" width="720" height="405" alt="Confirm edit product motion, light theme">
+      <img class="dark" src="./qa-segnatura-motion-set.confirm-edit.dark.svg" width="720" height="405" alt="Confirm edit product motion, dark theme">
+    </div><div class="asset-view" data-asset-view="qa-segnatura-motion-set.progress-signal" aria-label="Progress signal animation in feature card">
+      <img class="light" src="./qa-segnatura-motion-set.progress-signal.light.svg" width="720" height="405" alt="Progress signal product motion, light theme">
+      <img class="dark" src="./qa-segnatura-motion-set.progress-signal.dark.svg" width="720" height="405" alt="Progress signal product motion, dark theme">
+    </div></div></article></section>
+    <section class="scene" data-scene-panel="split"><div class="split-layout"><div class="copy-stack"><div class="copy-view is-active" data-asset-copy="qa-segnatura-motion-set.select-item"><div><p class="eyebrow">Test cases</p><h1>Move from list to detail.</h1><p>Select one item and reveal its useful context without losing the surrounding list.</p></div></div><div class="copy-view" data-asset-copy="qa-segnatura-motion-set.insert-step"><div><p class="eyebrow">Automation canvas</p><h1>Insert a step in place.</h1><p>Open space between two steps and insert the next action exactly where it belongs.</p></div></div><div class="copy-view" data-asset-copy="qa-segnatura-motion-set.confirm-edit"><div><p class="eyebrow">Focused editing</p><h1>Confirm the change.</h1><p>Focus a field, confirm the change, and let the resulting state settle into view.</p></div></div><div class="copy-view" data-asset-copy="qa-segnatura-motion-set.progress-signal"><div><p class="eyebrow">Run insight</p><h1>See progress move.</h1><p>Let one live signal travel through the data while the surrounding metrics stay calm.</p></div></div></div><div class="asset-slot"><div class="asset-view is-active" data-asset-view="qa-segnatura-motion-set.select-item" aria-label="Select item animation in split feature">
+      <img class="light" src="./qa-segnatura-motion-set.select-item.light.svg" width="720" height="405" alt="Select item product motion, light theme">
+      <img class="dark" src="./qa-segnatura-motion-set.select-item.dark.svg" width="720" height="405" alt="Select item product motion, dark theme">
+    </div><div class="asset-view" data-asset-view="qa-segnatura-motion-set.insert-step" aria-label="Insert step animation in split feature">
+      <img class="light" src="./qa-segnatura-motion-set.insert-step.light.svg" width="720" height="405" alt="Insert step product motion, light theme">
+      <img class="dark" src="./qa-segnatura-motion-set.insert-step.dark.svg" width="720" height="405" alt="Insert step product motion, dark theme">
+    </div><div class="asset-view" data-asset-view="qa-segnatura-motion-set.confirm-edit" aria-label="Confirm edit animation in split feature">
+      <img class="light" src="./qa-segnatura-motion-set.confirm-edit.light.svg" width="720" height="405" alt="Confirm edit product motion, light theme">
+      <img class="dark" src="./qa-segnatura-motion-set.confirm-edit.dark.svg" width="720" height="405" alt="Confirm edit product motion, dark theme">
+    </div><div class="asset-view" data-asset-view="qa-segnatura-motion-set.progress-signal" aria-label="Progress signal animation in split feature">
+      <img class="light" src="./qa-segnatura-motion-set.progress-signal.light.svg" width="720" height="405" alt="Progress signal product motion, light theme">
+      <img class="dark" src="./qa-segnatura-motion-set.progress-signal.dark.svg" width="720" height="405" alt="Progress signal product motion, dark theme">
+    </div></div></div></section>
+    <section class="scene" data-scene-panel="bento"><div class="bento-layout"><div class="bento-cell bento-asset"><div class="asset-slot"><div class="asset-view is-active" data-asset-view="qa-segnatura-motion-set.select-item" aria-label="Select item animation in bento feature">
+      <img class="light" src="./qa-segnatura-motion-set.select-item.light.svg" width="720" height="405" alt="Select item product motion, light theme">
+      <img class="dark" src="./qa-segnatura-motion-set.select-item.dark.svg" width="720" height="405" alt="Select item product motion, dark theme">
+    </div><div class="asset-view" data-asset-view="qa-segnatura-motion-set.insert-step" aria-label="Insert step animation in bento feature">
+      <img class="light" src="./qa-segnatura-motion-set.insert-step.light.svg" width="720" height="405" alt="Insert step product motion, light theme">
+      <img class="dark" src="./qa-segnatura-motion-set.insert-step.dark.svg" width="720" height="405" alt="Insert step product motion, dark theme">
+    </div><div class="asset-view" data-asset-view="qa-segnatura-motion-set.confirm-edit" aria-label="Confirm edit animation in bento feature">
+      <img class="light" src="./qa-segnatura-motion-set.confirm-edit.light.svg" width="720" height="405" alt="Confirm edit product motion, light theme">
+      <img class="dark" src="./qa-segnatura-motion-set.confirm-edit.dark.svg" width="720" height="405" alt="Confirm edit product motion, dark theme">
+    </div><div class="asset-view" data-asset-view="qa-segnatura-motion-set.progress-signal" aria-label="Progress signal animation in bento feature">
+      <img class="light" src="./qa-segnatura-motion-set.progress-signal.light.svg" width="720" height="405" alt="Progress signal product motion, light theme">
+      <img class="dark" src="./qa-segnatura-motion-set.progress-signal.dark.svg" width="720" height="405" alt="Progress signal product motion, dark theme">
+    </div></div></div><div class="bento-cell bento-copy"><div class="copy-stack"><div class="copy-view is-active" data-asset-copy="qa-segnatura-motion-set.select-item"><div><p class="eyebrow">Test cases</p><h2>Move from list to detail.</h2><p>Select one item and reveal its useful context without losing the surrounding list.</p></div></div><div class="copy-view" data-asset-copy="qa-segnatura-motion-set.insert-step"><div><p class="eyebrow">Automation canvas</p><h2>Insert a step in place.</h2><p>Open space between two steps and insert the next action exactly where it belongs.</p></div></div><div class="copy-view" data-asset-copy="qa-segnatura-motion-set.confirm-edit"><div><p class="eyebrow">Focused editing</p><h2>Confirm the change.</h2><p>Focus a field, confirm the change, and let the resulting state settle into view.</p></div></div><div class="copy-view" data-asset-copy="qa-segnatura-motion-set.progress-signal"><div><p class="eyebrow">Run insight</p><h2>See progress move.</h2><p>Let one live signal travel through the data while the surrounding metrics stay calm.</p></div></div></div></div><div class="bento-cell bento-detail" aria-hidden="true"></div></div></section><section class="scene" data-scene-panel="story"><div class="story-layout"><article class="story-row"><div><p class="eyebrow">Test cases</p><h2>Move from list to detail.</h2><p>Select one item and reveal its useful context without losing the surrounding list.</p></div><div class="asset-view is-active" aria-label="Select item animation in story row 1">
+      <img class="light" src="./qa-segnatura-motion-set.select-item.light.svg" width="720" height="405" alt="Select item product motion, light theme">
+      <img class="dark" src="./qa-segnatura-motion-set.select-item.dark.svg" width="720" height="405" alt="Select item product motion, dark theme">
+    </div></article><article class="story-row reverse"><div class="asset-view is-active" aria-label="Insert step animation in story row 2">
+      <img class="light" src="./qa-segnatura-motion-set.insert-step.light.svg" width="720" height="405" alt="Insert step product motion, light theme">
+      <img class="dark" src="./qa-segnatura-motion-set.insert-step.dark.svg" width="720" height="405" alt="Insert step product motion, dark theme">
+    </div><div><p class="eyebrow">Automation canvas</p><h2>Insert a step in place.</h2><p>Open space between two steps and insert the next action exactly where it belongs.</p></div></article><article class="story-row"><div><p class="eyebrow">Focused editing</p><h2>Confirm the change.</h2><p>Focus a field, confirm the change, and let the resulting state settle into view.</p></div><div class="asset-view is-active" aria-label="Confirm edit animation in story row 3">
+      <img class="light" src="./qa-segnatura-motion-set.confirm-edit.light.svg" width="720" height="405" alt="Confirm edit product motion, light theme">
+      <img class="dark" src="./qa-segnatura-motion-set.confirm-edit.dark.svg" width="720" height="405" alt="Confirm edit product motion, dark theme">
+    </div></article><article class="story-row reverse"><div class="asset-view is-active" aria-label="Progress signal animation in story row 4">
+      <img class="light" src="./qa-segnatura-motion-set.progress-signal.light.svg" width="720" height="405" alt="Progress signal product motion, light theme">
+      <img class="dark" src="./qa-segnatura-motion-set.progress-signal.dark.svg" width="720" height="405" alt="Progress signal product motion, dark theme">
+    </div><div><p class="eyebrow">Run insight</p><h2>See progress move.</h2><p>Let one live signal travel through the data while the surrounding metrics stay calm.</p></div></article></div></section><section class="scene" data-scene-panel="overview"><div class="set-grid"><article class="set-card"><div class="set-card-label">Select item</div><div class="asset-view is-active" aria-label="Select item animation in set overview">
+      <img class="light" src="./qa-segnatura-motion-set.select-item.light.svg" width="720" height="405" alt="Select item product motion, light theme">
+      <img class="dark" src="./qa-segnatura-motion-set.select-item.dark.svg" width="720" height="405" alt="Select item product motion, dark theme">
+    </div></article><article class="set-card"><div class="set-card-label">Insert step</div><div class="asset-view is-active" aria-label="Insert step animation in set overview">
+      <img class="light" src="./qa-segnatura-motion-set.insert-step.light.svg" width="720" height="405" alt="Insert step product motion, light theme">
+      <img class="dark" src="./qa-segnatura-motion-set.insert-step.dark.svg" width="720" height="405" alt="Insert step product motion, dark theme">
+    </div></article><article class="set-card"><div class="set-card-label">Confirm edit</div><div class="asset-view is-active" aria-label="Confirm edit animation in set overview">
+      <img class="light" src="./qa-segnatura-motion-set.confirm-edit.light.svg" width="720" height="405" alt="Confirm edit product motion, light theme">
+      <img class="dark" src="./qa-segnatura-motion-set.confirm-edit.dark.svg" width="720" height="405" alt="Confirm edit product motion, dark theme">
+    </div></article><article class="set-card"><div class="set-card-label">Progress signal</div><div class="asset-view is-active" aria-label="Progress signal animation in set overview">
+      <img class="light" src="./qa-segnatura-motion-set.progress-signal.light.svg" width="720" height="405" alt="Progress signal product motion, light theme">
+      <img class="dark" src="./qa-segnatura-motion-set.progress-signal.dark.svg" width="720" height="405" alt="Progress signal product motion, dark theme">
+    </div></article></div></section>
+  </main>
+  <script>
+    const root = document.documentElement;
+    const toggle = document.querySelector("#theme-toggle");
+    const themeLabel = document.querySelector("#theme-label");
+    const assetButtons = [...document.querySelectorAll("[data-asset-button]")];
+    const assetViews = [...document.querySelectorAll("[data-asset-view]")];
+    const assetCopies = [...document.querySelectorAll("[data-asset-copy]")];
+    const sceneButtons = [...document.querySelectorAll("[data-scene-button]")];
+    const scenePanels = [...document.querySelectorAll("[data-scene-panel]")];
+    const stored = localStorage.getItem("display-theme");
+    const preferred = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    function setTheme(theme) {
+      const dark = theme === "dark";
+      root.dataset.theme = theme;
+      if (!toggle) return;
+      toggle.setAttribute("aria-pressed", String(dark));
+      toggle.setAttribute("aria-label", dark ? "Switch to light mode" : "Switch to dark mode");
+      themeLabel.textContent = dark ? "Light" : "Dark";
+      localStorage.setItem("display-theme", theme);
+    }
+    function setAsset(asset) {
+      root.dataset.asset = asset;
+      for (const button of assetButtons) button.setAttribute("aria-pressed", String(button.dataset.assetButton === asset));
+      for (const view of assetViews) view.classList.toggle("is-active", view.dataset.assetView === asset);
+      for (const copy of assetCopies) copy.classList.toggle("is-active", copy.dataset.assetCopy === asset);
+    }
+    function setScene(scene) {
+      root.dataset.scene = scene;
+      for (const button of sceneButtons) button.setAttribute("aria-pressed", String(button.dataset.sceneButton === scene));
+      for (const panel of scenePanels) panel.classList.toggle("is-active", panel.dataset.scenePanel === scene);
+    }
+    setTheme(stored || preferred); setAsset("qa-segnatura-motion-set.select-item"); setScene("display");
+    toggle?.addEventListener("click", () => setTheme(root.dataset.theme === "dark" ? "light" : "dark"));
+    for (const button of assetButtons) button.addEventListener("click", () => setAsset(button.dataset.assetButton));
+    for (const button of sceneButtons) button.addEventListener("click", () => setScene(button.dataset.sceneButton));
+  </script>
+</body>
+</html>

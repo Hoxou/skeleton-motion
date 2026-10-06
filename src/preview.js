@@ -37,10 +37,16 @@ export function renderPreview({ assets, fontFile, name, scenes, zipFile }) {
 
   const assetSlot = (label) => `<div class="asset-slot">${groups.map((group, index) => picture(group, label, index === 0)).join("")}</div>`;
   const hasStory = groups.length > 1;
-  const sceneOptions = [["display", "Display"], ["card", "Card"], ["split", "Split"], ["bento", "Bento"], ...(hasStory ? [["story", "Story"]] : [])];
-  const storyFirst = groups[0];
-  const storySecond = groups[1] || groups[0];
-  const storyScene = hasStory ? `<section class="scene" data-scene-panel="story"><div class="story-layout"><article class="story-row"><div><p class="eyebrow">One connected system</p><h2>Build the flow.</h2><p>Each asset keeps its own motion while sharing the product’s visual language.</p></div>${picture(storyFirst, "story row one", true, false)}</article><article class="story-row reverse">${picture(storySecond, "story row two", true, false)}<div><p class="eyebrow">Then keep moving</p><h2>See what changed.</h2><p>Alternating copy and product motion turns a set of assets into a coherent landing-page narrative.</p></div></article></div></section>` : "";
+  const sceneOptions = [["display", "Display"], ["card", "Card"], ["split", "Split"], ["bento", "Bento"], ...(hasStory ? [["story", "Story"], ["overview", "Set"]] : [])];
+  const fallbackCopy = { description: "A focused product motion composed for a landing-page feature.", eyebrow: "Product motion", title: "Show the useful moment." };
+  const copyFor = (group) => ({ ...fallbackCopy, ...(group.copy || {}) });
+  const staticCopy = (group, heading = "h2") => {
+    const copy = copyFor(group);
+    return `<div><p class="eyebrow">${escapeXml(copy.eyebrow)}</p><${heading}>${escapeXml(copy.title)}</${heading}><p>${escapeXml(copy.description)}</p></div>`;
+  };
+  const switchableCopy = (heading = "h2") => `<div class="copy-stack">${groups.map((group, index) => `<div class="copy-view${index === 0 ? " is-active" : ""}" data-asset-copy="${escapeXml(group.id)}">${staticCopy(group, heading)}</div>`).join("")}</div>`;
+  const storyScene = hasStory ? `<section class="scene" data-scene-panel="story"><div class="story-layout">${groups.map((group, index) => `<article class="story-row${index % 2 ? " reverse" : ""}">${index % 2 ? `${picture(group, `story row ${index + 1}`, true, false)}${staticCopy(group)}` : `${staticCopy(group)}${picture(group, `story row ${index + 1}`, true, false)}`}</article>`).join("")}</div></section>` : "";
+  const overviewScene = hasStory ? `<section class="scene" data-scene-panel="overview"><div class="set-grid">${groups.map((group) => `<article class="set-card"><div class="set-card-label">${escapeXml(group.label)}</div>${picture(group, "set overview", true, false)}</article>`).join("")}</div></section>` : "";
 
   return `<!doctype html>
 <html lang="en" data-theme="light" data-scene="display" data-asset="${escapeXml(primary.id)}">
@@ -57,35 +63,33 @@ export function renderPreview({ assets, fontFile, name, scenes, zipFile }) {
       --accent: ${safeCss(lightPalette.accent, "#4f46e5")};
       --accent-2: ${safeCss(lightAccents[1], lightPalette.accent || "#4f46e5")};
       --accent-3: ${safeCss(lightAccents[2], lightAccents[1] || lightPalette.accent || "#4f46e5")};
-      --page: color-mix(in oklab, ${safeCss(lightPalette.background, "#fff")} 96%, ${safeCss(lightPalette.foreground, "#171717")} 4%);
+      --page: ${safeCss(lightPalette.background, "#fff")};
       --page-ink: ${safeCss(lightPalette.foreground, "#171717")};
       --copy: ${safeCss(lightPalette.mutedForeground, "#71717a")};
       --panel: ${safeCss(lightPalette.surface, "#fff")};
       --panel-solid: ${safeCss(lightPalette.muted, "#f4f4f5")};
       --panel-border: ${safeCss(lightPalette.border, "#e5e7eb")};
-      --page-glow: color-mix(in oklab, var(--accent) 3%, transparent);
-      --control-radius: 14px;
+      --control-radius: ${sceneRadius}px;
       --scene-radius: ${sceneRadius}px;
-      --switch: color-mix(in oklab, var(--panel) 88%, transparent);
-      --switch-hover: var(--panel);
+      --switch: var(--panel);
+      --switch-hover: var(--panel-solid);
     }
     [data-theme="dark"] {
       color-scheme: dark;
       --accent: ${safeCss(darkPalette.accent, "#818cf8")};
       --accent-2: ${safeCss(darkAccents[1], darkPalette.accent || "#818cf8")};
       --accent-3: ${safeCss(darkAccents[2], darkAccents[1] || darkPalette.accent || "#818cf8")};
-      --page: color-mix(in oklab, ${safeCss(darkPalette.background, "#111113")} 96%, ${safeCss(darkPalette.foreground, "#fafafa")} 4%);
+      --page: ${safeCss(darkPalette.background, "#111113")};
       --page-ink: ${safeCss(darkPalette.foreground, "#fafafa")};
       --copy: ${safeCss(darkPalette.mutedForeground, "#a1a1aa")};
       --panel: ${safeCss(darkPalette.surface, "#202024")};
       --panel-solid: ${safeCss(darkPalette.muted, "#27272a")};
       --panel-border: ${safeCss(darkPalette.border, "rgb(255 255 255 / 10%)")};
-      --page-glow: color-mix(in oklab, var(--accent) 4%, transparent);
-      --switch: color-mix(in oklab, var(--panel) 86%, transparent);
-      --switch-hover: var(--panel);
+      --switch: var(--panel);
+      --switch-hover: var(--panel-solid);
     }
     html, body { min-height: 100%; }
-    body { margin: 0; min-height: 100vh; overflow-x: hidden; background: radial-gradient(circle at 36% 48%, color-mix(in oklab, var(--accent-2) 5%, transparent), transparent 40%), radial-gradient(circle at 64% 44%, color-mix(in oklab, var(--accent-3) 4%, transparent), transparent 38%), var(--page); color: var(--page-ink); font-family: ${fontFile ? `"Source Preview", ` : ""}${fontStack}; transition: background-color 320ms ease, color 320ms ease; }
+    body { margin: 0; min-height: 100vh; overflow-x: hidden; background: var(--page); color: var(--page-ink); font-family: ${fontFile ? `"Source Preview", ` : ""}${fontStack}; transition: background-color 320ms ease, color 320ms ease; }
     header { position: fixed; z-index: 3; inset: 0 0 auto; padding: 24px 28px; pointer-events: none; }
     .brand { display: flex; align-items: center; gap: 10px; width: max-content; font-size: 11px; font-weight: 650; letter-spacing: .18em; text-transform: uppercase; opacity: .66; }
     .brand::before { content: ""; width: 7px; height: 7px; background: currentColor; box-shadow: 9px 0 0 color-mix(in oklab, currentColor 34%, transparent); }
@@ -99,8 +103,9 @@ export function renderPreview({ assets, fontFile, name, scenes, zipFile }) {
     [data-theme="dark"] .moon { display: none; } [data-theme="dark"] .sun { display: block; }
     .option-group { display: grid; gap: 4px; padding: 5px; border: 1px solid var(--panel-border); border-radius: var(--control-radius); background: var(--switch); backdrop-filter: blur(18px); }
     .group-label { padding: 4px 7px 2px; color: var(--copy); font-size: 9px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
-    .option-button { min-width: 0; padding: 7px 9px; border-color: color-mix(in oklab, var(--panel-border) 72%, transparent); border-radius: calc(var(--control-radius) - 5px); background: color-mix(in oklab, var(--panel) 76%, var(--page)); box-shadow: none; color: var(--copy); font-size: 11px; font-weight: 620; text-align: left; }
+    .option-button { min-width: 0; padding: 7px 9px; border-color: color-mix(in oklab, var(--panel-border) 72%, transparent); border-radius: var(--control-radius); background: var(--panel); box-shadow: none; color: var(--copy); font-size: 11px; font-weight: 620; text-align: left; }
     .option-button[aria-pressed="true"] { border-color: color-mix(in oklab, var(--accent) 24%, var(--panel-border)); background: color-mix(in oklab, var(--accent) 8%, var(--switch-hover)); color: var(--page-ink); }
+    [data-scene="story"] [aria-label="Animation"], [data-scene="overview"] [aria-label="Animation"] { opacity: .42; pointer-events: none; }
     .download { display: flex; align-items: center; justify-content: center; min-height: 38px; padding: 0 10px; border-radius: var(--control-radius); font-size: 11px; font-weight: 650; text-decoration: none; }
     main { min-height: 100vh; padding: 92px 166px 56px 5vw; }
     .scene { display: none; min-height: calc(100vh - 148px); place-items: center; animation: scene-in 360ms cubic-bezier(.22, 1, .36, 1) both; }
@@ -109,6 +114,8 @@ export function renderPreview({ assets, fontFile, name, scenes, zipFile }) {
     .asset-slot, .asset-view { width: 100%; }
     .asset-view { display: none; }
     .asset-view.is-active, .asset-view:not([data-asset-view]) { display: block; }
+    .copy-view { display: none; }
+    .copy-view.is-active { display: block; }
     img { display: block; width: 100%; height: auto; }
     .dark { display: none; }
     [data-theme="dark"] .light { display: none; }
@@ -132,11 +139,15 @@ export function renderPreview({ assets, fontFile, name, scenes, zipFile }) {
     .story-row { display: grid; grid-template-columns: .78fr 1.22fr; align-items: center; gap: clamp(38px, 7vw, 88px); }
     .story-row.reverse { grid-template-columns: 1.22fr .78fr; }
     .story-row h2 { font-size: clamp(28px, 3vw, 44px); }
+    .set-grid { width: min(80vw, 1000px); display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+    .set-card { position: relative; min-height: 280px; display: grid; align-items: center; padding: 22px; overflow: hidden; border: 1px solid var(--panel-border); border-radius: var(--scene-radius); background: var(--panel); }
+    .set-card-label { position: absolute; top: 18px; left: 20px; z-index: 1; color: var(--copy); font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
     @media (max-width: 900px) {
       main { padding: 100px 138px 36px 24px; }
       .feature-card, .split-layout, .story-row, .story-row.reverse { grid-template-columns: 1fr; gap: 26px; }
       .feature-card, .split-layout, .story-layout { width: min(70vw, 640px); }
       .bento-layout { width: min(70vw, 640px); grid-template-columns: 1fr; grid-template-rows: auto; }
+      .set-grid { width: min(74vw, 720px); grid-template-columns: 1fr; }
       .bento-asset { grid-row: auto; } .bento-copy, .bento-detail { display: none; }
     }
     @media (max-width: 640px) {
@@ -144,7 +155,7 @@ export function renderPreview({ assets, fontFile, name, scenes, zipFile }) {
       .controls { top: 18px; right: 18px; width: 104px; }
       .option-group { display: none; }
       main { padding: 88px 18px 30px; }
-      .display-scene .asset-slot, .feature-card, .split-layout, .bento-layout, .story-layout { width: 100%; }
+      .display-scene .asset-slot, .feature-card, .split-layout, .bento-layout, .story-layout, .set-grid { width: 100%; }
       .feature-card { padding: 18px; }
     }
     @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; } }
@@ -160,9 +171,9 @@ export function renderPreview({ assets, fontFile, name, scenes, zipFile }) {
   </aside>
   <main>
     <section class="scene display-scene is-active" data-scene-panel="display">${assetSlot("display view")}</section>
-    <section class="scene" data-scene-panel="card"><article class="feature-card"><div><p class="eyebrow">Automation</p><h2>Build flows in place.</h2><p>Add an action exactly where it belongs, without breaking the sequence.</p></div>${assetSlot("feature card")}</article></section>
-    <section class="scene" data-scene-panel="split"><div class="split-layout"><div><p class="eyebrow">Visual workflows</p><h1>Every step stays clear.</h1><p>Compose, inspect, and refine browser scenarios from one focused canvas.</p></div>${assetSlot("split feature")}</div></section>
-    <section class="scene" data-scene-panel="bento"><div class="bento-layout"><div class="bento-cell bento-asset">${assetSlot("bento feature")}</div><div class="bento-cell bento-copy"><p class="eyebrow">Flows</p><h2>Insert anywhere.</h2></div><div class="bento-cell bento-detail" aria-hidden="true"></div></div></section>${storyScene}
+    <section class="scene" data-scene-panel="card"><article class="feature-card">${switchableCopy("h2")}${assetSlot("feature card")}</article></section>
+    <section class="scene" data-scene-panel="split"><div class="split-layout">${switchableCopy("h1")}${assetSlot("split feature")}</div></section>
+    <section class="scene" data-scene-panel="bento"><div class="bento-layout"><div class="bento-cell bento-asset">${assetSlot("bento feature")}</div><div class="bento-cell bento-copy">${switchableCopy("h2")}</div><div class="bento-cell bento-detail" aria-hidden="true"></div></div></section>${storyScene}${overviewScene}
   </main>
   <script>
     const root = document.documentElement;
@@ -170,6 +181,7 @@ export function renderPreview({ assets, fontFile, name, scenes, zipFile }) {
     const themeLabel = document.querySelector("#theme-label");
     const assetButtons = [...document.querySelectorAll("[data-asset-button]")];
     const assetViews = [...document.querySelectorAll("[data-asset-view]")];
+    const assetCopies = [...document.querySelectorAll("[data-asset-copy]")];
     const sceneButtons = [...document.querySelectorAll("[data-scene-button]")];
     const scenePanels = [...document.querySelectorAll("[data-scene-panel]")];
     const stored = localStorage.getItem("display-theme");
@@ -187,6 +199,7 @@ export function renderPreview({ assets, fontFile, name, scenes, zipFile }) {
       root.dataset.asset = asset;
       for (const button of assetButtons) button.setAttribute("aria-pressed", String(button.dataset.assetButton === asset));
       for (const view of assetViews) view.classList.toggle("is-active", view.dataset.assetView === asset);
+      for (const copy of assetCopies) copy.classList.toggle("is-active", copy.dataset.assetCopy === asset);
     }
     function setScene(scene) {
       root.dataset.scene = scene;

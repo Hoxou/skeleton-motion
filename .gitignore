@@ -1,4 +1,8 @@
 node_modules/
 dist/
+.docusaurus/
+build/
+website/.docusaurus/
+website/build/
 *.log
 .DS_Store

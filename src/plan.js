@@ -97,10 +97,10 @@ function colorSemantics(profile, palette) {
 }
 
 export function planScene(analysis, options, theme) {
-  const winner = options.concept === "auto" ? analysis.concepts.ranked[0]?.kind || "flow" : options.concept;
+  const winner = options.story?.concept || (options.concept === "auto" ? analysis.concepts.ranked[0]?.kind || "flow" : options.concept);
   const concept = winner === "list" ? "list" : winner;
-  const palette = analysis.palettesByConcept?.[concept]?.[theme] || analysis.palettes[theme];
-  const evidence = analysis.concepts.evidence.filter((item) => item.kind === winner).slice(0, 5);
+  const palette = options.paletteOverride?.[theme] || analysis.palettesByConcept?.[concept]?.[theme] || analysis.palettes[theme];
+  const evidence = options.story?.evidence || analysis.concepts.evidence.filter((item) => item.kind === winner).slice(0, 5);
   const profile = motionProfile(concept, evidence, analysis);
   const backdrop = analysis.visual?.backdrop || "none";
   return {
@@ -122,6 +122,7 @@ export function planScene(analysis, options, theme) {
     palette: { ...palette, radius: numericRadius(palette.radius) },
     schemaVersion: 1,
     source: analysis.source,
+    story: options.story,
     theme,
     typography: analysis.typography,
     viewport: { height: options.height, width: options.width },

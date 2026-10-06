@@ -21,3 +21,11 @@ test("parses a single source and exact output controls", () => {
 test("rejects batch-style multiple sources", () => {
   assert.throws(() => parseArgs(["one", "two"]), /unexpected argument/);
 });
+
+test("enables coordinated set generation", () => {
+  const result = parseArgs(["../app", "--set", "--count", "3"], "/tmp/project");
+
+  assert.equal(result.set, true);
+  assert.equal(result.count, 3);
+  assert.throws(() => parseArgs(["../app", "--set", "--count", "5"]), /integer from 2 to 4/);
+});

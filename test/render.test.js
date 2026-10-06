@@ -125,9 +125,10 @@ test("renders display-first landing-page context controls", () => {
   assert.match(html, /data-scene-button="bento"/);
   assert.match(html, /data-asset-button="flow"/);
   assert.match(html, /href="\.\/flow\.assets\.zip" download/);
-  assert.match(html, /--control-radius: 14px/);
+  assert.match(html, /--control-radius: 0px/);
   assert.match(html, /\.download[^}]*border-radius: var\(--control-radius\)/);
-  assert.match(html, /\.option-button[^}]*background: color-mix/);
+  assert.match(html, /\.option-button[^}]*background: var\(--panel\)/);
+  assert.match(html, /body \{[^}]*background: var\(--page\)/);
   assert.doesNotMatch(html, /\.asset-view\s*\{[^}]*background:/);
 });
 
@@ -151,7 +152,11 @@ test("renders asset switching and a combined story without framing each asset", 
 
   assert.match(html, /data-asset-button="run-flow"/);
   assert.match(html, /data-scene-button="story"/);
+  assert.match(html, /data-scene-button="overview"/);
   assert.match(html, /data-scene-panel="story"/);
+  assert.match(html, /data-scene-panel="overview"/);
+  assert.equal((html.match(/story row \d/g) || []).length, 2);
+  assert.equal((html.match(/class="set-card"/g) || []).length, 2);
   assert.match(html, /@font-face \{ font-family: "Source Preview"/);
   assert.match(html, /--accent: #142ce3/);
   assert.match(html, /--scene-radius: 0px/);

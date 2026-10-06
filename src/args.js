@@ -1,7 +1,7 @@
 import path from "node:path";
 
 const HELP = `
-skeleton-motion — one minimal product-motion asset per run
+skeleton-motion — minimal product-motion assets from a repository or URL
 
 Usage:
   skeleton-motion <repo-path-or-url> [options]
@@ -9,6 +9,8 @@ Usage:
 Options:
   --out <dir>          Output directory (default: ./skeleton-motion-output)
   --name <slug>        Asset name (default: inferred from source)
+  --set                Generate a coordinated multi-asset set
+  --count <number>     Assets in a set, from 2 to 4 (default: 4)
   --theme <value>      light, dark, or auto (default: auto)
   --width <pixels>     Width (default: 720)
   --height <pixels>    Height (default: 405)
@@ -19,6 +21,7 @@ Options:
 
 Examples:
   skeleton-motion ../qa-segnatura --theme dark --format svg,html
+  skeleton-motion ../qa-segnatura --set --out ./motion-set
   skeleton-motion https://example.com --width 1600 --height 900
 `;
 
@@ -42,12 +45,14 @@ export function parseArgs(argv, cwd = process.cwd()) {
   let source;
   const options = {
     concept: "auto",
+    count: 4,
     duration: 5,
     formats: ["svg", "html"],
     height: 405,
     out: path.resolve(cwd, "skeleton-motion-output"),
     theme: "auto",
     width: 720,
+    set: false,
   };
 
   for (let index = 0; index < argv.length; index += 1) {
@@ -58,10 +63,16 @@ export function parseArgs(argv, cwd = process.cwd()) {
       continue;
     }
 
+    if (arg === "--set") {
+      options.set = true;
+      continue;
+    }
+
     const value = readValue(argv, index, arg);
     index += 1;
     if (arg === "--out") options.out = path.resolve(cwd, value);
     else if (arg === "--name") options.name = value;
+    else if (arg === "--count") options.count = positiveNumber(value, arg);
     else if (arg === "--theme") options.theme = value;
     else if (arg === "--width") options.width = positiveNumber(value, arg);
     else if (arg === "--height") options.height = positiveNumber(value, arg);
@@ -78,6 +89,9 @@ export function parseArgs(argv, cwd = process.cwd()) {
   }
   if (!["auto", "flow", "list", "dashboard", "editor"].includes(options.concept)) {
     throw new Error("--concept must be auto, flow, list, dashboard, or editor");
+  }
+  if (!Number.isInteger(options.count) || options.count < 2 || options.count > 4) {
+    throw new Error("--count must be an integer from 2 to 4");
   }
   const allowedFormats = new Set(["svg", "html", "gif", "webm", "mp4"]);
   const invalid = options.formats.find((format) => !allowedFormats.has(format));

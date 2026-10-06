@@ -1,12 +1,12 @@
 # Skeleton Motion
 
-Generate one minimal, branded product-motion asset from a local codebase or webpage URL.
+Generate a coordinated set of minimal, branded product-motion assets from a local codebase or webpage URL.
 
 Tool scans source without executing it, ranks visual concepts, extracts light/dark design tokens, and renders one compact animated skeleton scene. Native output is animated SVG: sharper and smaller than GIF, responsive at any size, and suitable for landing pages. GIF, WebM, and MP4 are optional exports.
 
 ## Current scope
 
-- One asset per command.
+- One focused asset per command by default, or a coordinated set of two to four with `--set`.
 - Local repository or public HTTP(S) URL input.
 - Automatic light/dark accent, surface, border, radius, background, and typography extraction.
 - Concept-scoped monochrome versus multicolor detection, with reusable accent and pastel tag roles derived from colors the relevant UI actually uses.
@@ -16,10 +16,9 @@ Tool scans source without executing it, ranks visual concepts, extracts light/da
 - Shared visual grammar, varied choreography: camera, pointer, and emphasis are selected per story instead of applied globally.
 - Exact `--width`, `--height`, and `--duration` controls.
 - Analysis manifest explains selected concept and source evidence.
-- Display preview with light/dark switching, asset switching, ZIP download, and Display, Card, Split, and Bento landing-page contexts.
+- Source-styled Display Room with light/dark switching, asset switching, ZIP download, Display, Card, Split, Bento, Story, and Set contexts.
 
-Batch generation is intentionally deferred. The preview and manifest already model a coordinated asset set, including a combined alternating Story scene when multiple assets are supplied.
-The set should share palette, density, geometry, and line treatment while rotating motion profiles; zoom is reserved for moments that benefit from focus.
+The set shares palette, density, geometry, and line treatment while rotating motion profiles; zoom is reserved for moments that benefit from focus. Display Room backgrounds, controls, radii, typography, and theme colors come from the analyzed source rather than a generic showroom theme.
 
 ## Motion rules
 
@@ -53,6 +52,8 @@ npm link
 
 ```bash
 skeleton-motion /path/to/repository \
+  --set \
+  --count 4 \
   --out ./output \
   --width 720 \
   --height 405 \
@@ -60,7 +61,7 @@ skeleton-motion /path/to/repository \
   --format svg,html
 ```
 
-`--theme auto` creates light and dark variants of one asset plus a preview that follows system theme.
+`--theme auto` creates light and dark variants plus a preview that follows system theme. Omit `--set` to generate one asset while testing a concept.
 
 URL input:
 
@@ -78,12 +79,14 @@ skeleton-motion ../my-app --concept dashboard
 
 ```text
 output/
-  project-flow.light.svg
-  project-flow.dark.svg
-  project-flow.preview.html
-  project-flow.preview-font.ttf
-  project-flow.manifest.json
-  project-flow.assets.zip
+  project-motion-set.insert-step.light.svg
+  project-motion-set.insert-step.dark.svg
+  project-motion-set.select-item.light.svg
+  project-motion-set.select-item.dark.svg
+  project-motion-set.preview.html
+  project-motion-set.preview-font.ttf
+  project-motion-set.manifest.json
+  project-motion-set.assets.zip
 ```
 
 The copied preview font is included only when a matching local font file is found. The ZIP contains every generated asset, the preview, its manifest, and the preview font when present.
@@ -120,3 +123,13 @@ Video fallback:
 ## Safety
 
 Target repositories are read-only. Scanner ignores generated/dependency directories and never imports source modules or runs project scripts.
+
+## Documentation and roadmap
+
+The Docusaurus site includes the CLI reference, motion grammar, Display Room contract, local Codex/Claude Code adapter design, privacy boundary, cost plan, and hosted-product roadmap.
+
+```bash
+npm run docs:start
+```
+
+The public site is designed as documentation and a future entry point. A browser cannot safely inspect a private local repository or start a local AI tool by itself; that workflow will use a loopback companion. See [`ROADMAP.md`](ROADMAP.md).

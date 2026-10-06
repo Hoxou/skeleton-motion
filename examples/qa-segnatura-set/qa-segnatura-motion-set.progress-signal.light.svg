@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="405" viewBox="0 0 1200 675" role="img" aria-labelledby="title description">
+  <title id="title">qa-segnatura-motion-set.progress-signal — chart-sweep</title>
+  <desc id="description">Minimal dashboard product illustration generated from /Users/victor.toupar/Documents/dev/qa-segnatura.</desc>
+  <style>
+    :root {
+      --accent: #142ce3;
+      --accent-1: #142ce3;
+      --accent-2: #142ce3;
+      --accent-3: #142ce3;
+      --accent-4: #142ce3;
+      --accent-soft: color-mix(in oklab, #142ce3 12%, oklch(1 0 0));
+      --background: oklch(1 0 0);
+      --border: oklch(0.922 0 0);
+      --border-strong: color-mix(in oklab, oklch(0.145 0 0) 18%, oklch(1 0 0));
+      --cursor-outline: oklch(1 0 0);
+      --ink: oklch(0.145 0 0);
+      --muted: oklch(0.97 0 0);
+      --canvas: oklch(1 0 0);
+      --radius: 0px;
+      --surface: oklch(1 0 0);
+      --tag-1: color-mix(in oklab, #142ce3 14%, oklch(1 0 0));
+      --tag-2: color-mix(in oklab, #142ce3 14%, oklch(1 0 0));
+      --tag-3: color-mix(in oklab, #142ce3 14%, oklch(1 0 0));
+      --tag-4: color-mix(in oklab, #142ce3 14%, oklch(1 0 0));
+    }
+    * { vector-effect: non-scaling-stroke; }
+    @media (prefers-reduced-motion: reduce) { svg { visibility: visible; } }
+  </style>
+  <defs><pattern id="dots" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="1.5" cy="1.5" r="1.25" fill="var(--border)" /></pattern><filter id="cursor-shadow" x="-60%" y="-60%" width="220%" height="220%"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#000" flood-opacity=".28" /></filter></defs>
+
+    <g><rect x="72" y="94" width="278" height="156" rx="var(--radius)" fill="var(--surface)" stroke="var(--border)"/><circle cx="106" cy="130" r="10" fill="var(--tag-1)"/><rect x="130" y="124" width="82" height="8" rx="4" fill="var(--ink)" opacity=".1"/><rect x="100" y="176" width="100" height="22" rx="5" fill="var(--ink)" opacity=".16"/><rect x="100" y="214" width="138" height="5" rx="2.5" fill="var(--ink)" opacity=".07"/></g><g><rect x="386" y="94" width="278" height="156" rx="var(--radius)" fill="var(--surface)" stroke="var(--border)"/><circle cx="420" cy="130" r="10" fill="var(--tag-2)"/><rect x="444" y="124" width="82" height="8" rx="4" fill="var(--ink)" opacity=".1"/><rect x="414" y="176" width="100" height="22" rx="5" fill="var(--ink)" opacity=".16"/><rect x="414" y="214" width="166" height="5" rx="2.5" fill="var(--ink)" opacity=".07"/></g><g><rect x="700" y="94" width="278" height="156" rx="var(--radius)" fill="var(--surface)" stroke="var(--border)"/><circle cx="734" cy="130" r="10" fill="var(--tag-3)"/><rect x="758" y="124" width="82" height="8" rx="4" fill="var(--ink)" opacity=".1"/><rect x="728" y="176" width="100" height="22" rx="5" fill="var(--ink)" opacity=".16"/><rect x="728" y="214" width="194" height="5" rx="2.5" fill="var(--ink)" opacity=".07"/></g>
+    <rect x="72" y="292" width="1056" height="292" rx="var(--radius)" fill="var(--surface)" stroke="var(--border)" />
+    <path d="M118 512 C210 460 240 486 324 410 C400 342 482 476 566 398 C654 318 730 428 812 350 C884 282 964 376 1082 322" fill="none" stroke="var(--border-strong)" stroke-width="3" />
+    <path d="M118 512 C210 460 240 486 324 410 C400 342 482 476 566 398 C654 318 730 428 812 350 C884 282 964 376 1082 322" fill="none" stroke="var(--accent)" stroke-width="3" opacity="0"><animate attributeName="opacity" values="0;0;.82;.82;0" keyTimes="0;.12;.22;.9;1" dur="5s" repeatCount="indefinite"/></path>
+    <line x1="118" y1="540" x2="1082" y2="540" stroke="var(--border)" />
+    <circle r="8" fill="var(--accent)"><animateMotion path="M118 512 C210 460 240 486 324 410 C400 342 482 476 566 398 C654 318 730 428 812 350 C884 282 964 376 1082 322" keyTimes="0;.12;.72;1" keyPoints="0;0;1;1" dur="5s" repeatCount="indefinite"/><animate attributeName="opacity" values="0;1;1;0" keyTimes="0;.12;.82;1" dur="5s" repeatCount="indefinite"/></circle>
+
+</svg>
