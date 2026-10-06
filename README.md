@@ -12,10 +12,12 @@ Tool scans source without executing it, ranks visual concepts, extracts light/da
 - Four scene types: flow, list, dashboard, editor.
 - 3–5 major containers, little to no text, generous whitespace.
 - Cursor, selection, progress, reveal, or chart-sweep motion.
+- Shared visual grammar, varied choreography: camera, pointer, and emphasis are selected per story instead of applied globally.
 - Exact `--width`, `--height`, and `--duration` controls.
 - Analysis manifest explains selected concept and source evidence.
 
 Batch generation is intentionally deferred. Future mode can use ranked concepts already stored in manifest to create a coordinated asset set.
+The set should share palette, density, geometry, and line treatment while rotating motion profiles; zoom is reserved for moments that benefit from focus.
 
 ## Install
 
@@ -29,8 +31,8 @@ npm link
 ```bash
 skeleton-motion /path/to/repository \
   --out ./output \
-  --width 1200 \
-  --height 675 \
+  --width 720 \
+  --height 405 \
   --theme auto \
   --format svg,html
 ```

@@ -9,6 +9,7 @@ export function renderPreview({ name, scenes }) {
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="data:,">
   <title>Display — ${escapeXml(name)}</title>
   <style>
     * { box-sizing: border-box; }
@@ -104,7 +105,7 @@ export function renderPreview({ name, scenes }) {
     }
     .display {
       position: relative;
-      width: min(88vw, 1120px);
+      width: min(86vw, 760px);
       overflow: hidden;
       border: 1px solid var(--panel-border);
       border-radius: 18px;

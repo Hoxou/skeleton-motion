@@ -2,20 +2,29 @@ import { escapeXml } from "./utils.js";
 
 const BASE_WIDTH = 1200;
 const BASE_HEIGHT = 675;
+const COMPACT_WIDTH = 720;
+const COMPACT_HEIGHT = 405;
 
-function cursor(duration, path, clickAt = 0.46) {
-  const clickStart = Math.max(0, clickAt - 0.03);
-  const clickPeak = Math.min(1, clickAt + 0.02);
-  const clickEnd = Math.min(1, clickAt + 0.08);
+function clickRipple(duration, at) {
+  const start = Math.max(0, at - 0.025);
+  const peak = Math.min(1, at + 0.018);
+  const end = Math.min(1, at + 0.085);
+  return `<circle cx="0" cy="0" r="7" fill="none" stroke="var(--accent)" stroke-width="2" opacity="0">
+    <animate attributeName="r" values="7;7;24;29;7" keyTimes="0;${start};${peak};${end};1" dur="${duration}s" repeatCount="indefinite" />
+    <animate attributeName="opacity" values="0;0;.62;0;0" keyTimes="0;${start};${peak};${end};1" dur="${duration}s" repeatCount="indefinite" />
+  </circle>`;
+}
+
+function cursor(duration, frames, clicks = []) {
+  const values = frames.map(({ x, y }) => `${x} ${y}`).join(";");
+  const keyTimes = frames.map(({ at }) => at).join(";");
+  const keySplines = frames.slice(1).map(() => ".22 1 .36 1").join(";");
   return `
     <g id="cursor" opacity="0">
-      <circle cx="0" cy="0" r="22" fill="none" stroke="var(--accent)" stroke-width="2" opacity="0">
-        <animate attributeName="r" values="8;8;30;34;8" keyTimes="0;${clickStart};${clickPeak};${clickEnd};1" dur="${duration}s" repeatCount="indefinite" />
-        <animate attributeName="opacity" values="0;0;.65;0;0" keyTimes="0;${clickStart};${clickPeak};${clickEnd};1" dur="${duration}s" repeatCount="indefinite" />
-      </circle>
-      <path d="M0 0 L0 28 L7.5 20 L14 34 L20 31 L13.5 17 L24 16 Z" fill="var(--cursor-fill)" stroke="var(--cursor-stroke)" stroke-width="2" stroke-linejoin="round" />
-      <animate attributeName="opacity" values="0;1;1;0;0" keyTimes="0;.08;.84;.94;1" dur="${duration}s" repeatCount="indefinite" />
-      <animateMotion path="${path}" keyTimes="0;.12;.42;.58;.78;1" keyPoints="0;.12;.47;.58;.88;1" calcMode="spline" keySplines=".22 1 .36 1;.22 1 .36 1;.22 1 .36 1;.22 1 .36 1;.22 1 .36 1" dur="${duration}s" repeatCount="indefinite" />
+      ${clicks.map((at) => clickRipple(duration, at)).join("")}
+      <path d="M2.5 1.5 V28 L9.4 21.4 L15.4 34.8 L21.4 32.1 L15.4 18.8 L27 18.1 Z" fill="var(--accent)" stroke="var(--cursor-outline)" stroke-width="2.2" stroke-linejoin="round" filter="url(#cursor-shadow)" />
+      <animate attributeName="opacity" values="0;1;1;0;0" keyTimes="0;.07;.85;.92;1" dur="${duration}s" repeatCount="indefinite" />
+      <animateTransform attributeName="transform" type="translate" values="${values}" keyTimes="${keyTimes}" calcMode="spline" keySplines="${keySplines}" dur="${duration}s" repeatCount="indefinite" />
     </g>`;
 }
 
@@ -29,66 +38,64 @@ function skeletonLines(x, y, widths = [88, 132]) {
 
 function flowScene(scene) {
   const duration = scene.duration;
+  const focused = scene.motionProfile?.camera === "focus-zoom";
+  const pointer = scene.motionProfile?.pointer !== "none";
   return `
-    <rect x="64" y="58" width="804" height="558" rx="var(--radius)" fill="var(--surface)" stroke="var(--border)" />
-    <rect x="64" y="58" width="804" height="558" rx="var(--radius)" fill="url(#dots)" opacity=".72" />
+    <g transform="translate(260 229)">
+      <g>
+        ${focused ? `<animateTransform attributeName="transform" type="scale" values="1;1;1.055;1.055;1" keyTimes="0;.62;.71;.87;1" calcMode="spline" keySplines=".22 1 .36 1;.22 1 .36 1;.22 1 .36 1;.22 1 .36 1" dur="${duration}s" repeatCount="indefinite" />` : ""}
+        <g transform="translate(-260 -229)">
+    <rect x="24" y="22" width="672" height="361" rx="var(--radius)" fill="var(--surface)" stroke="var(--border)" />
+    <rect x="24" y="22" width="672" height="361" rx="var(--radius)" fill="url(#dots)" opacity=".62" />
 
-    <path d="M452 222 V306" stroke="var(--border-strong)" stroke-width="2" />
-    <path d="M452 394 V478" stroke="var(--border-strong)" stroke-width="2" />
-    <path d="M452 222 V306" stroke="var(--accent)" stroke-width="2.5" stroke-dasharray="84" stroke-dashoffset="84">
-      <animate attributeName="stroke-dashoffset" values="84;84;0;0;84" keyTimes="0;.52;.68;.86;1" dur="${duration}s" repeatCount="indefinite" />
+    <path d="M260 137 V278" stroke="var(--border-strong)" stroke-width="2" />
+    <path d="M260 137 V278" stroke="var(--accent)" stroke-width="2.5" stroke-dasharray="141" stroke-dashoffset="141">
+      <animate attributeName="stroke-dashoffset" values="141;141;0;0;141" keyTimes="0;.63;.8;.9;1" dur="${duration}s" repeatCount="indefinite" />
     </path>
-    <path d="M452 394 V478" stroke="var(--accent)" stroke-width="2.5" stroke-dasharray="84" stroke-dashoffset="84">
-      <animate attributeName="stroke-dashoffset" values="84;84;0;0;84" keyTimes="0;.66;.8;.9;1" dur="${duration}s" repeatCount="indefinite" />
-    </path>
 
     <g>
-      <rect x="264" y="132" width="376" height="90" rx="var(--radius)" fill="var(--surface)" stroke="var(--border-strong)" />
-      <circle cx="302" cy="177" r="15" fill="var(--muted)" />
-      <path d="M296 177h12M302 171v12" stroke="var(--ink)" opacity=".38" stroke-width="2" stroke-linecap="round" />
-      ${skeletonLines(332, 164, [104, 154])}
-      <circle cx="607" cy="177" r="5" fill="var(--ink)" opacity=".15" />
+      <rect x="78" y="58" width="364" height="79" rx="var(--radius)" fill="var(--surface)" stroke="var(--border-strong)" />
+      <circle cx="116" cy="97.5" r="16" fill="var(--muted)" />
+      <path d="M109 97.5h14M116 90.5v14" stroke="var(--ink)" opacity=".4" stroke-width="2.2" stroke-linecap="round" />
+      ${skeletonLines(148, 84, [122, 174])}
     </g>
 
-    <g id="middle-card">
-      <rect x="264" y="306" width="376" height="88" rx="var(--radius)" fill="var(--surface)" stroke="var(--border-strong)" />
-      <rect x="264" y="306" width="376" height="88" rx="var(--radius)" fill="var(--accent-soft)" opacity="0">
-        <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;.49;.56;.9;1" dur="${duration}s" repeatCount="indefinite" />
-      </rect>
-      <rect x="264" y="306" width="376" height="88" rx="var(--radius)" fill="none" stroke="var(--accent)" stroke-width="2" opacity="0">
-        <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;.49;.53;.91;1" dur="${duration}s" repeatCount="indefinite" />
-      </rect>
-      <circle cx="302" cy="350" r="15" fill="var(--muted)" />
-      <path d="M296 350h12" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" />
-      ${skeletonLines(332, 337, [126, 82])}
-      <rect x="574" y="340" width="34" height="20" rx="10" fill="var(--muted)" />
-      <circle cx="584" cy="350" r="6" fill="var(--ink)" opacity=".18">
-        <animate attributeName="cx" values="584;584;598;598;584" keyTimes="0;.57;.65;.91;1" dur="${duration}s" repeatCount="indefinite" />
-        <animate attributeName="fill" values="var(--ink);var(--ink);var(--accent);var(--accent);var(--ink)" keyTimes="0;.57;.65;.91;1" dur="${duration}s" repeatCount="indefinite" />
-      </circle>
+    <circle cx="260" cy="171" r="17" fill="var(--surface)" stroke="var(--border-strong)" />
+    <path d="M253 171h14M260 164v14" stroke="var(--ink)" opacity=".45" stroke-width="2.2" stroke-linecap="round" />
+
+    <g id="inserted-card" opacity="${pointer ? "0" : "1"}">
+      <rect x="78" y="190" width="364" height="79" rx="var(--radius)" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="2" />
+      <circle cx="116" cy="229.5" r="16" fill="var(--accent-soft)" stroke="var(--accent)" stroke-opacity=".35" />
+      <path d="M109 229.5h14" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" />
+      ${skeletonLines(148, 216, [142, 92])}
+      ${pointer ? `<animate attributeName="opacity" values="0;0;.42;.42;1;1;0" keyTimes="0;.32;.38;.57;.64;.9;1" dur="${duration}s" repeatCount="indefinite" />` : `<animate attributeName="opacity" values="1;1;.72;1;1" keyTimes="0;.56;.66;.78;1" dur="${duration}s" repeatCount="indefinite" />`}
     </g>
 
     <g>
-      <rect x="264" y="478" width="376" height="88" rx="var(--radius)" fill="var(--surface)" stroke="var(--border-strong)" />
-      <circle cx="302" cy="522" r="15" fill="var(--muted)" />
-      <path d="M296 516l12 12M308 516l-12 12" stroke="var(--ink)" opacity=".3" stroke-width="2" stroke-linecap="round" />
-      ${skeletonLines(332, 509, [92, 142])}
-      <circle cx="607" cy="522" r="5" fill="var(--ink)" opacity=".15" />
+      <rect x="78" y="278" width="364" height="79" rx="var(--radius)" fill="var(--surface)" stroke="var(--border-strong)" />
+      <circle cx="116" cy="317.5" r="16" fill="var(--muted)" />
+      <path d="M110 311.5l12 12M122 311.5l-12 12" stroke="var(--ink)" opacity=".32" stroke-width="2.2" stroke-linecap="round" />
+      ${skeletonLines(148, 304, [110, 160])}
     </g>
-
-    <circle cx="452" cy="264" r="15" fill="var(--surface)" stroke="var(--border-strong)" />
-    <path d="M446 264h12M452 258v12" stroke="var(--ink)" opacity=".42" stroke-width="2" stroke-linecap="round" />
 
     <g>
-      <rect x="912" y="146" width="224" height="356" rx="var(--radius)" fill="var(--surface)" stroke="var(--border)" />
-      <rect x="938" y="174" width="172" height="28" rx="var(--radius)" fill="var(--muted)" />
-      <circle cx="958" cy="188" r="6" fill="var(--ink)" opacity=".17" />
-      <rect x="974" y="185" width="62" height="6" rx="3" fill="var(--ink)" opacity=".12" />
-      ${[230, 294, 358].map((y, index) => `<g><rect x="938" y="${y}" width="172" height="46" rx="var(--radius)" fill="var(--surface)" stroke="${index === 0 ? "var(--accent)" : "var(--border)"}" stroke-opacity="${index === 0 ? ".55" : "1"}"/><rect x="952" y="${y + 12}" width="22" height="22" rx="var(--radius)" fill="${index === 0 ? "var(--accent-soft)" : "var(--muted)"}"/>${skeletonLines(987, y + 12, [74, 48])}</g>`).join("")}
-      <rect x="938" y="432" width="104" height="5" rx="2.5" fill="var(--ink)" opacity=".08" />
-      <rect x="938" y="446" width="146" height="5" rx="2.5" fill="var(--ink)" opacity=".06" />
+      <rect x="472" y="78" width="188" height="184" rx="var(--radius)" fill="var(--surface)" stroke="var(--border)" />
+      ${[98, 149, 200].map((y, index) => `<g><rect x="490" y="${y}" width="152" height="39" rx="var(--radius)" fill="${index === 0 ? "var(--accent-soft)" : "var(--surface)"}" stroke="${index === 0 ? "var(--accent)" : "var(--border)"}" stroke-opacity="${index === 0 ? ".65" : "1"}"/><rect x="503" y="${y + 10}" width="19" height="19" rx="var(--radius)" fill="${index === 0 ? "var(--accent)" : "var(--muted)"}" opacity="${index === 0 ? ".18" : "1"}"/><rect x="535" y="${y + 16}" width="${index === 0 ? 72 : 58}" height="7" rx="3.5" fill="var(--ink)" opacity="${index === 0 ? ".22" : ".12"}"/></g>`).join("")}
     </g>
-    ${cursor(duration, "M780 560 C690 520 560 370 452 264 C600 250 805 190 986 252 C880 290 730 340 604 350 C690 420 760 520 780 560", 0.46)}
+        </g>
+      </g>
+    </g>
+    ${pointer ? cursor(duration, [
+      { at: 0, x: 654, y: 350 },
+      { at: 0.07, x: 654, y: 350 },
+      { at: 0.29, x: 260, y: 171 },
+      { at: 0.38, x: 260, y: 171 },
+      { at: 0.54, x: 548, y: 117 },
+      { at: 0.63, x: 548, y: 117 },
+      { at: 0.75, x: 360, y: 229 },
+      { at: 0.87, x: 360, y: 229 },
+      { at: 1, x: 654, y: 350 },
+    ], [0.31, 0.56]) : ""}
   `;
 }
 
@@ -108,7 +115,10 @@ function listScene(scene) {
     <rect x="524" y="270" width="210" height="9" rx="4.5" fill="var(--ink)" opacity=".12" />
     ${[308, 346, 384, 422].map((y) => `<rect x="524" y="${y}" width="520" height="18" rx="var(--radius)" fill="var(--surface)" opacity=".7"/>`).join("")}
     <rect x="988" y="496" width="98" height="36" rx="var(--radius)" fill="var(--accent)" opacity="0"><animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;.54;.62;.9;1" dur="${duration}s" repeatCount="indefinite"/></rect>
-    ${cursor(duration, "M760 560 C580 520 380 360 242 289 C370 260 590 320 820 390 C890 430 940 480 1028 514 C920 540 820 560 760 560", 0.45)}
+    ${cursor(duration, [
+      { at: 0, x: 760, y: 560 }, { at: .1, x: 760, y: 560 }, { at: .42, x: 242, y: 289 },
+      { at: .52, x: 242, y: 289 }, { at: .72, x: 1028, y: 514 }, { at: .86, x: 1028, y: 514 }, { at: 1, x: 760, y: 560 },
+    ], [.44, .74])}
   `;
 }
 
@@ -135,18 +145,24 @@ function editorScene(scene) {
     <circle cx="945" cy="270" r="64" fill="var(--accent-soft)" />
     <path d="M914 270l20 20 43-46" fill="none" stroke="var(--accent)" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="94" stroke-dashoffset="94"><animate attributeName="stroke-dashoffset" values="94;94;0;0;94" keyTimes="0;.58;.7;.9;1" dur="${duration}s" repeatCount="indefinite"/></path>
     ${skeletonLines(858, 374, [174, 128])}
-    ${cursor(duration, "M650 560 C580 500 490 400 420 318 C360 300 300 310 240 318 C230 400 210 480 170 530 C350 560 520 570 650 560", 0.45)}
+    ${cursor(duration, [
+      { at: 0, x: 650, y: 560 }, { at: .1, x: 650, y: 560 }, { at: .43, x: 240, y: 318 },
+      { at: .54, x: 240, y: 318 }, { at: .73, x: 170, y: 530 }, { at: .86, x: 170, y: 530 }, { at: 1, x: 650, y: 560 },
+    ], [.45, .75])}
   `;
 }
 
 export function renderSvg(scene) {
   const { palette, viewport } = scene;
+  const viewBox = scene.concept === "flow"
+    ? { height: COMPACT_HEIGHT, width: COMPACT_WIDTH }
+    : { height: BASE_HEIGHT, width: BASE_WIDTH };
   const content = scene.concept === "flow" ? flowScene(scene)
     : scene.concept === "list" ? listScene(scene)
       : scene.concept === "dashboard" ? dashboardScene(scene)
         : editorScene(scene);
   return `<?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="${viewport.width}" height="${viewport.height}" viewBox="0 0 ${BASE_WIDTH} ${BASE_HEIGHT}" role="img" aria-labelledby="title description">
+<svg xmlns="http://www.w3.org/2000/svg" width="${viewport.width}" height="${viewport.height}" viewBox="0 0 ${viewBox.width} ${viewBox.height}" role="img" aria-labelledby="title description">
   <title id="title">${escapeXml(scene.name)} — ${escapeXml(scene.motion)}</title>
   <desc id="description">Minimal ${escapeXml(scene.concept)} product illustration generated from ${escapeXml(scene.source.input)}.</desc>
   <style>
@@ -156,8 +172,7 @@ export function renderSvg(scene) {
       --background: ${palette.background};
       --border: ${palette.border};
       --border-strong: color-mix(in oklab, ${palette.foreground} 18%, ${palette.surface});
-      --cursor-fill: ${palette.foreground};
-      --cursor-stroke: ${palette.background};
+      --cursor-outline: ${palette.background};
       --ink: ${palette.foreground};
       --muted: ${palette.muted};
       --radius: ${palette.radius}px;
@@ -166,8 +181,8 @@ export function renderSvg(scene) {
     * { vector-effect: non-scaling-stroke; }
     @media (prefers-reduced-motion: reduce) { svg { visibility: visible; } }
   </style>
-  <defs>${dots()}</defs>
-  <rect width="1200" height="675" fill="var(--background)" />
+  <defs>${dots()}<filter id="cursor-shadow" x="-60%" y="-60%" width="220%" height="220%"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#000" flood-opacity=".28" /></filter></defs>
+  <rect width="${viewBox.width}" height="${viewBox.height}" fill="var(--background)" />
   ${content}
 </svg>`;
 }

@@ -119,6 +119,12 @@
         ],
         "file": "qa-segnatura-flow.light.svg",
         "motion": "add-step",
+        "motionProfile": {
+          "camera": "focus-zoom",
+          "emphasis": "click-ripple",
+          "name": "add-step",
+          "pointer": "cursor-click"
+        },
         "palette": {
           "accent": "#142ce3",
           "background": "oklch(1 0 0)",
@@ -130,8 +136,8 @@
         },
         "theme": "light",
         "viewport": {
-          "height": 675,
-          "width": 1200
+          "height": 405,
+          "width": 720
         }
       },
       {
@@ -159,6 +165,12 @@
         ],
         "file": "qa-segnatura-flow.dark.svg",
         "motion": "add-step",
+        "motionProfile": {
+          "camera": "focus-zoom",
+          "emphasis": "click-ripple",
+          "name": "add-step",
+          "pointer": "cursor-click"
+        },
         "palette": {
           "accent": "#586df7",
           "background": "oklch(0.145 0 0)",
@@ -170,12 +182,12 @@
         },
         "theme": "dark",
         "viewport": {
-          "height": 675,
-          "width": 1200
+          "height": 405,
+          "width": 720
         }
       }
     ]
   },
-  "generatedAt": "2026-10-06T02:04:21.287Z",
+  "generatedAt": "2026-10-06T02:21:40.722Z",
   "schemaVersion": 1
 }

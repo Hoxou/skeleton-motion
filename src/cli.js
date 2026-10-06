@@ -58,7 +58,7 @@ export async function run(argv) {
       concept,
       name: assetName,
       oneAssetPerRun: true,
-      variants: scenes.map(({ evidence, file, motion, palette, theme, viewport }) => ({ evidence, file, motion, palette, theme, viewport })),
+      variants: scenes.map(({ evidence, file, motion, motionProfile, palette, theme, viewport }) => ({ evidence, file, motion, motionProfile, palette, theme, viewport })),
     },
     generatedAt: new Date().toISOString(),
     schemaVersion: 1,

@@ -10,8 +10,8 @@ Options:
   --out <dir>          Output directory (default: ./skeleton-motion-output)
   --name <slug>        Asset name (default: inferred from source)
   --theme <value>      light, dark, or auto (default: auto)
-  --width <pixels>     Width (default: 1200)
-  --height <pixels>    Height (default: 675)
+  --width <pixels>     Width (default: 720)
+  --height <pixels>    Height (default: 405)
   --duration <seconds> Loop duration (default: 5)
   --concept <value>    auto, flow, list, dashboard, or editor (default: auto)
   --format <values>    svg,html,gif,webm,mp4 or comma-separated (default: svg,html)
@@ -44,10 +44,10 @@ export function parseArgs(argv, cwd = process.cwd()) {
     concept: "auto",
     duration: 5,
     formats: ["svg", "html"],
-    height: 675,
+    height: 405,
     out: path.resolve(cwd, "skeleton-motion-output"),
     theme: "auto",
-    width: 1200,
+    width: 720,
   };
 
   for (let index = 0; index < argv.length; index += 1) {
