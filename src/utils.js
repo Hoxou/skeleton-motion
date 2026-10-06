@@ -31,7 +31,7 @@ const TEXT_EXTENSIONS = new Set([
   ".vue",
 ]);
 
-export async function collectTextFiles(root, limit = 2_500) {
+export async function collectFilesByExtensions(root, extensions, limit = 2_500) {
   const files = [];
   const queue = [root];
   while (queue.length > 0 && files.length < limit) {
@@ -48,13 +48,17 @@ export async function collectTextFiles(root, limit = 2_500) {
       const absolute = path.join(directory, entry.name);
       if (entry.isDirectory()) {
         if (!IGNORED_DIRECTORIES.has(entry.name)) queue.push(absolute);
-      } else if (TEXT_EXTENSIONS.has(path.extname(entry.name).toLowerCase())) {
+      } else if (extensions.has(path.extname(entry.name).toLowerCase())) {
         files.push(absolute);
         if (files.length >= limit) break;
       }
     }
   }
   return files;
+}
+
+export async function collectTextFiles(root, limit = 2_500) {
+  return collectFilesByExtensions(root, TEXT_EXTENSIONS, limit);
 }
 
 export async function readText(file, maxBytes = 400_000) {

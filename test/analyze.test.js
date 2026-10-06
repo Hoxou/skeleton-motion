@@ -23,6 +23,18 @@ test("extracts separate light and dark semantic tokens", () => {
   assert.equal(palettes.dark.surface, "#222");
 });
 
+test("infers a readable product font from Next font imports", () => {
+  const typography = __testing.inferTypography("", `import { DM_Sans, Geist_Mono } from "next/font/google";`);
+
+  assert.equal(typography.family, "DM Sans");
+  assert.match(typography.stack, /^"DM Sans"/);
+});
+
+test("only selects a dotted backdrop when the source contains that treatment", () => {
+  assert.equal(__testing.inferBackdrop(`<Background variant={BackgroundVariant.Dots} />`), "dots");
+  assert.equal(__testing.inferBackdrop(`<ReactFlow nodes={nodes} edges={edges} />`), "none");
+});
+
 test("ranks a reachable automation canvas as a flow concept", async (context) => {
   const fixture = await fs.mkdtemp(path.join(os.tmpdir(), "skeleton-motion-test-"));
   context.after(() => fs.rm(fixture, { force: true, recursive: true }));
@@ -32,14 +44,15 @@ test("ranks a reachable automation canvas as a flow concept", async (context) =>
     .dark { --background: #111; --card: #222; --primary: #586df7; }
   `);
   await fs.writeFile(path.join(fixture, "app", "scenario-canvas.tsx"), `
-    import { ReactFlow } from "@xyflow/react";
-    export function ScenarioCanvas() { return <ReactFlow nodes={nodes} edges={edges} onNodeClick={selectStep} />; }
+    import { Background, BackgroundVariant, ReactFlow } from "@xyflow/react";
+    export function ScenarioCanvas() { return <ReactFlow nodes={nodes} edges={edges} onNodeClick={selectStep}><Background variant={BackgroundVariant.Dots} /></ReactFlow>; }
   `);
   await fs.writeFile(path.join(fixture, "app", "button.test.tsx"), `export const Button = () => <button>ok</button>`);
 
   const analysis = await analyzeSource(fixture);
   assert.equal(analysis.concepts.ranked[0].kind, "flow");
   assert.equal(analysis.palettes.dark.accent, "#586df7");
+  assert.equal(analysis.visual.backdrop, "dots");
 });
 
 test("analyzes a webpage URL without running page scripts", async (context) => {

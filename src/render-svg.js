@@ -52,45 +52,46 @@ function skeletonLines(x, y, widths = [88, 132]) {
 function flowScene(scene) {
   const duration = scene.duration;
   const pointer = scene.motionProfile?.pointer !== "none";
+  // Every cursor click below has target-local feedback: the add control opens
+  // the layout, the picker row presses/highlights, and the inserted card settles.
   return `
-    <rect x="24" y="22" width="672" height="361" rx="var(--radius)" fill="var(--surface)" stroke="var(--border)" />
-    <rect x="24" y="22" width="672" height="361" rx="var(--radius)" fill="url(#dots)" opacity=".62" />
+    ${scene.backdrop === "dots" ? `<rect width="720" height="405" fill="url(#dots)" opacity=".62" />` : ""}
 
-    <path d="M197.5 128 V277" stroke="var(--border-strong)" stroke-width="2" />
-    <path d="M197.5 128 V162.5" stroke="var(--accent)" stroke-width="2.5" opacity="0">
+    <path d="M190 128 V277" stroke="var(--border-strong)" stroke-width="2" />
+    <path d="M190 128 V162.5" stroke="var(--accent)" stroke-width="2.5" opacity="0">
       <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;.68;.76;.9;1" dur="${duration}s" repeatCount="indefinite" />
     </path>
-    <path d="M197.5 242.5 V277" stroke="var(--accent)" stroke-width="2.5" opacity="0">
+    <path d="M190 242.5 V277" stroke="var(--accent)" stroke-width="2.5" opacity="0">
       <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;.7;.78;.9;1" dur="${duration}s" repeatCount="indefinite" />
     </path>
 
     <g>
       ${pointer ? `<animateTransform attributeName="transform" type="translate" values="0 56;0 56;0 -2;0 0;0 0;0 56" keyTimes="0;.31;.42;.47;.88;1" calcMode="spline" keySplines="${easingSegments("gentle", 5)}" dur="${duration}s" repeatCount="indefinite" />` : ""}
-      <rect x="43" y="48" width="309" height="80" rx="var(--radius)" fill="var(--surface)" stroke="var(--border-strong)" />
-      <circle cx="79" cy="88" r="15" fill="var(--muted)" />
-      <path d="M72 88h14M79 81v14" stroke="var(--ink)" opacity=".4" stroke-width="2.2" stroke-linecap="round" />
-      ${skeletonLines(110, 75, [110, 166])}
+      <rect x="40" y="48" width="300" height="80" rx="var(--radius)" fill="var(--surface)" stroke="var(--border-strong)" />
+      <circle cx="76" cy="88" r="15" fill="var(--muted)" />
+      <path d="M69 88h14M76 81v14" stroke="var(--ink)" opacity=".4" stroke-width="2.2" stroke-linecap="round" />
+      ${skeletonLines(107, 75, [110, 158])}
     </g>
 
     <g opacity="0">
-      <circle cx="197.5" cy="202.5" r="17" fill="var(--surface)" stroke="var(--accent)" />
-      <path d="M190.5 202.5h14M197.5 195.5v14" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" />
+      <circle cx="190" cy="202.5" r="17" fill="var(--surface)" stroke="var(--accent)" />
+      <path d="M183 202.5h14M190 195.5v14" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" />
       <animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;.17;.23;.31;.37;1" dur="${duration}s" repeatCount="indefinite" />
     </g>
 
-    <g id="inserted-card" opacity="${pointer ? "0" : "1"}" transform="translate(197.5 202.5)">
+    <g id="inserted-card" opacity="${pointer ? "0" : "1"}" transform="translate(190 202.5)">
       <g>
         ${pointer ? `<animateTransform attributeName="transform" type="scale" values=".94;.94;1.018;1;1" keyTimes="0;.36;.43;.49;1" calcMode="spline" keySplines="${easingSegments("gentle", 4)}" dur="${duration}s" repeatCount="indefinite" />` : ""}
-        <g transform="translate(-197.5 -202.5)">
-          <rect x="43" y="162.5" width="309" height="80" rx="var(--radius)" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="2" stroke-dasharray="7 6">
+        <g transform="translate(-190 -202.5)">
+          <rect x="40" y="162.5" width="300" height="80" rx="var(--radius)" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="2" stroke-dasharray="7 6">
             ${pointer ? `<animate attributeName="opacity" values="1;1;0;0;1" keyTimes="0;.6;.68;.9;1" dur="${duration}s" repeatCount="indefinite" />` : ""}
           </rect>
-          <rect x="43" y="162.5" width="309" height="80" rx="var(--radius)" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="2" opacity="${pointer ? "0" : "1"}">
+          <rect x="40" y="162.5" width="300" height="80" rx="var(--radius)" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="2" opacity="${pointer ? "0" : "1"}">
             ${pointer ? `<animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;.61;.69;.9;1" dur="${duration}s" repeatCount="indefinite" />` : ""}
           </rect>
-          <circle cx="79" cy="202.5" r="15" fill="var(--accent-soft)" stroke="var(--accent)" stroke-opacity=".42" />
-          <path d="M72 202.5h14" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" />
-          ${skeletonLines(110, 189.5, [134, 86])}
+          <circle cx="76" cy="202.5" r="15" fill="var(--accent-soft)" stroke="var(--accent)" stroke-opacity=".42" />
+          <path d="M69 202.5h14" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" />
+          ${skeletonLines(107, 189.5, [134, 86])}
         </g>
       </g>
       ${pointer ? `<animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;.34;.39;.9;1" dur="${duration}s" repeatCount="indefinite" />` : `<animate attributeName="opacity" values="1;1;.76;1;1" keyTimes="0;.56;.66;.78;1" dur="${duration}s" repeatCount="indefinite" />`}
@@ -98,32 +99,27 @@ function flowScene(scene) {
 
     <g>
       ${pointer ? `<animateTransform attributeName="transform" type="translate" values="0 -56;0 -56;0 2;0 0;0 0;0 -56" keyTimes="0;.31;.42;.47;.88;1" calcMode="spline" keySplines="${easingSegments("gentle", 5)}" dur="${duration}s" repeatCount="indefinite" />` : ""}
-      <rect x="43" y="277" width="309" height="80" rx="var(--radius)" fill="var(--surface)" stroke="var(--border-strong)" />
-      <circle cx="79" cy="317" r="15" fill="var(--muted)" />
-      <path d="M73 311l12 12M85 311l-12 12" stroke="var(--ink)" opacity=".32" stroke-width="2.2" stroke-linecap="round" />
-      ${skeletonLines(110, 304, [102, 158])}
+      <rect x="40" y="277" width="300" height="80" rx="var(--radius)" fill="var(--surface)" stroke="var(--border-strong)" />
+      <circle cx="76" cy="317" r="15" fill="var(--muted)" />
+      <path d="M70 311l12 12M82 311l-12 12" stroke="var(--ink)" opacity=".32" stroke-width="2.2" stroke-linecap="round" />
+      ${skeletonLines(107, 304, [102, 150])}
     </g>
 
-    <g transform="translate(522.5 202.5)">
-      <g>
-        ${pointer ? `<animateTransform attributeName="transform" type="scale" values=".638;.638;1.006;1;1;.638" keyTimes="0;.31;.42;.47;.88;1" calcMode="spline" keySplines="${easingSegments("gentle", 5)}" dur="${duration}s" repeatCount="indefinite" />` : ""}
-        <g transform="translate(-522.5 -202.5)">
-          <rect x="368" y="48" width="309" height="309" rx="var(--radius)" fill="var(--surface)" stroke="var(--border)" />
-          <rect x="388" y="68" width="72" height="7" rx="3.5" fill="var(--ink)" opacity=".14" />
-          <rect x="468" y="68" width="42" height="7" rx="3.5" fill="var(--ink)" opacity=".07" />
-          ${[91, 171, 251].map((y, index) => `<g><rect x="388" y="${y}" width="269" height="70" rx="var(--radius)" fill="var(--surface)" stroke="var(--border)"/><rect x="388" y="${y}" width="269" height="70" rx="var(--radius)" fill="var(--accent-soft)" stroke="var(--accent)" opacity="0">${index === 0 ? `<animate attributeName="opacity" values="0;0;.18;.18;0" keyTimes="0;.45;.52;.64;1" dur="${duration}s" repeatCount="indefinite" />` : ""}</rect><rect x="406" y="${y + 20}" width="30" height="30" rx="var(--radius)" fill="${index === 0 ? "var(--accent-soft)" : "var(--muted)"}"/><rect x="452" y="${y + 27}" width="${index === 0 ? 104 : 82}" height="8" rx="4" fill="var(--ink)" opacity="${index === 0 ? ".2" : ".11"}"/></g>`).join("")}
-        </g>
-      </g>
+    <g id="step-picker">
+      <rect x="380" y="48" width="300" height="309" rx="var(--radius)" fill="var(--surface)" stroke="var(--border)" />
+      <rect x="400" y="68" width="72" height="7" rx="3.5" fill="var(--ink)" opacity=".14" />
+      <rect x="480" y="68" width="42" height="7" rx="3.5" fill="var(--ink)" opacity=".07" />
+      ${[91, 171, 251].map((y, index) => `<g${index === 0 ? ` id="clicked-option"` : ""}><rect x="400" y="${y}" width="260" height="70" rx="var(--radius)" fill="var(--surface)" stroke="var(--border)"/><rect x="400" y="${y}" width="260" height="70" rx="var(--radius)" fill="var(--accent-soft)" stroke="var(--accent)" opacity="0">${index === 0 ? `<animate attributeName="opacity" values="0;0;.08;.42;.16;0;0" keyTimes="0;.47;.53;.58;.61;.69;1" calcMode="spline" keySplines="${easingSegments("quick", 6)}" dur="${duration}s" repeatCount="indefinite" /><animate attributeName="stroke-width" values="1;1;1;2.2;1.2;1;1" keyTimes="0;.47;.53;.58;.61;.69;1" dur="${duration}s" repeatCount="indefinite" />` : ""}</rect><rect x="418" y="${y + 20}" width="30" height="30" rx="var(--radius)" fill="${index === 0 ? "var(--accent-soft)" : "var(--muted)"}"/><rect x="464" y="${y + 27}" width="${index === 0 ? 104 : 82}" height="8" rx="4" fill="var(--ink)" opacity="${index === 0 ? ".2" : ".11"}"/></g>`).join("")}
     </g>
     ${pointer ? cursor(duration, [
       { at: 0, x: 654, y: 350 },
       { at: 0.07, x: 654, y: 350 },
-      { at: 0.29, x: 197.5, y: 202.5 },
-      { at: 0.38, x: 197.5, y: 202.5 },
-      { at: 0.53, x: 506, y: 126 },
-      { at: 0.62, x: 506, y: 126 },
-      { at: 0.76, x: 270, y: 202.5 },
-      { at: 0.87, x: 270, y: 202.5 },
+      { at: 0.29, x: 190, y: 202.5 },
+      { at: 0.38, x: 190, y: 202.5 },
+      { at: 0.53, x: 520, y: 126 },
+      { at: 0.62, x: 520, y: 126 },
+      { at: 0.76, x: 265, y: 202.5 },
+      { at: 0.87, x: 265, y: 202.5 },
       { at: 1, x: 654, y: 350 },
     ], [0.31, 0.58]) : ""}
   `;
@@ -212,7 +208,6 @@ export function renderSvg(scene) {
     @media (prefers-reduced-motion: reduce) { svg { visibility: visible; } }
   </style>
   <defs>${dots()}<filter id="cursor-shadow" x="-60%" y="-60%" width="220%" height="220%"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#000" flood-opacity=".28" /></filter></defs>
-  <rect width="${viewBox.width}" height="${viewBox.height}" fill="var(--background)" />
   ${content}
 </svg>`;
 }

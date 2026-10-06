@@ -57,7 +57,9 @@ export function planScene(analysis, options, theme) {
   const palette = analysis.palettes[theme];
   const evidence = analysis.concepts.evidence.filter((item) => item.kind === winner).slice(0, 5);
   const profile = motionProfile(concept, evidence);
+  const backdrop = analysis.visual?.backdrop || "none";
   return {
+    backdrop,
     concept,
     containers: concept === "flow" ? 5 : 4,
     duration: options.duration,
@@ -69,6 +71,7 @@ export function planScene(analysis, options, theme) {
     schemaVersion: 1,
     source: analysis.source,
     theme,
+    typography: analysis.typography,
     viewport: { height: options.height, width: options.width },
   };
 }

@@ -1,6 +1,6 @@
 import fs from "node:fs/promises";
 import path from "node:path";
-import { collectTextFiles, isUrl, readText, slugify } from "./utils.js";
+import { collectFilesByExtensions, collectTextFiles, isUrl, readText, slugify } from "./utils.js";
 
 const SIGNALS = {
   flow: ["automation", "canvas", "edge", "flow", "node", "pipeline", "scenario", "step", "workflow", "xyflow"],
@@ -65,6 +65,7 @@ function buildPalette(lightVariables, darkVariables) {
     border: token(lightVariables, ["border", "input"], "#e5e7eb"),
     foreground: token(lightVariables, ["foreground", "text", "card-foreground"], "#171717"),
     muted: token(lightVariables, ["muted", "secondary"], "#f4f4f5"),
+    mutedForeground: token(lightVariables, ["muted-foreground", "secondary-foreground"], "#71717a"),
     radius: token(lightVariables, ["radius", "radius-lg"], "12px"),
     surface: token(lightVariables, ["card", "popover", "surface"], "#ffffff"),
   };
@@ -75,10 +76,45 @@ function buildPalette(lightVariables, darkVariables) {
     border: token(combinedDark, ["border", "input"], "rgb(255 255 255 / 10%)"),
     foreground: token(combinedDark, ["foreground", "text", "card-foreground"], "#fafafa"),
     muted: token(combinedDark, ["muted", "secondary"], "#27272a"),
+    mutedForeground: token(combinedDark, ["muted-foreground", "secondary-foreground"], "#a1a1aa"),
     radius: token(combinedDark, ["radius", "radius-lg"], light.radius),
     surface: token(combinedDark, ["card", "popover", "surface"], "#202024"),
   };
   return { dark, light };
+}
+
+function readableFontName(identifier) {
+  return identifier
+    .replace(/_/g, " ")
+    .replace(/([a-z])([A-Z])/g, "$1 $2")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function inferTypography(cssText, sourceText) {
+  const explicit = [...cssText.matchAll(/font-family\s*:\s*([^;}{]+)/gi)]
+    .map((match) => match[1].trim())
+    .find((value) => !/inherit|var\(/i.test(value));
+  if (explicit) return { family: explicit.split(",")[0].replace(/["']/g, "").trim(), stack: explicit };
+
+  const imported = [...sourceText.matchAll(/import\s*\{([^}]+)\}\s*from\s*["']next\/font\/(?:google|local)["']/g)]
+    .flatMap((match) => match[1].split(",").map((name) => name.trim().split(/\s+as\s+/i)[0]))
+    .filter(Boolean);
+  const identifier = imported.find((name) => !/mono/i.test(name)) || imported[0];
+  const family = identifier ? readableFontName(identifier) : "system-ui";
+  return { family, stack: identifier ? `"${family}", ui-sans-serif, system-ui, sans-serif` : "ui-sans-serif, system-ui, sans-serif" };
+}
+
+function inferBackdrop(sourceText) {
+  const hasDotCanvas = /BackgroundVariant\.Dots|background-pattern[^\n]{0,120}\bdots?\b|(?:repeating-)?radial-gradient\s*\([^)]{0,180}\b(?:circle|dot)/i.test(sourceText);
+  return hasDotCanvas ? "dots" : "none";
+}
+
+async function findFontAsset(root, family) {
+  const fonts = await collectFilesByExtensions(root, new Set([".woff", ".woff2", ".ttf", ".otf"]), 200);
+  if (fonts.length === 0) return undefined;
+  const wanted = family.toLowerCase().replace(/[^a-z0-9]/g, "");
+  return fonts.find((file) => path.basename(file).toLowerCase().replace(/[^a-z0-9]/g, "").includes(wanted)) || fonts[0];
 }
 
 function scoreFile(relative, content) {
@@ -127,20 +163,28 @@ async function analyzeRepository(source) {
   const paths = await collectTextFiles(root);
   const files = [];
   let cssText = "";
+  let sourceText = "";
+  let backdrop = "none";
   for (const absolute of paths) {
     const content = await readText(absolute);
     const relative = path.relative(root, absolute);
     if (/\.(css|scss|sass)$/i.test(relative)) cssText += `\n${content}`;
+    if (sourceText.length < 2_000_000) sourceText += `\n${content.slice(0, 2_000_000 - sourceText.length)}`;
+    if (backdrop === "none") backdrop = inferBackdrop(content);
     files.push({ relative, scores: scoreFile(relative, content) });
   }
   const lightVariables = readTheme(cssText, ":root");
   const darkVariables = readTheme(cssText, ".dark");
   const concepts = rankConcepts(files);
+  const typography = inferTypography(cssText, sourceText);
+  typography.asset = await findFontAsset(root, typography.family);
   return {
     concepts,
     name: path.basename(root),
     palettes: buildPalette(lightVariables, darkVariables),
     source: { input: root, scannedFiles: paths.length, type: "repository" },
+    typography,
+    visual: { backdrop },
   };
 }
 
@@ -173,11 +217,14 @@ async function analyzeUrl(source) {
   const title = html.match(/<title[^>]*>([^<]+)<\/title>/i)?.[1]?.trim() || new URL(response.url).hostname;
   const scores = scoreFile(response.url, html);
   const files = [{ relative: response.url, scores }];
+  const typography = inferTypography(cssText, html);
   return {
     concepts: rankConcepts(files),
     name: title,
     palettes: buildPalette(lightVariables, darkVariables),
     source: { input: response.url, linkedStylesheets: sheets.length, type: "url" },
+    typography,
+    visual: { backdrop: inferBackdrop(`${html}\n${cssText}`) },
   };
 }
 
@@ -186,4 +233,4 @@ export async function analyzeSource(source) {
   return { ...analysis, slug: slugify(analysis.name) };
 }
 
-export const __testing = { buildPalette, findBlock, parseVariables, rankConcepts, scoreFile };
+export const __testing = { buildPalette, findBlock, inferBackdrop, inferTypography, parseVariables, rankConcepts, scoreFile };

@@ -8,24 +8,27 @@ Tool scans source without executing it, ranks visual concepts, extracts light/da
 
 - One asset per command.
 - Local repository or public HTTP(S) URL input.
-- Automatic light/dark accent, surface, border, radius, and background extraction.
+- Automatic light/dark accent, surface, border, radius, background, and typography extraction.
 - Four scene types: flow, list, dashboard, editor.
 - 3–5 major containers, little to no text, generous whitespace.
 - Cursor, selection, progress, reveal, or chart-sweep motion.
 - Shared visual grammar, varied choreography: camera, pointer, and emphasis are selected per story instead of applied globally.
 - Exact `--width`, `--height`, and `--duration` controls.
 - Analysis manifest explains selected concept and source evidence.
-- Display preview with light/dark switching and Display, Card, Split, and Bento landing-page contexts.
+- Display preview with light/dark switching, asset switching, ZIP download, and Display, Card, Split, and Bento landing-page contexts.
 
-Batch generation is intentionally deferred. Future mode can use ranked concepts already stored in manifest to create a coordinated asset set.
+Batch generation is intentionally deferred. The preview and manifest already model a coordinated asset set, including a combined alternating Story scene when multiple assets are supplied.
 The set should share palette, density, geometry, and line treatment while rotating motion profiles; zoom is reserved for moments that benefit from focus.
 
 ## Motion rules
 
 - Model meaningful before/after layouts. Insertion moves existing objects apart before the new object settles into the opened space.
+- Every authored click must cause an immediate response on its target: a pressed state, highlight, selection, reveal, or layout change. A cursor ripple alone is not interaction feedback.
 - Never animate a stroke from zero length. Keep connector geometry valid and reveal complete segments with opacity or a non-zero clip.
 - Use motion tokens by role: gentle spring-like settling for layout, quick easing for direct feedback, and smooth in/out travel for pointers.
 - Add only slight overshoot to primary movement. Supporting motion should stay quiet and should not repeat every effect used elsewhere in the set.
+- Treat the asset backdrop as an explicit art-direction choice. Assets are unframed by default; add a canvas treatment such as dots only when it belongs to the source product or the story.
+- Assume landing pages will place assets inside cards or sections. Do not add an automatic outer plate around the animation and avoid redundant containers inside containers.
 
 ## Install
 
@@ -66,8 +69,12 @@ output/
   project-flow.light.svg
   project-flow.dark.svg
   project-flow.preview.html
+  project-flow.preview-font.ttf
   project-flow.manifest.json
+  project-flow.assets.zip
 ```
+
+The copied preview font is included only when a matching local font file is found. The ZIP contains every generated asset, the preview, its manifest, and the preview font when present.
 
 SVG and preview work without extra system tools. Video and GIF exports use local Chrome plus FFmpeg:
 
