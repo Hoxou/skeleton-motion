@@ -78,6 +78,19 @@ test("keeps an asset unframed when the source has no authored backdrop", () => {
   assert.doesNotMatch(svg, /<rect width="720" height="405" fill="url\(#dots\)"/);
 });
 
+test("uses voice-to-task motion without recycling cursor choreography", () => {
+  const voiceAnalysis = structuredClone(analysis);
+  voiceAnalysis.features = { voice: true };
+  const scene = planScene(voiceAnalysis, { concept: "flow", duration: 5, height: 405, width: 720 }, "light");
+  const svg = renderSvg(scene);
+
+  assert.equal(scene.motion, "voice-to-task");
+  assert.equal(scene.motionProfile.pointer, "none");
+  assert.match(svg, /id="voice-control"/);
+  assert.match(svg, /id="voice-updated-task"/);
+  assert.doesNotMatch(svg, /id="cursor"/);
+});
+
 test("renders display-first landing-page context controls", () => {
   const light = { file: "flow.light.svg", theme: "light", viewport: { height: 405, width: 720 } };
   const dark = { file: "flow.dark.svg", theme: "dark", viewport: { height: 405, width: 720 } };
@@ -90,6 +103,9 @@ test("renders display-first landing-page context controls", () => {
   assert.match(html, /data-scene-button="bento"/);
   assert.match(html, /data-asset-button="flow"/);
   assert.match(html, /href="\.\/flow\.assets\.zip" download/);
+  assert.match(html, /--control-radius: 14px/);
+  assert.match(html, /\.download[^}]*border-radius: var\(--control-radius\)/);
+  assert.match(html, /\.option-button[^}]*background: color-mix/);
   assert.doesNotMatch(html, /\.asset-view\s*\{[^}]*background:/);
 });
 

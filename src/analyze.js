@@ -110,6 +110,11 @@ function inferBackdrop(sourceText) {
   return hasDotCanvas ? "dots" : "none";
 }
 
+function inferFeatures(sourceText) {
+  const voice = /voice[- ](?:first|assisted|command|commands|control|input)|speech[- ]to[- ]text/i.test(sourceText);
+  return { voice };
+}
+
 async function findFontAsset(root, family) {
   const fonts = await collectFilesByExtensions(root, new Set([".woff", ".woff2", ".ttf", ".otf"]), 200);
   if (fonts.length === 0) return undefined;
@@ -165,12 +170,14 @@ async function analyzeRepository(source) {
   let cssText = "";
   let sourceText = "";
   let backdrop = "none";
+  let voice = false;
   for (const absolute of paths) {
     const content = await readText(absolute);
     const relative = path.relative(root, absolute);
     if (/\.(css|scss|sass)$/i.test(relative)) cssText += `\n${content}`;
     if (sourceText.length < 2_000_000) sourceText += `\n${content.slice(0, 2_000_000 - sourceText.length)}`;
     if (backdrop === "none") backdrop = inferBackdrop(content);
+    if (!voice) voice = inferFeatures(content).voice;
     files.push({ relative, scores: scoreFile(relative, content) });
   }
   const lightVariables = readTheme(cssText, ":root");
@@ -183,6 +190,7 @@ async function analyzeRepository(source) {
     name: path.basename(root),
     palettes: buildPalette(lightVariables, darkVariables),
     source: { input: root, scannedFiles: paths.length, type: "repository" },
+    features: { voice },
     typography,
     visual: { backdrop },
   };
@@ -218,8 +226,10 @@ async function analyzeUrl(source) {
   const scores = scoreFile(response.url, html);
   const files = [{ relative: response.url, scores }];
   const typography = inferTypography(cssText, html);
+  const features = inferFeatures(html);
   return {
     concepts: rankConcepts(files),
+    features,
     name: title,
     palettes: buildPalette(lightVariables, darkVariables),
     source: { input: response.url, linkedStylesheets: sheets.length, type: "url" },
@@ -233,4 +243,4 @@ export async function analyzeSource(source) {
   return { ...analysis, slug: slugify(analysis.name) };
 }
 
-export const __testing = { buildPalette, findBlock, inferBackdrop, inferTypography, parseVariables, rankConcepts, scoreFile };
+export const __testing = { buildPalette, findBlock, inferBackdrop, inferFeatures, inferTypography, parseVariables, rankConcepts, scoreFile };

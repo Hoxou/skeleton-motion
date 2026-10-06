@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="405" viewBox="0 0 720 405" role="img" aria-labelledby="title description">
+  <title id="title">ai-project-operations-for-voice-first-product-teams-bisonflow-fl — voice-to-task</title>
+  <desc id="description">Minimal flow product illustration generated from https://bisonflow.com/en.</desc>
+  <style>
+    :root {
+      --accent: #1447e6;
+      --accent-soft: color-mix(in oklab, #1447e6 12%, #fff);
+      --background: #fff;
+      --border: #e4e4e7;
+      --border-strong: color-mix(in oklab, #09090b 18%, #fff);
+      --cursor-outline: #fff;
+      --ink: #09090b;
+      --muted: #f4f4f5;
+      --radius: 14px;
+      --surface: #fff;
+    }
+    * { vector-effect: non-scaling-stroke; }
+    @media (prefers-reduced-motion: reduce) { svg { visibility: visible; } }
+  </style>
+  <defs><pattern id="dots" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="1.5" cy="1.5" r="1.25" fill="var(--border)" /></pattern><filter id="cursor-shadow" x="-60%" y="-60%" width="220%" height="220%"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#000" flood-opacity=".28" /></filter></defs>
+
+    <rect width="720" height="405" fill="url(#dots)" opacity=".48" />
+
+    <g>
+      <rect x="38" y="74" width="430" height="64" rx="var(--radius)" fill="var(--surface)" stroke="var(--border)" />
+
+      <circle cx="70" cy="106" r="12" fill="var(--muted)" />
+      <rect x="98" y="95" width="142" height="7" rx="3.5" fill="var(--ink)" opacity=".18" />
+      <rect x="98" y="110" width="220" height="5" rx="2.5" fill="var(--ink)" opacity=".08" />
+      <rect x="376" y="93" width="66" height="26" rx="13" fill="var(--muted)" />
+
+    </g><g id="voice-updated-task">
+      <rect x="38" y="171" width="430" height="64" rx="var(--radius)" fill="var(--surface)" stroke="var(--border)" />
+      <rect x="38" y="171" width="430" height="64" rx="var(--radius)" fill="var(--accent-soft)" stroke="var(--accent)" opacity="0">
+        <animate attributeName="opacity" values="0;0;.08;.28;.18;.18;0" keyTimes="0;.46;.54;.62;.72;.88;1" dur="5s" repeatCount="indefinite" />
+      </rect>
+      <circle cx="70" cy="203" r="12" fill="var(--accent-soft)" />
+      <rect x="98" y="192" width="176" height="7" rx="3.5" fill="var(--ink)" opacity=".18" />
+      <rect x="98" y="207" width="196" height="5" rx="2.5" fill="var(--ink)" opacity=".08" />
+      <rect x="376" y="190" width="66" height="26" rx="13" fill="var(--muted)" />
+      <rect x="376" y="190" width="66" height="26" rx="13" fill="var(--accent)" opacity="0">
+        <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;.58;.68;.9;1" dur="5s" repeatCount="indefinite" />
+      </rect><path d="M399 203l6 6 12-13" fill="none" stroke="var(--surface)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" opacity="0">
+        <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;.64;.7;.9;1" dur="5s" repeatCount="indefinite" />
+      </path>
+    </g><g>
+      <rect x="38" y="268" width="430" height="64" rx="var(--radius)" fill="var(--surface)" stroke="var(--border)" />
+
+      <circle cx="70" cy="300" r="12" fill="var(--muted)" />
+      <rect x="98" y="289" width="118" height="7" rx="3.5" fill="var(--ink)" opacity=".18" />
+      <rect x="98" y="304" width="252" height="5" rx="2.5" fill="var(--ink)" opacity=".08" />
+      <rect x="376" y="287" width="66" height="26" rx="13" fill="var(--muted)" />
+
+    </g>
+
+    <path d="M468 203 H504" stroke="var(--accent)" stroke-width="2" opacity="0">
+      <animate attributeName="opacity" values="0;0;.7;.7;0;0" keyTimes="0;.42;.5;.7;.82;1" dur="5s" repeatCount="indefinite" />
+    </path>
+
+    <g id="voice-control">
+      <rect x="504" y="74" width="178" height="258" rx="var(--radius)" fill="var(--surface)" stroke="var(--border)" />
+      <circle cx="593" cy="132" r="25" fill="var(--accent-soft)" />
+      <path d="M593 117a8 8 0 0 0-8 8v9a8 8 0 0 0 16 0v-9a8 8 0 0 0-8-8Zm-14 16v2a14 14 0 0 0 28 0v-2M593 149v9" fill="none" stroke="var(--accent)" stroke-width="2.4" stroke-linecap="round" />
+      <circle cx="593" cy="132" r="25" fill="none" stroke="var(--accent)" stroke-width="2" opacity="0">
+        <animate attributeName="r" values="25;25;34;42;42;25" keyTimes="0;.12;.24;.38;.46;1" dur="5s" repeatCount="indefinite" />
+        <animate attributeName="opacity" values="0;0;.5;0;0;0" keyTimes="0;.12;.24;.38;.46;1" dur="5s" repeatCount="indefinite" />
+      </circle>
+      <rect x="542" y="202" width="8" height="8" rx="4" fill="var(--accent)" opacity=".72">
+      <animate attributeName="y" values="202;202;192;198;202;202" keyTimes="0;.16;.3;.42;.52;1" dur="5s" repeatCount="indefinite" />
+      <animate attributeName="height" values="8;8;28;16;8;8" keyTimes="0;.16;.3;.42;.52;1" dur="5s" repeatCount="indefinite" />
+      <animate attributeName="opacity" values=".24;.24;1;.68;.24;.24" keyTimes="0;.16;.3;.42;.52;1" dur="5s" repeatCount="indefinite" />
+    </rect><rect x="564" y="200" width="8" height="12" rx="4" fill="var(--accent)" opacity=".72">
+      <animate attributeName="y" values="200;200;186.5;194.5;200;200" keyTimes="0;.16;.3;.42;.52;1" dur="5s" repeatCount="indefinite" />
+      <animate attributeName="height" values="12;12;39;23;12;12" keyTimes="0;.16;.3;.42;.52;1" dur="5s" repeatCount="indefinite" />
+      <animate attributeName="opacity" values=".24;.24;1;.68;.24;.24" keyTimes="0;.16;.3;.42;.52;1" dur="5s" repeatCount="indefinite" />
+    </rect><rect x="586" y="202" width="8" height="8" rx="4" fill="var(--accent)" opacity=".72">
+      <animate attributeName="y" values="202;202;181;191;202;202" keyTimes="0;.16;.3;.42;.52;1" dur="5s" repeatCount="indefinite" />
+      <animate attributeName="height" values="8;8;50;30;8;8" keyTimes="0;.16;.3;.42;.52;1" dur="5s" repeatCount="indefinite" />
+      <animate attributeName="opacity" values=".24;.24;1;.68;.24;.24" keyTimes="0;.16;.3;.42;.52;1" dur="5s" repeatCount="indefinite" />
+    </rect><rect x="608" y="200" width="8" height="12" rx="4" fill="var(--accent)" opacity=".72">
+      <animate attributeName="y" values="200;200;189.5;197.5;200;200" keyTimes="0;.16;.3;.42;.52;1" dur="5s" repeatCount="indefinite" />
+      <animate attributeName="height" values="12;12;33;17;12;12" keyTimes="0;.16;.3;.42;.52;1" dur="5s" repeatCount="indefinite" />
+      <animate attributeName="opacity" values=".24;.24;1;.68;.24;.24" keyTimes="0;.16;.3;.42;.52;1" dur="5s" repeatCount="indefinite" />
+    </rect><rect x="630" y="202" width="8" height="8" rx="4" fill="var(--accent)" opacity=".72">
+      <animate attributeName="y" values="202;202;184;194;202;202" keyTimes="0;.16;.3;.42;.52;1" dur="5s" repeatCount="indefinite" />
+      <animate attributeName="height" values="8;8;44;24;8;8" keyTimes="0;.16;.3;.42;.52;1" dur="5s" repeatCount="indefinite" />
+      <animate attributeName="opacity" values=".24;.24;1;.68;.24;.24" keyTimes="0;.16;.3;.42;.52;1" dur="5s" repeatCount="indefinite" />
+    </rect>
+      <rect x="532" y="258" width="122" height="7" rx="3.5" fill="var(--ink)" opacity=".1" />
+      <rect x="548" y="277" width="90" height="5" rx="2.5" fill="var(--ink)" opacity=".06" />
+    </g>
+
+</svg>

@@ -35,6 +35,11 @@ test("only selects a dotted backdrop when the source contains that treatment", (
   assert.equal(__testing.inferBackdrop(`<ReactFlow nodes={nodes} edges={edges} />`), "none");
 });
 
+test("detects a voice-first product story", () => {
+  assert.equal(__testing.inferFeatures("Create and update tasks with voice commands.").voice, true);
+  assert.equal(__testing.inferFeatures("Drag tasks between project columns.").voice, false);
+});
+
 test("ranks a reachable automation canvas as a flow concept", async (context) => {
   const fixture = await fs.mkdtemp(path.join(os.tmpdir(), "skeleton-motion-test-"));
   context.after(() => fs.rm(fixture, { force: true, recursive: true }));

@@ -1,85 +1,43 @@
-import { escapeXml } from "./utils.js";
-
-function safeCss(value, fallback) {
-  const text = String(value || "").trim();
-  return text && !/[;{}<>]/.test(text) ? text : fallback;
-}
-
-function labelFromId(value) {
-  return String(value).replace(/[-_]+/g, " ").replace(/\b\w/g, (letter) => letter.toUpperCase());
-}
-
-export function renderPreview({ assets, fontFile, name, scenes, zipFile }) {
-  const groups = assets?.length ? assets : [{ id: name, label: labelFromId(name), scenes }];
-  const primary = groups[0];
-  const light = primary.scenes.find((scene) => scene.theme === "light") || primary.scenes[0];
-  const dark = primary.scenes.find((scene) => scene.theme === "dark") || primary.scenes[0];
-  const hasBoth = light !== dark;
-  const lightPalette = light.palette || {};
-  const darkPalette = dark.palette || lightPalette;
-  const typography = light.typography || {};
-  const fontStack = safeCss(typography.stack, "ui-sans-serif, system-ui, sans-serif");
-  const sceneRadius = Math.max(0, Math.min(32, Number.parseFloat(lightPalette.radius) || 0));
-  const archive = zipFile || `${name}.assets.zip`;
-
-  function picture(group, label, active = false, switchable = true) {
-    const groupLight = group.scenes.find((scene) => scene.theme === "light") || group.scenes[0];
-    const groupDark = group.scenes.find((scene) => scene.theme === "dark") || group.scenes[0];
-    const groupHasBoth = groupLight !== groupDark;
-    const switchAttributes = switchable ? ` data-asset-view="${escapeXml(group.id)}"` : "";
-    return `<div class="asset-view${active ? " is-active" : ""}"${switchAttributes} aria-label="${escapeXml(group.label)} animation in ${label}">
-      <img class="light" src="./${escapeXml(groupLight.file)}" width="${groupLight.viewport.width}" height="${groupLight.viewport.height}" alt="${escapeXml(group.label)} product motion, light theme">
-      ${groupHasBoth ? `<img class="dark" src="./${escapeXml(groupDark.file)}" width="${groupDark.viewport.width}" height="${groupDark.viewport.height}" alt="${escapeXml(group.label)} product motion, dark theme">` : ""}
-    </div>`;
-  }
-
-  const assetSlot = (label) => `<div class="asset-slot">${groups.map((group, index) => picture(group, label, index === 0)).join("")}</div>`;
-  const hasStory = groups.length > 1;
-  const sceneOptions = [["display", "Display"], ["card", "Card"], ["split", "Split"], ["bento", "Bento"], ...(hasStory ? [["story", "Story"]] : [])];
-  const storyFirst = groups[0];
-  const storySecond = groups[1] || groups[0];
-  const storyScene = hasStory ? `<section class="scene" data-scene-panel="story"><div class="story-layout"><article class="story-row"><div><p class="eyebrow">One connected system</p><h2>Build the flow.</h2><p>Each asset keeps its own motion while sharing the product’s visual language.</p></div>${picture(storyFirst, "story row one", true, false)}</article><article class="story-row reverse">${picture(storySecond, "story row two", true, false)}<div><p class="eyebrow">Then keep moving</p><h2>See what changed.</h2><p>Alternating copy and product motion turns a set of assets into a coherent landing-page narrative.</p></div></article></div></section>` : "";
-
-  return `<!doctype html>
-<html lang="en" data-theme="light" data-scene="display" data-asset="${escapeXml(primary.id)}">
+<!doctype html>
+<html lang="en" data-theme="light" data-scene="display" data-asset="ai-project-operations-for-voice-first-product-teams-bisonflow-fl">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" href="data:,">
-  <title>Display — ${escapeXml(name)}</title>
+  <title>Display — ai-project-operations-for-voice-first-product-teams-bisonflow-fl</title>
   <style>
-    ${fontFile ? `@font-face { font-family: "Source Preview"; src: url("./${escapeXml(fontFile)}"); font-display: swap; }` : ""}
+    
     * { box-sizing: border-box; }
     :root {
       color-scheme: light;
-      --accent: ${safeCss(lightPalette.accent, "#4f46e5")};
-      --page: color-mix(in oklab, ${safeCss(lightPalette.background, "#fff")} 96%, ${safeCss(lightPalette.foreground, "#171717")} 4%);
-      --page-ink: ${safeCss(lightPalette.foreground, "#171717")};
-      --copy: ${safeCss(lightPalette.mutedForeground, "#71717a")};
-      --panel: ${safeCss(lightPalette.surface, "#fff")};
-      --panel-solid: ${safeCss(lightPalette.muted, "#f4f4f5")};
-      --panel-border: ${safeCss(lightPalette.border, "#e5e7eb")};
+      --accent: #1447e6;
+      --page: color-mix(in oklab, #fff 96%, #09090b 4%);
+      --page-ink: #09090b;
+      --copy: #71717b;
+      --panel: #fff;
+      --panel-solid: #f4f4f5;
+      --panel-border: #e4e4e7;
       --page-glow: color-mix(in oklab, var(--accent) 3%, transparent);
       --control-radius: 14px;
-      --scene-radius: ${sceneRadius}px;
+      --scene-radius: 14px;
       --switch: color-mix(in oklab, var(--panel) 88%, transparent);
       --switch-hover: var(--panel);
     }
     [data-theme="dark"] {
       color-scheme: dark;
-      --accent: ${safeCss(darkPalette.accent, "#818cf8")};
-      --page: color-mix(in oklab, ${safeCss(darkPalette.background, "#111113")} 96%, ${safeCss(darkPalette.foreground, "#fafafa")} 4%);
-      --page-ink: ${safeCss(darkPalette.foreground, "#fafafa")};
-      --copy: ${safeCss(darkPalette.mutedForeground, "#a1a1aa")};
-      --panel: ${safeCss(darkPalette.surface, "#202024")};
-      --panel-solid: ${safeCss(darkPalette.muted, "#27272a")};
-      --panel-border: ${safeCss(darkPalette.border, "rgb(255 255 255 / 10%)")};
+      --accent: #1f3fad;
+      --page: color-mix(in oklab, #09090b 96%, #fafafa 4%);
+      --page-ink: #fafafa;
+      --copy: #9f9fa9;
+      --panel: #18181b;
+      --panel-solid: #27272a;
+      --panel-border: #ffffff1a;
       --page-glow: color-mix(in oklab, var(--accent) 4%, transparent);
       --switch: color-mix(in oklab, var(--panel) 86%, transparent);
       --switch-hover: var(--panel);
     }
     html, body { min-height: 100%; }
-    body { margin: 0; min-height: 100vh; overflow-x: hidden; background: radial-gradient(circle at 47% 48%, var(--page-glow), transparent 46%), var(--page); color: var(--page-ink); font-family: ${fontFile ? `"Source Preview", ` : ""}${fontStack}; transition: background-color 320ms ease, color 320ms ease; }
+    body { margin: 0; min-height: 100vh; overflow-x: hidden; background: radial-gradient(circle at 47% 48%, var(--page-glow), transparent 46%), var(--page); color: var(--page-ink); font-family: Figtree; transition: background-color 320ms ease, color 320ms ease; }
     header { position: fixed; z-index: 3; inset: 0 0 auto; padding: 24px 28px; pointer-events: none; }
     .brand { display: flex; align-items: center; gap: 10px; width: max-content; font-size: 11px; font-weight: 650; letter-spacing: .18em; text-transform: uppercase; opacity: .66; }
     .brand::before { content: ""; width: 7px; height: 7px; background: currentColor; box-shadow: 9px 0 0 color-mix(in oklab, currentColor 34%, transparent); }
@@ -147,16 +105,28 @@ export function renderPreview({ assets, fontFile, name, scenes, zipFile }) {
 <body>
   <header><div class="brand"><span>Display</span></div></header>
   <aside class="controls" aria-label="Display controls">
-    ${hasBoth ? `<button class="theme-toggle" id="theme-toggle" type="button" aria-label="Switch to dark mode" aria-pressed="false"><svg class="moon" aria-hidden="true" viewBox="0 0 24 24" fill="none"><path d="M20.2 15.2A8.5 8.5 0 0 1 8.8 3.8 8.5 8.5 0 1 0 20.2 15.2Z" stroke="currentColor" stroke-width="1.8"/></svg><svg class="sun" aria-hidden="true" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3.5" stroke="currentColor" stroke-width="1.8"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2" stroke="currentColor" stroke-width="1.8"/></svg><span id="theme-label">Dark</span></button>` : ""}
-    <nav class="option-group" aria-label="Animation"><span class="group-label">Animation</span>${groups.map((group, index) => `<button class="option-button" type="button" data-asset-button="${escapeXml(group.id)}" aria-pressed="${index === 0}">${escapeXml(group.label)}</button>`).join("")}</nav>
-    <nav class="option-group" aria-label="Preview scene"><span class="group-label">Scene</span>${sceneOptions.map(([id, label], index) => `<button class="option-button" type="button" data-scene-button="${id}" aria-pressed="${index === 0}">${label}</button>`).join("")}</nav>
-    <a class="download" href="./${escapeXml(archive)}" download>Download ZIP</a>
+    <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Switch to dark mode" aria-pressed="false"><svg class="moon" aria-hidden="true" viewBox="0 0 24 24" fill="none"><path d="M20.2 15.2A8.5 8.5 0 0 1 8.8 3.8 8.5 8.5 0 1 0 20.2 15.2Z" stroke="currentColor" stroke-width="1.8"/></svg><svg class="sun" aria-hidden="true" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3.5" stroke="currentColor" stroke-width="1.8"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2" stroke="currentColor" stroke-width="1.8"/></svg><span id="theme-label">Dark</span></button>
+    <nav class="option-group" aria-label="Animation"><span class="group-label">Animation</span><button class="option-button" type="button" data-asset-button="ai-project-operations-for-voice-first-product-teams-bisonflow-fl" aria-pressed="true">Voice task</button></nav>
+    <nav class="option-group" aria-label="Preview scene"><span class="group-label">Scene</span><button class="option-button" type="button" data-scene-button="display" aria-pressed="true">Display</button><button class="option-button" type="button" data-scene-button="card" aria-pressed="false">Card</button><button class="option-button" type="button" data-scene-button="split" aria-pressed="false">Split</button><button class="option-button" type="button" data-scene-button="bento" aria-pressed="false">Bento</button></nav>
+    <a class="download" href="./ai-project-operations-for-voice-first-product-teams-bisonflow-fl.assets.zip" download>Download ZIP</a>
   </aside>
   <main>
-    <section class="scene display-scene is-active" data-scene-panel="display">${assetSlot("display view")}</section>
-    <section class="scene" data-scene-panel="card"><article class="feature-card"><div><p class="eyebrow">Automation</p><h2>Build flows in place.</h2><p>Add an action exactly where it belongs, without breaking the sequence.</p></div>${assetSlot("feature card")}</article></section>
-    <section class="scene" data-scene-panel="split"><div class="split-layout"><div><p class="eyebrow">Visual workflows</p><h1>Every step stays clear.</h1><p>Compose, inspect, and refine browser scenarios from one focused canvas.</p></div>${assetSlot("split feature")}</div></section>
-    <section class="scene" data-scene-panel="bento"><div class="bento-layout"><div class="bento-cell bento-asset">${assetSlot("bento feature")}</div><div class="bento-cell bento-copy"><p class="eyebrow">Flows</p><h2>Insert anywhere.</h2></div><div class="bento-cell bento-detail" aria-hidden="true"></div></div></section>${storyScene}
+    <section class="scene display-scene is-active" data-scene-panel="display"><div class="asset-slot"><div class="asset-view is-active" data-asset-view="ai-project-operations-for-voice-first-product-teams-bisonflow-fl" aria-label="Voice task animation in display view">
+      <img class="light" src="./ai-project-operations-for-voice-first-product-teams-bisonflow-fl.light.svg" width="720" height="405" alt="Voice task product motion, light theme">
+      <img class="dark" src="./ai-project-operations-for-voice-first-product-teams-bisonflow-fl.dark.svg" width="720" height="405" alt="Voice task product motion, dark theme">
+    </div></div></section>
+    <section class="scene" data-scene-panel="card"><article class="feature-card"><div><p class="eyebrow">Automation</p><h2>Build flows in place.</h2><p>Add an action exactly where it belongs, without breaking the sequence.</p></div><div class="asset-slot"><div class="asset-view is-active" data-asset-view="ai-project-operations-for-voice-first-product-teams-bisonflow-fl" aria-label="Voice task animation in feature card">
+      <img class="light" src="./ai-project-operations-for-voice-first-product-teams-bisonflow-fl.light.svg" width="720" height="405" alt="Voice task product motion, light theme">
+      <img class="dark" src="./ai-project-operations-for-voice-first-product-teams-bisonflow-fl.dark.svg" width="720" height="405" alt="Voice task product motion, dark theme">
+    </div></div></article></section>
+    <section class="scene" data-scene-panel="split"><div class="split-layout"><div><p class="eyebrow">Visual workflows</p><h1>Every step stays clear.</h1><p>Compose, inspect, and refine browser scenarios from one focused canvas.</p></div><div class="asset-slot"><div class="asset-view is-active" data-asset-view="ai-project-operations-for-voice-first-product-teams-bisonflow-fl" aria-label="Voice task animation in split feature">
+      <img class="light" src="./ai-project-operations-for-voice-first-product-teams-bisonflow-fl.light.svg" width="720" height="405" alt="Voice task product motion, light theme">
+      <img class="dark" src="./ai-project-operations-for-voice-first-product-teams-bisonflow-fl.dark.svg" width="720" height="405" alt="Voice task product motion, dark theme">
+    </div></div></div></section>
+    <section class="scene" data-scene-panel="bento"><div class="bento-layout"><div class="bento-cell bento-asset"><div class="asset-slot"><div class="asset-view is-active" data-asset-view="ai-project-operations-for-voice-first-product-teams-bisonflow-fl" aria-label="Voice task animation in bento feature">
+      <img class="light" src="./ai-project-operations-for-voice-first-product-teams-bisonflow-fl.light.svg" width="720" height="405" alt="Voice task product motion, light theme">
+      <img class="dark" src="./ai-project-operations-for-voice-first-product-teams-bisonflow-fl.dark.svg" width="720" height="405" alt="Voice task product motion, dark theme">
+    </div></div></div><div class="bento-cell bento-copy"><p class="eyebrow">Flows</p><h2>Insert anywhere.</h2></div><div class="bento-cell bento-detail" aria-hidden="true"></div></div></section>
   </main>
   <script>
     const root = document.documentElement;
@@ -187,11 +157,10 @@ export function renderPreview({ assets, fontFile, name, scenes, zipFile }) {
       for (const button of sceneButtons) button.setAttribute("aria-pressed", String(button.dataset.sceneButton === scene));
       for (const panel of scenePanels) panel.classList.toggle("is-active", panel.dataset.scenePanel === scene);
     }
-    setTheme(stored || preferred); setAsset(${JSON.stringify(primary.id)}); setScene("display");
+    setTheme(stored || preferred); setAsset("ai-project-operations-for-voice-first-product-teams-bisonflow-fl"); setScene("display");
     toggle?.addEventListener("click", () => setTheme(root.dataset.theme === "dark" ? "light" : "dark"));
     for (const button of assetButtons) button.addEventListener("click", () => setAsset(button.dataset.assetButton));
     for (const button of sceneButtons) button.addEventListener("click", () => setScene(button.dataset.sceneButton));
   </script>
 </body>
-</html>`;
-}
+</html>

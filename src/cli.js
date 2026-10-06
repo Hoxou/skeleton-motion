@@ -49,8 +49,16 @@ export async function run(argv) {
 
   if (options.formats.includes("html")) {
     const previewFile = `${assetName}.preview.html`;
+    const motionLabel = {
+      "add-step": "Add step",
+      "chart-sweep": "Chart sweep",
+      "focus-and-confirm": "Confirm edit",
+      "route-propagation": "Route status",
+      "select-and-reveal": "Select item",
+      "voice-to-task": "Voice task",
+    }[scenes[0]?.motion] || concept[0].toUpperCase() + concept.slice(1);
     await fs.writeFile(path.join(options.out, previewFile), renderPreview({
-      assets: [{ id: assetName, label: concept[0].toUpperCase() + concept.slice(1), scenes }],
+      assets: [{ id: assetName, label: motionLabel, scenes }],
       fontFile,
       name: assetName,
       scenes,
@@ -71,6 +79,7 @@ export async function run(argv) {
   const manifest = {
     analysis: {
       concepts: analysis.concepts,
+      features: analysis.features,
       name: analysis.name,
       palettes: analysis.palettes,
       source: analysis.source,

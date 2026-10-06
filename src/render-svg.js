@@ -125,6 +125,62 @@ function flowScene(scene) {
   `;
 }
 
+function voiceFlowScene(scene) {
+  const duration = scene.duration;
+  const rows = [74, 171, 268];
+  const bars = [0, 1, 2, 3, 4].map((index) => {
+    const x = 542 + index * 22;
+    const low = 8 + (index % 2) * 4;
+    const high = 28 + ((index * 11) % 28);
+    const mid = 16 + ((index * 7) % 20);
+    const yLow = 206 - low / 2;
+    const yHigh = 206 - high / 2;
+    const yMid = 206 - mid / 2;
+    return `<rect x="${x}" y="${yLow}" width="8" height="${low}" rx="4" fill="var(--accent)" opacity=".72">
+      <animate attributeName="y" values="${yLow};${yLow};${yHigh};${yMid};${yLow};${yLow}" keyTimes="0;.16;.3;.42;.52;1" dur="${duration}s" repeatCount="indefinite" />
+      <animate attributeName="height" values="${low};${low};${high};${mid};${low};${low}" keyTimes="0;.16;.3;.42;.52;1" dur="${duration}s" repeatCount="indefinite" />
+      <animate attributeName="opacity" values=".24;.24;1;.68;.24;.24" keyTimes="0;.16;.3;.42;.52;1" dur="${duration}s" repeatCount="indefinite" />
+    </rect>`;
+  }).join("");
+
+  return `
+    ${scene.backdrop === "dots" ? `<rect width="720" height="405" fill="url(#dots)" opacity=".48" />` : ""}
+
+    ${rows.map((y, index) => `<g${index === 1 ? ` id="voice-updated-task"` : ""}>
+      <rect x="38" y="${y}" width="430" height="64" rx="var(--radius)" fill="var(--surface)" stroke="var(--border)" />
+      ${index === 1 ? `<rect x="38" y="${y}" width="430" height="64" rx="var(--radius)" fill="var(--accent-soft)" stroke="var(--accent)" opacity="0">
+        <animate attributeName="opacity" values="0;0;.08;.28;.18;.18;0" keyTimes="0;.46;.54;.62;.72;.88;1" dur="${duration}s" repeatCount="indefinite" />
+      </rect>` : ""}
+      <circle cx="70" cy="${y + 32}" r="12" fill="${index === 1 ? "var(--accent-soft)" : "var(--muted)"}" />
+      <rect x="98" y="${y + 21}" width="${index === 0 ? 142 : index === 1 ? 176 : 118}" height="7" rx="3.5" fill="var(--ink)" opacity=".18" />
+      <rect x="98" y="${y + 36}" width="${index === 0 ? 220 : index === 1 ? 196 : 252}" height="5" rx="2.5" fill="var(--ink)" opacity=".08" />
+      <rect x="376" y="${y + 19}" width="66" height="26" rx="13" fill="var(--muted)" />
+      ${index === 1 ? `<rect x="376" y="${y + 19}" width="66" height="26" rx="13" fill="var(--accent)" opacity="0">
+        <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;.58;.68;.9;1" dur="${duration}s" repeatCount="indefinite" />
+      </rect><path d="M399 ${y + 32}l6 6 12-13" fill="none" stroke="var(--surface)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" opacity="0">
+        <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;.64;.7;.9;1" dur="${duration}s" repeatCount="indefinite" />
+      </path>` : ""}
+    </g>`).join("")}
+
+    <path d="M468 203 H504" stroke="var(--accent)" stroke-width="2" opacity="0">
+      <animate attributeName="opacity" values="0;0;.7;.7;0;0" keyTimes="0;.42;.5;.7;.82;1" dur="${duration}s" repeatCount="indefinite" />
+    </path>
+
+    <g id="voice-control">
+      <rect x="504" y="74" width="178" height="258" rx="var(--radius)" fill="var(--surface)" stroke="var(--border)" />
+      <circle cx="593" cy="132" r="25" fill="var(--accent-soft)" />
+      <path d="M593 117a8 8 0 0 0-8 8v9a8 8 0 0 0 16 0v-9a8 8 0 0 0-8-8Zm-14 16v2a14 14 0 0 0 28 0v-2M593 149v9" fill="none" stroke="var(--accent)" stroke-width="2.4" stroke-linecap="round" />
+      <circle cx="593" cy="132" r="25" fill="none" stroke="var(--accent)" stroke-width="2" opacity="0">
+        <animate attributeName="r" values="25;25;34;42;42;25" keyTimes="0;.12;.24;.38;.46;1" dur="${duration}s" repeatCount="indefinite" />
+        <animate attributeName="opacity" values="0;0;.5;0;0;0" keyTimes="0;.12;.24;.38;.46;1" dur="${duration}s" repeatCount="indefinite" />
+      </circle>
+      ${bars}
+      <rect x="532" y="258" width="122" height="7" rx="3.5" fill="var(--ink)" opacity=".1" />
+      <rect x="548" y="277" width="90" height="5" rx="2.5" fill="var(--ink)" opacity=".06" />
+    </g>
+  `;
+}
+
 function listScene(scene) {
   const duration = scene.duration;
   return `
@@ -183,11 +239,12 @@ export function renderSvg(scene) {
   const viewBox = scene.concept === "flow"
     ? { height: COMPACT_HEIGHT, width: COMPACT_WIDTH }
     : { height: BASE_HEIGHT, width: BASE_WIDTH };
-  const content = scene.concept === "flow" ? flowScene(scene)
+  const content = scene.concept === "flow" && scene.motion === "voice-to-task" ? voiceFlowScene(scene)
+    : scene.concept === "flow" ? flowScene(scene)
     : scene.concept === "list" ? listScene(scene)
       : scene.concept === "dashboard" ? dashboardScene(scene)
         : editorScene(scene);
-  return `<?xml version="1.0" encoding="UTF-8"?>
+  const svg = `<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" width="${viewport.width}" height="${viewport.height}" viewBox="0 0 ${viewBox.width} ${viewBox.height}" role="img" aria-labelledby="title description">
   <title id="title">${escapeXml(scene.name)} — ${escapeXml(scene.motion)}</title>
   <desc id="description">Minimal ${escapeXml(scene.concept)} product illustration generated from ${escapeXml(scene.source.input)}.</desc>
@@ -210,4 +267,5 @@ export function renderSvg(scene) {
   <defs>${dots()}<filter id="cursor-shadow" x="-60%" y="-60%" width="220%" height="220%"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#000" flood-opacity=".28" /></filter></defs>
   ${content}
 </svg>`;
+  return svg.replace(/[ \t]+$/gm, "");
 }

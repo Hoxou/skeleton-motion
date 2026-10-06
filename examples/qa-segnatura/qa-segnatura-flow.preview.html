@@ -18,6 +18,7 @@
       --panel-solid: oklch(0.97 0 0);
       --panel-border: oklch(0.922 0 0);
       --page-glow: color-mix(in oklab, var(--accent) 3%, transparent);
+      --control-radius: 14px;
       --scene-radius: 0px;
       --switch: color-mix(in oklab, var(--panel) 88%, transparent);
       --switch-hover: var(--panel);
@@ -44,15 +45,15 @@
     button, .download { border: 1px solid var(--panel-border); background: var(--switch); color: inherit; font: inherit; cursor: pointer; backdrop-filter: blur(18px); transition: background 180ms ease, transform 180ms ease, border-color 180ms ease; }
     button:hover, .download:hover { background: var(--switch-hover); transform: translateY(-1px); }
     button:focus-visible, .download:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
-    .theme-toggle { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 38px; padding: 0 12px; border-radius: 999px; font-size: 12px; font-weight: 600; }
+    .theme-toggle { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 38px; padding: 0 12px; border-radius: var(--control-radius); font-size: 12px; font-weight: 600; }
     .theme-toggle svg { width: 15px; height: 15px; }
     .moon { display: block; } .sun { display: none; }
     [data-theme="dark"] .moon { display: none; } [data-theme="dark"] .sun { display: block; }
-    .option-group { display: grid; gap: 4px; padding: 5px; border: 1px solid var(--panel-border); border-radius: 14px; background: color-mix(in oklab, var(--page) 74%, transparent); backdrop-filter: blur(18px); }
+    .option-group { display: grid; gap: 4px; padding: 5px; border: 1px solid var(--panel-border); border-radius: var(--control-radius); background: var(--switch); backdrop-filter: blur(18px); }
     .group-label { padding: 4px 7px 2px; color: var(--copy); font-size: 9px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
-    .option-button { min-width: 0; padding: 7px 9px; border-color: transparent; border-radius: 9px; background: transparent; box-shadow: none; color: var(--copy); font-size: 11px; font-weight: 620; text-align: left; }
+    .option-button { min-width: 0; padding: 7px 9px; border-color: color-mix(in oklab, var(--panel-border) 72%, transparent); border-radius: calc(var(--control-radius) - 5px); background: color-mix(in oklab, var(--panel) 76%, var(--page)); box-shadow: none; color: var(--copy); font-size: 11px; font-weight: 620; text-align: left; }
     .option-button[aria-pressed="true"] { border-color: color-mix(in oklab, var(--accent) 24%, var(--panel-border)); background: color-mix(in oklab, var(--accent) 8%, var(--switch-hover)); color: var(--page-ink); }
-    .download { display: flex; align-items: center; justify-content: center; min-height: 36px; padding: 0 10px; border-radius: 10px; font-size: 11px; font-weight: 650; text-decoration: none; }
+    .download { display: flex; align-items: center; justify-content: center; min-height: 38px; padding: 0 10px; border-radius: var(--control-radius); font-size: 11px; font-weight: 650; text-decoration: none; }
     main { min-height: 100vh; padding: 92px 166px 56px 5vw; }
     .scene { display: none; min-height: calc(100vh - 148px); place-items: center; animation: scene-in 360ms cubic-bezier(.22, 1, .36, 1) both; }
     .scene.is-active { display: grid; }
@@ -105,26 +106,26 @@
   <header><div class="brand"><span>Display</span></div></header>
   <aside class="controls" aria-label="Display controls">
     <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Switch to dark mode" aria-pressed="false"><svg class="moon" aria-hidden="true" viewBox="0 0 24 24" fill="none"><path d="M20.2 15.2A8.5 8.5 0 0 1 8.8 3.8 8.5 8.5 0 1 0 20.2 15.2Z" stroke="currentColor" stroke-width="1.8"/></svg><svg class="sun" aria-hidden="true" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3.5" stroke="currentColor" stroke-width="1.8"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2" stroke="currentColor" stroke-width="1.8"/></svg><span id="theme-label">Dark</span></button>
-    <nav class="option-group" aria-label="Animation"><span class="group-label">Animation</span><button class="option-button" type="button" data-asset-button="qa-segnatura-flow" aria-pressed="true">Flow</button></nav>
+    <nav class="option-group" aria-label="Animation"><span class="group-label">Animation</span><button class="option-button" type="button" data-asset-button="qa-segnatura-flow" aria-pressed="true">Add step</button></nav>
     <nav class="option-group" aria-label="Preview scene"><span class="group-label">Scene</span><button class="option-button" type="button" data-scene-button="display" aria-pressed="true">Display</button><button class="option-button" type="button" data-scene-button="card" aria-pressed="false">Card</button><button class="option-button" type="button" data-scene-button="split" aria-pressed="false">Split</button><button class="option-button" type="button" data-scene-button="bento" aria-pressed="false">Bento</button></nav>
     <a class="download" href="./qa-segnatura-flow.assets.zip" download>Download ZIP</a>
   </aside>
   <main>
-    <section class="scene display-scene is-active" data-scene-panel="display"><div class="asset-slot"><div class="asset-view is-active" data-asset-view="qa-segnatura-flow" aria-label="Flow animation in display view">
-      <img class="light" src="./qa-segnatura-flow.light.svg" width="720" height="405" alt="Flow product motion, light theme">
-      <img class="dark" src="./qa-segnatura-flow.dark.svg" width="720" height="405" alt="Flow product motion, dark theme">
+    <section class="scene display-scene is-active" data-scene-panel="display"><div class="asset-slot"><div class="asset-view is-active" data-asset-view="qa-segnatura-flow" aria-label="Add step animation in display view">
+      <img class="light" src="./qa-segnatura-flow.light.svg" width="720" height="405" alt="Add step product motion, light theme">
+      <img class="dark" src="./qa-segnatura-flow.dark.svg" width="720" height="405" alt="Add step product motion, dark theme">
     </div></div></section>
-    <section class="scene" data-scene-panel="card"><article class="feature-card"><div><p class="eyebrow">Automation</p><h2>Build flows in place.</h2><p>Add an action exactly where it belongs, without breaking the sequence.</p></div><div class="asset-slot"><div class="asset-view is-active" data-asset-view="qa-segnatura-flow" aria-label="Flow animation in feature card">
-      <img class="light" src="./qa-segnatura-flow.light.svg" width="720" height="405" alt="Flow product motion, light theme">
-      <img class="dark" src="./qa-segnatura-flow.dark.svg" width="720" height="405" alt="Flow product motion, dark theme">
+    <section class="scene" data-scene-panel="card"><article class="feature-card"><div><p class="eyebrow">Automation</p><h2>Build flows in place.</h2><p>Add an action exactly where it belongs, without breaking the sequence.</p></div><div class="asset-slot"><div class="asset-view is-active" data-asset-view="qa-segnatura-flow" aria-label="Add step animation in feature card">
+      <img class="light" src="./qa-segnatura-flow.light.svg" width="720" height="405" alt="Add step product motion, light theme">
+      <img class="dark" src="./qa-segnatura-flow.dark.svg" width="720" height="405" alt="Add step product motion, dark theme">
     </div></div></article></section>
-    <section class="scene" data-scene-panel="split"><div class="split-layout"><div><p class="eyebrow">Visual workflows</p><h1>Every step stays clear.</h1><p>Compose, inspect, and refine browser scenarios from one focused canvas.</p></div><div class="asset-slot"><div class="asset-view is-active" data-asset-view="qa-segnatura-flow" aria-label="Flow animation in split feature">
-      <img class="light" src="./qa-segnatura-flow.light.svg" width="720" height="405" alt="Flow product motion, light theme">
-      <img class="dark" src="./qa-segnatura-flow.dark.svg" width="720" height="405" alt="Flow product motion, dark theme">
+    <section class="scene" data-scene-panel="split"><div class="split-layout"><div><p class="eyebrow">Visual workflows</p><h1>Every step stays clear.</h1><p>Compose, inspect, and refine browser scenarios from one focused canvas.</p></div><div class="asset-slot"><div class="asset-view is-active" data-asset-view="qa-segnatura-flow" aria-label="Add step animation in split feature">
+      <img class="light" src="./qa-segnatura-flow.light.svg" width="720" height="405" alt="Add step product motion, light theme">
+      <img class="dark" src="./qa-segnatura-flow.dark.svg" width="720" height="405" alt="Add step product motion, dark theme">
     </div></div></div></section>
-    <section class="scene" data-scene-panel="bento"><div class="bento-layout"><div class="bento-cell bento-asset"><div class="asset-slot"><div class="asset-view is-active" data-asset-view="qa-segnatura-flow" aria-label="Flow animation in bento feature">
-      <img class="light" src="./qa-segnatura-flow.light.svg" width="720" height="405" alt="Flow product motion, light theme">
-      <img class="dark" src="./qa-segnatura-flow.dark.svg" width="720" height="405" alt="Flow product motion, dark theme">
+    <section class="scene" data-scene-panel="bento"><div class="bento-layout"><div class="bento-cell bento-asset"><div class="asset-slot"><div class="asset-view is-active" data-asset-view="qa-segnatura-flow" aria-label="Add step animation in bento feature">
+      <img class="light" src="./qa-segnatura-flow.light.svg" width="720" height="405" alt="Add step product motion, light theme">
+      <img class="dark" src="./qa-segnatura-flow.dark.svg" width="720" height="405" alt="Add step product motion, dark theme">
     </div></div></div><div class="bento-cell bento-copy"><p class="eyebrow">Flows</p><h2>Insert anywhere.</h2></div><div class="bento-cell bento-detail" aria-hidden="true"></div></div></section>
   </main>
   <script>

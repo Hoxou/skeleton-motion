@@ -1,0 +1,153 @@
+{
+  "analysis": {
+    "concepts": {
+      "evidence": [
+        {
+          "file": "https://bisonflow.com/en",
+          "kind": "flow",
+          "score": 47
+        }
+      ],
+      "ranked": [
+        {
+          "kind": "flow",
+          "score": 47
+        },
+        {
+          "kind": "dashboard",
+          "score": 43
+        },
+        {
+          "kind": "list",
+          "score": 41
+        },
+        {
+          "kind": "editor",
+          "score": 29
+        }
+      ]
+    },
+    "features": {
+      "voice": true
+    },
+    "name": "AI Project Operations for Voice-First Product Teams | Bisonflow",
+    "palettes": {
+      "dark": {
+        "accent": "#1f3fad",
+        "background": "#09090b",
+        "border": "#ffffff1a",
+        "foreground": "#fafafa",
+        "muted": "#27272a",
+        "mutedForeground": "#9f9fa9",
+        "radius": ".875rem",
+        "surface": "#18181b"
+      },
+      "light": {
+        "accent": "#1447e6",
+        "background": "#fff",
+        "border": "#e4e4e7",
+        "foreground": "#09090b",
+        "muted": "#f4f4f5",
+        "mutedForeground": "#71717b",
+        "radius": ".875rem",
+        "surface": "#fff"
+      }
+    },
+    "source": {
+      "input": "https://bisonflow.com/en",
+      "linkedStylesheets": 2,
+      "type": "url"
+    },
+    "typography": {
+      "family": "Figtree",
+      "stack": "Figtree"
+    },
+    "visual": {
+      "backdrop": "dots"
+    }
+  },
+  "asset": {
+    "concept": "flow",
+    "name": "ai-project-operations-for-voice-first-product-teams-bisonflow-fl",
+    "oneAssetPerRun": true,
+    "archive": "ai-project-operations-for-voice-first-product-teams-bisonflow-fl.assets.zip",
+    "variants": [
+      {
+        "backdrop": "dots",
+        "evidence": [
+          {
+            "file": "https://bisonflow.com/en",
+            "kind": "flow",
+            "score": 47
+          }
+        ],
+        "file": "ai-project-operations-for-voice-first-product-teams-bisonflow-fl.light.svg",
+        "motion": "voice-to-task",
+        "motionProfile": {
+          "camera": "static",
+          "emphasis": "speech-transform",
+          "name": "voice-to-task",
+          "pointer": "none"
+        },
+        "palette": {
+          "accent": "#1447e6",
+          "background": "#fff",
+          "border": "#e4e4e7",
+          "foreground": "#09090b",
+          "muted": "#f4f4f5",
+          "mutedForeground": "#71717b",
+          "radius": 14,
+          "surface": "#fff"
+        },
+        "theme": "light",
+        "typography": {
+          "family": "Figtree",
+          "stack": "Figtree"
+        },
+        "viewport": {
+          "height": 405,
+          "width": 720
+        }
+      },
+      {
+        "backdrop": "dots",
+        "evidence": [
+          {
+            "file": "https://bisonflow.com/en",
+            "kind": "flow",
+            "score": 47
+          }
+        ],
+        "file": "ai-project-operations-for-voice-first-product-teams-bisonflow-fl.dark.svg",
+        "motion": "voice-to-task",
+        "motionProfile": {
+          "camera": "static",
+          "emphasis": "speech-transform",
+          "name": "voice-to-task",
+          "pointer": "none"
+        },
+        "palette": {
+          "accent": "#1f3fad",
+          "background": "#09090b",
+          "border": "#ffffff1a",
+          "foreground": "#fafafa",
+          "muted": "#27272a",
+          "mutedForeground": "#9f9fa9",
+          "radius": 14,
+          "surface": "#18181b"
+        },
+        "theme": "dark",
+        "typography": {
+          "family": "Figtree",
+          "stack": "Figtree"
+        },
+        "viewport": {
+          "height": 405,
+          "width": 720
+        }
+      }
+    ]
+  },
+  "generatedAt": "2026-10-06T03:15:29.783Z",
+  "schemaVersion": 1
+}

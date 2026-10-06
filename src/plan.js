@@ -33,8 +33,17 @@ const MOTION_PROFILES = {
   },
 };
 
-function motionProfile(concept, evidence) {
+function motionProfile(concept, evidence, analysis) {
   const profile = MOTION_PROFILES[concept];
+
+  if (concept === "flow" && analysis.features?.voice) {
+    return {
+      camera: "static",
+      emphasis: "speech-transform",
+      name: "voice-to-task",
+      pointer: "none",
+    };
+  }
 
   // A running/status flow reads better as ambient propagation than another
   // cursor demo. Authoring canvases keep the focused add-step choreography.
@@ -56,7 +65,7 @@ export function planScene(analysis, options, theme) {
   const concept = winner === "list" ? "list" : winner;
   const palette = analysis.palettes[theme];
   const evidence = analysis.concepts.evidence.filter((item) => item.kind === winner).slice(0, 5);
-  const profile = motionProfile(concept, evidence);
+  const profile = motionProfile(concept, evidence, analysis);
   const backdrop = analysis.visual?.backdrop || "none";
   return {
     backdrop,
