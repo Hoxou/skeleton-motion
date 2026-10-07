@@ -10,7 +10,7 @@ function summarizeScene({ backdrop, colorSemantics, composition, duration, evide
   return { backdrop, colorSemantics, composition, duration, evidence, file, format: format.id, motion, motionPhysics, motionProfile, palette, theme, typography, viewport };
 }
 
-function buildManifest(analysis, options, { archiveFile, assets, collectionName, frameFormats, typography }) {
+function buildManifest(analysis, options, { archiveFile, assets, collectionName, engineVersion, frameFormats, typography }) {
   const manifest = {
     analysis: {
       colorSystem: analysis.colorSystem,
@@ -24,6 +24,7 @@ function buildManifest(analysis, options, { archiveFile, assets, collectionName,
       typography,
       visual: analysis.visual,
     },
+    engineVersion,
     formats: frameFormats.map((format) => format.id),
     generatedAt: new Date().toISOString(),
     schemaVersion: options.set ? 2 : 1,
@@ -56,10 +57,11 @@ function buildManifest(analysis, options, { archiveFile, assets, collectionName,
  * returned separately because the CLI appends media exports before it.
  * `fontExtension` names the copied source font (the caller copies the bytes);
  * `preview.shell` replaces the on-disk Display Room shell where no filesystem exists.
+ * `engineVersion` names the deployed engine release in the manifest.
  * `stories` replaces the built-in story library with validated scene plans
  * ({ id, label, copy, plan }), one designed animation per story.
  */
-export function generateCollection(analysis, options, { fontExtension, preview = {}, stories: designed } = {}) {
+export function generateCollection(analysis, options, { engineVersion = "dev", fontExtension, preview = {}, stories: designed } = {}) {
   const themes = options.theme === "auto" ? ["light", "dark"] : [options.theme];
   // Designed stories borrow a built-in concept only for palette and timing
   // defaults; their motion always comes from the plan composer.
@@ -115,7 +117,7 @@ export function generateCollection(analysis, options, { fontExtension, preview =
     });
   }
 
-  const manifest = buildManifest(analysis, options, { archiveFile, assets, collectionName, frameFormats, typography });
+  const manifest = buildManifest(analysis, options, { archiveFile, assets, collectionName, engineVersion, frameFormats, typography });
   return {
     archiveFile,
     assets,

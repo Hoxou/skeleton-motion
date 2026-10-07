@@ -1,6 +1,6 @@
 import { AccessError, deleteOwnKey, hostedUsage, saveOwnKey } from "./ai/access.js";
 import { browserUsage } from "./brand.js";
-import { createJob, isJobId, listJobs, listPublicJobs, serveJobFile, setVisibility, UserError } from "./jobs.js";
+import { createJob, engineVersion, isJobId, listJobs, listPublicJobs, serveJobFile, setVisibility, UserError } from "./jobs.js";
 import { hashToken, isOwnerToken, ownerCookie, readOwnerToken, resolveOwner } from "./owner.js";
 import { logError } from "./log.js";
 
@@ -135,7 +135,7 @@ export default {
     if (route === "POST /api/jobs") return handleCreate(request, env);
     if (route === "GET /api/gallery") return handleGallery(request, env, url);
     if (route === "POST /api/gallery/restore") return handleRestore(request, env);
-    if (route === "GET /api/status") return json({ browser: await browserUsage(env) });
+    if (route === "GET /api/status") return json({ browser: await browserUsage(env), engine: engineVersion(env) });
     if (route === "POST /api/ai/key") return handleSaveKey(request, env);
     if (route === "DELETE /api/ai/key") return handleDeleteKey(request, env);
     if (route === "GET /api/ai/status") {

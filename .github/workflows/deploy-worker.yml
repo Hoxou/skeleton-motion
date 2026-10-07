@@ -5,8 +5,9 @@ on:
     branches: [main]
   workflow_dispatch:
 
+# contents: write pushes the engine-vN tag after a successful deploy.
 permissions:
-  contents: read
+  contents: write
 
 # Queue deploys instead of cancelling: a cancelled run could stop between
 # the D1 migration and the Worker upload.
@@ -25,6 +26,9 @@ jobs:
       CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          # Tags are needed to number the next engine release.
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -33,6 +37,23 @@ jobs:
       - run: npm run check
       # Migrations run first so the new Worker never sees an older schema.
       - run: npm run worker:migrate
-      - run: npm run worker:deploy
+      # Every deploy is the next engine release: vN is stamped on jobs and
+      # manifests, tags the Cloudflare version (instant rollback), and tags
+      # the commit (rebuild rollback). The queue above keeps numbers unique.
+      - name: Number the engine release
+        id: release
+        run: echo "version=v$(node scripts/engine-version.mjs next)" >> "$GITHUB_OUTPUT"
+      - run: npm run worker:deploy -- --var "ENGINE_VERSION:${{ steps.release.outputs.version }}" --tag "${{ steps.release.outputs.version }}" --message "${GITHUB_SHA::12}"
       - name: Smoke check
-        run: curl --fail --silent --show-error --retry 3 --retry-delay 5 https://skeleton-motion.qa-segnatura.workers.dev/api/status
+        env:
+          RELEASE: ${{ steps.release.outputs.version }}
+        run: |
+          for attempt in 1 2 3 4 5 6; do
+            status=$(curl --fail --silent --show-error https://skeleton-motion.qa-segnatura.workers.dev/api/status) && echo "$status" | grep -q "\"engine\":\"$RELEASE\"" && { echo "$status"; exit 0; }
+            sleep 5
+          done
+          echo "production does not report $RELEASE"; exit 1
+      - name: Tag the release
+        run: |
+          git tag "engine-${{ steps.release.outputs.version }}" "$GITHUB_SHA"
+          git push origin "engine-${{ steps.release.outputs.version }}"

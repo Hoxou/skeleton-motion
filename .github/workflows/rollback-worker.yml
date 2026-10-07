@@ -1,0 +1,67 @@
+name: Roll back Cloudflare Worker
+
+# Points production back at an earlier engine release. Recent releases switch
+# instantly (Cloudflare keeps their versions); older ones are rebuilt from
+# their engine-vN tag. D1 migrations are additive and never rolled back, so
+# an older engine runs against the newer schema.
+#
+# A rollback holds only until the next push to main deploys again: revert the
+# bad commit on main before pushing anything else.
+
+on:
+  workflow_dispatch:
+    inputs:
+      release:
+        description: "Engine release to serve, e.g. v7"
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: cloudflare-worker
+  cancel-in-progress: false
+
+jobs:
+  rollback:
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: https://skeleton-motion.qa-segnatura.workers.dev
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+      RELEASE: ${{ inputs.release }}
+    steps:
+      - name: Check the release name
+        run: echo "$RELEASE" | grep -Eq '^v[0-9]+$'
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Instant rollback
+        id: instant
+        run: |
+          set +e
+          node scripts/engine-version.mjs rollback "$RELEASE"
+          code=$?
+          if [ "$code" = 3 ]; then echo "rebuild=true" >> "$GITHUB_OUTPUT"; exit 0; fi
+          exit "$code"
+      - name: Rebuild from tag
+        if: steps.instant.outputs.rebuild == 'true'
+        run: |
+          git checkout "engine-$RELEASE"
+          npm ci
+          npm run worker:deploy -- --var "ENGINE_VERSION:$RELEASE" --tag "$RELEASE" --message "rebuild of $RELEASE"
+      - name: Smoke check
+        run: |
+          for attempt in 1 2 3 4 5 6; do
+            status=$(curl --fail --silent --show-error https://skeleton-motion.qa-segnatura.workers.dev/api/status) && echo "$status" | grep -q "\"engine\":\"$RELEASE\"" && { echo "$status"; exit 0; }
+            sleep 5
+          done
+          echo "production does not report $RELEASE"; exit 1

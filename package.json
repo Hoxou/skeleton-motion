@@ -12,6 +12,8 @@
     "worker:dev": "npm run docs:build && wrangler dev",
     "worker:migrate": "wrangler d1 migrations apply skeleton-motion-jobs --remote",
     "worker:deploy": "npm run docs:build && wrangler deploy",
+    "engine:releases": "node ./scripts/engine-version.mjs list",
+    "engine:rollback": "node ./scripts/engine-version.mjs rollback",
     "docs:serve": "docusaurus serve website",
     "docs:start": "docusaurus start website",
     "test": "node --test",

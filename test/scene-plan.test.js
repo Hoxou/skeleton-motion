@@ -5,7 +5,7 @@ import path from "node:path";
 import test from "node:test";
 import { analyzeSource } from "../src/analyze.js";
 import { parseArgs } from "../src/args.js";
-import { __testing, layoutTree, planKeys, withFillers } from "../src/compose/plan.js";
+import { __testing, adaptToFrame, layoutTree, planKeys, withFillers } from "../src/compose/plan.js";
 import { frameFor, FORMATS } from "../src/layout/formats.js";
 import { generateCollection } from "../src/generate.js";
 import { validatePlan } from "../src/scene-plan.js";
@@ -312,4 +312,25 @@ test("a chart beside a list heads its own column of designed modules, not a stre
   assert.ok(trend.width / trend.height >= 1.8 - 1e-6, "the chart grows no taller than a readable ratio");
   const tiles = rects[column.children[1].children[0]];
   assert.ok(tiles.y - (trend.y + trend.height) < 40, "modules sit right under the chart, without a stretched gap");
+});
+
+test("fillers never squeeze a state that is already snug", () => {
+  const rows = Object.fromEntries(Array.from({ length: 6 }, (_, index) => [`r-${index}`, { kind: "row" }]));
+  const { plan } = validatePlan({
+    elements: { ...rows, list: { kind: "panel" } },
+    screen: { children: Object.keys(rows).slice(0, 4), id: "list", type: "panel" },
+    steps: [{ do: Object.keys(rows).slice(4).map((id) => ({ id, into: "list", op: "insert" })) }, { do: [{ id: "r-0", op: "set", state: "done" }] }],
+  }, { driver: "system" });
+  const frame = frameFor(FORMATS["4:3"]);
+  const tight = (candidate) => Math.min(...candidate.states.map((state) => layoutTree(state.layout, frame.safe, candidate, frame).tightest));
+  assert.ok(tight(withFillers(plan, frame)) >= tight(plan) - 1e-6);
+});
+
+test("stacked panels sit side by side on square and wide frames", () => {
+  const plan = { states: [{ layout: { children: [{ children: ["a"], id: "p1", type: "panel" }, { children: ["b"], id: "p2", type: "panel" }], id: "__g1", type: "column" } }] };
+  assert.equal(adaptToFrame(plan, frameFor(FORMATS["4:3"])).states[0].layout.type, "row");
+  assert.equal(adaptToFrame(plan, frameFor(FORMATS["1:1"])).states[0].layout.type, "row");
+  assert.equal(adaptToFrame(plan, frameFor(FORMATS["9:16"])).states[0].layout.type, "column");
+  const mixed = { states: [{ layout: { children: [{ children: ["a"], type: "row" }, { children: ["b"], id: "p2", type: "panel" }], type: "column" } }] };
+  assert.equal(adaptToFrame(mixed, frameFor(FORMATS["4:3"])).states[0].layout.type, "column", "only a column of panels flips");
 });

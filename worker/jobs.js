@@ -16,6 +16,8 @@ import { assertPublicUrl, createSafeFetch } from "./safe-fetch.js";
 import { logError, logWarning } from "./log.js";
 
 const JOB_ID = /^[A-Za-z0-9_-]{16}$/;
+// Set by the deploy workflow (`--var ENGINE_VERSION:vN`); local runs are "dev".
+export const engineVersion = (env) => env.ENGINE_VERSION || "dev";
 const VISIBILITIES = new Set(["private", "public"]);
 const PAGE_SIZE = 24;
 const CURSOR = /^(\d{4}-\d\d-\d\dT[\d:.]+Z)\|([A-Za-z0-9_-]{16})$/;
@@ -162,7 +164,7 @@ export async function createJob(env, ownerHash, body) {
   if (access.hosted) await recordHostedUse(env, ownerHash);
 
   const options = parseArgs([pageUrl.href, "--set", "--name", host], "/");
-  const result = generateCollection(analysis, options, { preview: { shell: previewShell }, stories: design.stories });
+  const result = generateCollection(analysis, options, { engineVersion: engineVersion(env), preview: { shell: previewShell }, stories: design.stories });
 
   const id = newToken(12);
   const files = [...result.files, result.manifest];
@@ -177,6 +179,7 @@ export async function createJob(env, ownerHash, body) {
     assetCount: result.assets.length,
     collection: result.collectionName,
     createdAt: new Date().toISOString(),
+    engineVersion: engineVersion(env),
     fileCount: files.length,
     heroDark: hero.find((scene) => scene.theme === "dark")?.file || null,
     heroes,
@@ -187,8 +190,8 @@ export async function createJob(env, ownerHash, body) {
     visibility,
   };
   await env.DB.prepare(
-    "INSERT INTO jobs (id, owner_hash, source, name, collection, hero_light, hero_dark, heroes, asset_count, file_count, created_at, visibility) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-  ).bind(job.id, ownerHash, job.source, job.name, job.collection, job.heroLight, job.heroDark, JSON.stringify(heroes), job.assetCount, job.fileCount, job.createdAt, job.visibility).run();
+    "INSERT INTO jobs (id, owner_hash, source, name, collection, hero_light, hero_dark, heroes, asset_count, file_count, created_at, visibility, engine_version) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+  ).bind(job.id, ownerHash, job.source, job.name, job.collection, job.heroLight, job.heroDark, JSON.stringify(heroes), job.assetCount, job.fileCount, job.createdAt, job.visibility, job.engineVersion).run();
 
   return { ...job, ai: { calls: design.calls, hosted: access.hosted, provider: access.provider.label, rejected: design.rejected, rejections: design.rejections, timings: design.timings }, brandSource, durationMs: Date.now() - startedAt, url: `/jobs/${id}/` };
 }
@@ -208,6 +211,7 @@ function toJob(row) {
     assetCount: row.asset_count,
     collection: row.collection,
     createdAt: row.created_at,
+    engineVersion: row.engine_version ?? null,
     heroDark: row.hero_dark,
     heroLight: row.hero_light,
     heroes: heroesOf(row),

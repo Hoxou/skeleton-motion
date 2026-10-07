@@ -136,6 +136,8 @@ export function layoutTree(root, rect, plan, frame, presence = {}, { minScale = 
   const k = sourceUnits(frame)(1);
   const rects = {};
   const issues = [];
+  // The tightest squeeze anywhere in the layout (1 when nothing shrinks).
+  let tightest = 1;
 
   function group(children, axis, area, gapName, path, center = false) {
     if (children.length === 0) return;
@@ -166,6 +168,7 @@ export function layoutTree(root, rect, plan, frame, presence = {}, { minScale = 
     if (needed > length) {
       const scale = Math.max(0, (length - gap * Math.max(0, items.length - 1)) / Math.max(1e-6, needed - gap * Math.max(0, items.length - 1)));
       if (scale < minScale - 1e-6) issues.push(path);
+      tightest = Math.min(tightest, scale);
       for (const item of items) item.basis *= Math.max(scale, 0);
     }
     // Natural-size items pack from the start like a real list instead of
@@ -200,7 +203,7 @@ export function layoutTree(root, rect, plan, frame, presence = {}, { minScale = 
   // Rows reflow to a stack only where their columns would get too narrow
   // (see `group`), the way the product would on a phone.
   group([root], "y", rect, "tight", "root", true);
-  return { issues, rects };
+  return { issues, rects, tightest };
 }
 
 export function idsIn(node) {
@@ -369,6 +372,23 @@ function addFillers(plan, counts, targets) {
   return { ...plan, elements, states: plan.states.map((state) => ({ ...state, layout: withFill(state.layout) })) };
 }
 
+// Stacked panels suit tall frames; on square and wide ones the same panels
+// sit side by side, or every card stretches across the whole frame. Rows
+// already fold into stacks when a frame is too narrow for them (see
+// `group`); this is the other direction, decided per frame before layout.
+const SIDE_BY_SIDE = 0.95;
+
+export function adaptToFrame(plan, frame) {
+  if (frame.safe.width / frame.safe.height < SIDE_BY_SIDE) return plan;
+  const flip = (node) => {
+    if (isItem(node)) return node;
+    const children = node.children.map(flip);
+    const panels = node.type === "column" && children.length >= 2 && children.every((child) => !isItem(child) && child.type === "panel");
+    return panels ? { ...node, children, type: "row" } : { ...node, children };
+  };
+  return { ...plan, states: plan.states.map((state) => ({ ...state, layout: flip(state.layout) })) };
+}
+
 export function withFillers(plan, frame) {
   const targets = fillTargets(plan);
   if (targets.size === 0) return plan;
@@ -376,9 +396,10 @@ export function withFillers(plan, frame) {
   // margin would only leave their bottoms empty) but may not crowd any group
   // the plan did not already crowd. A plan that is snug in one state can
   // still fill its other groups.
-  const crowded = (trial) => trial.states.map((state) => new Set(layoutTree(state.layout, frame.safe, trial, frame, {}, { minScale: 1 }).issues));
-  const base = crowded(plan);
-  const fits = (trial) => crowded(trial).every((issues, index) => [...issues].every((path) => base[index].has(path)));
+  // Nor may they squeeze any state tighter than the plan already was.
+  const measure = (trial) => trial.states.map((state) => layoutTree(state.layout, frame.safe, trial, frame, {}, { minScale: 1 }));
+  const base = measure(plan).map(({ issues, tightest }) => ({ issues: new Set(issues), tightest }));
+  const fits = (trial) => measure(trial).every(({ issues, tightest }, index) => tightest >= base[index].tightest - 1e-6 && issues.every((path) => base[index].issues.has(path)));
   const counts = Object.fromEntries([...targets.keys()].map((id) => [id, 0]));
   const open = new Set(Object.keys(counts));
   while (open.size) {
@@ -754,7 +775,7 @@ function paintOrder(plan) {
 
 export function composePlan(scene) {
   const frame = frameFor(scene.format);
-  const plan = withFillers(scene.story.plan, frame);
+  const plan = withFillers(adaptToFrame(scene.story.plan, frame), frame);
   const k = sourceUnits(frame)(1);
   const radius = Math.max(0, (scene.palette.radius ?? 0) / frame.unitPx);
   const { clicks, keys } = planKeys(plan);
