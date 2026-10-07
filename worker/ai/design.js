@@ -53,13 +53,38 @@ export function normalizeBriefs(features) {
     }
   }
   const used = { move: new Set(), surface: new Set() };
+  let worded = false;
   return picked.map(({ typical, ...brief }) => {
+    // Wordless skeletons read best; at most one story in a set uses words.
+    const words = brief.words === "few" && !worded ? "few" : "none";
+    worded ||= words === "few";
     const move = brief.move && !used.move.has(brief.move) ? brief.move : Object.keys(MOVES).find((name) => !used.move.has(name));
     const surface = brief.surface && !used.surface.has(brief.surface) ? brief.surface : Object.keys(SURFACES).find((name) => !used.surface.has(name));
     used.move.add(move);
     used.surface.add(surface);
-    return { ...brief, move, surface };
+    return { ...brief, move, surface, words };
   });
+}
+
+const MAX_LABELS = 2;
+
+/**
+ * Caps a validated plan's labels to what the brief allows: none at all, or
+ * the two that matter most (the button, then the storyboard's focus).
+ */
+export function limitWords(plan, words, focus) {
+  const keep = new Set();
+  if (words === "few") {
+    const labeled = Object.entries(plan.elements).filter(([, element]) => element.label).map(([id, element]) => ({ element, id }));
+    const rank = ({ element, id }) => (element.kind === "button" ? 0 : id === focus ? 1 : 2);
+    for (const { id } of labeled.sort((a, b) => rank(a) - rank(b)).slice(0, MAX_LABELS)) keep.add(id);
+  }
+  const elements = Object.fromEntries(Object.entries(plan.elements).map(([id, element]) => {
+    if (!element.label || keep.has(id)) return [id, element];
+    const { label, ...rest } = element;
+    return [id, rest];
+  }));
+  return { ...plan, elements };
 }
 
 // What kind of change a draft makes and how it is triggered; two stories
@@ -94,7 +119,7 @@ async function designStory(provider, context, input, retry = null) {
     // asked again without it.
     if (draft && (!draft.screen || !draft.elements || Object.keys(draft.elements).length === 0)) schema = null;
     const result = validatePlan(draft, options);
-    if (result.ok) return { calls, draft, plan: result.plan };
+    if (result.ok) return { calls, draft, plan: limitWords(result.plan, input.brief.words, String(draft?.storyboard?.focus ?? "")) };
     const errors = result.errors.slice(0, 12);
     if (round >= REPAIR_ROUNDS) return { calls, errors, failure, plan: null };
     calls += 1;

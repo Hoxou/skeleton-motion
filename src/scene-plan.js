@@ -227,6 +227,15 @@ function compileSteps(input, elements, errors) {
     return { records: [], screen: null, states: [] };
   }
   for (const id of groupIds(screen)) if (Object.hasOwn(elements, id)) errors.push(`Group name "${id}" is also an element id; give the row or column its own name.`);
+  // Unnamed rows and columns get internal names that travel through every
+  // step, so the engine can find the same group in each state (to fill it).
+  let unnamed = 0;
+  const name = (node) => {
+    if (typeof node === "string" || node.type === "item") return;
+    if (node.type !== "panel" && !node.id) node.id = `__g${(unnamed += 1)}`;
+    node.children.forEach(name);
+  };
+  name(screen);
   const status = {};
   const value = {};
   for (const [id, element] of Object.entries(elements)) {

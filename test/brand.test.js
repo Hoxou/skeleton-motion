@@ -136,3 +136,28 @@ test("only real colors become accents", async () => {
   const analysis = await analyzeSource("https://social.example/", { fetch: async () => new Response(html) });
   assert.deepEqual(analysis.palettes.light.accents, ["#1877f2", "#31a24c", "hsl(214, 89%, 52%)"]);
 });
+
+test("brand hues come from stylesheets and the site's own logo, not customer logos", async () => {
+  const css = ".hero { background: #ffd601 } .tag { color: #ee30fb } .tag-b { color: #ee30fb } .muted { color: #972121 } .soft { background: #e6f6e9 }";
+  const html = `<html><head><title>x</title><style>:root { --primary: #635bff; } ${css}</style></head><body>
+    <header><a href="/"><svg><path fill="#24cb71"/></svg></a><nav><svg><path fill="#e01e5a"/></svg></nav></header>
+    <section class="logos"><svg><path fill="#34a853"/><path fill="#34a853"/><path fill="#34a853"/></svg></section></body></html>`;
+  const analysis = await analyzeSource("https://pay.example/", { fetch: async () => new Response(html) });
+  const accents = analysis.palettes.light.accents;
+  assert.equal(accents[0], "#635bff");
+  assert.ok(accents.includes("#ffd601") && accents.includes("#ee30fb") && accents.includes("#24cb71"), accents.join(" "));
+  for (const noise of ["#34a853", "#e01e5a", "#972121", "#e6f6e9"]) assert.ok(!accents.includes(noise), `${noise} is not a brand hue`);
+  assert.equal(analysis.palettes.light.colorMode, "multicolor");
+});
+
+test("stylesheets on a CDN host count toward the palette", async () => {
+  const html = '<html><head><title>x</title><link href="https://cdn.example/site.css" rel="stylesheet"><style>:root { --primary: #635bff; }</style></head><body></body></html>';
+  const fetched = [];
+  const fetch = async (url) => {
+    fetched.push(String(url));
+    return new Response(String(url).endsWith(".css") ? ".a { color: #ffd601 } .b { color: #ee30fb } .c { color: #00d4ff }" : html);
+  };
+  const analysis = await analyzeSource("https://pay.example/", { fetch });
+  assert.ok(fetched.includes("https://cdn.example/site.css"));
+  assert.equal(analysis.palettes.light.accents.length, 4);
+});

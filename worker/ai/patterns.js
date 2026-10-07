@@ -1,6 +1,7 @@
 // Named choreographies the story designer chooses from. Each is a mechanic,
 // not a screen: the model keeps the move's steps and builds the screen from
-// the product's own objects. Every pattern is a complete, valid plan so the
+// the product's own objects. Patterns are wordless on purpose: skeletons read
+// better than text, and examples are what the model copies most. Every pattern is a complete, valid plan so the
 // model sees the exact syntax, and each comes from a different made-up
 // product so no single screen becomes the template.
 
@@ -10,12 +11,12 @@ export const MOVES = Object.freeze({
     plan: {
       copy: { description: "Pick the next request and sign it off.", eyebrow: "Reviews", title: "Approve in two clicks." },
       elements: {
-        approve: { kind: "button", label: "Approve" },
+        approve: { kind: "button" },
         detail: { kind: "panel" },
         "detail-bar-a": { kind: "bar" },
         "detail-bar-b": { kind: "bar" },
         "detail-title": { kind: "text" },
-        queue: { kind: "panel", label: "Requests" },
+        queue: { kind: "panel" },
         "req-1": { kind: "row", state: "pending", tone: "tag-2" },
         "req-2": { kind: "row", tone: "tag-3" },
         "req-3": { kind: "row", tone: "tag-1" },
@@ -34,11 +35,11 @@ export const MOVES = Object.freeze({
       copy: { description: "Write a note and it lands at the top of the thread.", eyebrow: "Notes", title: "Say it once." },
       elements: {
         composer: { kind: "panel" },
-        note: { kind: "field", label: "Add a note" },
+        note: { kind: "field" },
         "note-new": { kind: "card", tone: "tag-2" },
         "note-a": { kind: "card", tone: "tag-1" },
         "note-b": { kind: "card", tone: "tag-3" },
-        send: { kind: "button", label: "Post" },
+        send: { kind: "button" },
         thread: { kind: "panel" },
       },
       label: "Post note",
@@ -58,7 +59,7 @@ export const MOVES = Object.freeze({
         "step-a": { kind: "card", tone: "tag-1" },
         "step-b": { kind: "card", tone: "tag-3" },
         "step-new": { kind: "card", state: "pending", tone: "tag-2" },
-        trigger: { kind: "chip", label: "New order", tone: "accent" },
+        trigger: { kind: "chip", tone: "accent" },
       },
       label: "Add step",
       screen: { children: [{ children: ["trigger", "step-a", "step-b"], id: "flow", type: "column" }, { children: ["add-step"], id: "side", type: "column" }], type: "row" },
@@ -74,7 +75,7 @@ export const MOVES = Object.freeze({
       copy: { description: "One tap and only the open listings stay in focus.", eyebrow: "Listings", title: "Find it faster." },
       elements: {
         "chip-all": { kind: "chip", state: "on" },
-        "chip-open": { kind: "chip", label: "Open now" },
+        "chip-open": { kind: "chip" },
         "chip-near": { kind: "chip" },
         "spot-a": { kind: "image", tone: "tag-1" },
         "spot-b": { kind: "image", tone: "tag-2" },
@@ -98,7 +99,7 @@ export const MOVES = Object.freeze({
         "build-b": { kind: "row", tone: "tag-3", value: 0.8 },
         builds: { kind: "panel" },
         health: { kind: "trend", value: 0.35 },
-        status: { kind: "chip", label: "Rolling out", state: "pending" },
+        status: { kind: "chip", state: "pending" },
       },
       label: "Roll out",
       screen: { children: [{ children: ["health", "status"], type: "column" }, { children: ["build-a", "build-b"], id: "builds", type: "panel" }], type: "row" },
@@ -142,7 +143,7 @@ export const MOVES = Object.freeze({
         "order-c": { kind: "row", tone: "tag-2" },
         "order-new": { kind: "row", tone: "tag-4" },
         "order-z": { kind: "row", tone: "tag-2" },
-        rush: { kind: "chip", label: "Rush", tone: "accent" },
+        rush: { kind: "chip", tone: "accent" },
         today: { kind: "chart", value: 0.4 },
       },
       label: "Live orders",

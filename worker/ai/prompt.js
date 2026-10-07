@@ -71,7 +71,7 @@ Rules:
 - 5 candidates from 5 different areas of the product; never 5 steps of one workflow.
 - Every candidate has a different move. Prefer moves that fit the feature's real interaction, and vary the surfaces.
 - driver "system" when the product changes the screen by itself (payment arrives, build finishes, data syncs); at most 2 candidates.
-- words "none" when shapes, color, and motion explain the feature alone; "few" when 1-2 real words make it clear. Wordless is often stronger.
+- words "none" by default: skeleton shapes, color, and motion carry the story. "few" only when the feature cannot be read without one or two words; at most one candidate.
 - objects are specific to this product, never generic like "Item 1".
 - Write in English unless the product only serves one non-English market.`;
 
@@ -104,7 +104,7 @@ Rules:
 - driver "user": steps the person causes have "by"; a step without "by" happens on its own right after. driver "system": no step has "by".
 - The screen is a real, full product screen: at least 4 items besides panels; unlabeled items are skeletons and cost nothing. At most 3 groups deep, 4 items per group, 3 columns side by side.
 - One focus: each step changes one main thing; at most 2 highlights per step.
-- Words follow the brief: "none" means no labels at all and no labeled text; "few" means label only what needs naming, with real words from this product, at most ${LIMITS.label} characters. Never lorem ipsum or placeholders like "Item 1".
+- Words follow the brief: "none" means no element has a label (text elements become heading skeletons); "few" means at most 2 labels, on the focus element or the button, real words from this product, at most ${LIMITS.label} characters. Never lorem ipsum or placeholders like "Item 1".
 - Tones are brand colors: give one only where color means something (category, status, person, payment method); leave the rest untoned.
 - Ids: lowercase letters, digits, dashes. Declare every id in "elements" (unique); an element appears once per screen. Group names differ from element ids.
 - Write in English unless the product only serves one non-English market.`;

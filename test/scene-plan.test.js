@@ -5,7 +5,8 @@ import path from "node:path";
 import test from "node:test";
 import { analyzeSource } from "../src/analyze.js";
 import { parseArgs } from "../src/args.js";
-import { __testing, planKeys } from "../src/compose/plan.js";
+import { __testing, planKeys, withFillers } from "../src/compose/plan.js";
+import { frameFor, FORMATS } from "../src/layout/formats.js";
 import { generateCollection } from "../src/generate.js";
 import { validatePlan } from "../src/scene-plan.js";
 import { wellFormedErrors } from "./helpers/xml.js";
@@ -229,4 +230,36 @@ test("an inserted element starts as the shape it grows out of", () => {
   assert.deepEqual(__testing.viewAt("fresh", { toward: 1, ui: 0 }, layouts, null), { opacity: 0, rect: button });
   layouts.origins[1] = {};
   assert.deepEqual(__testing.viewAt("fresh", { toward: 1, ui: 0 }, layouts, null), { opacity: 0, rect: slot }, "without an origin it opens from its slot");
+});
+
+const fillerIds = (node) => (typeof node === "string" ? (node.startsWith("__fill-") ? [node] : []) : node.children.flatMap(fillerIds));
+
+test("fillers extend a list inside a mixed panel, before its button", () => {
+  const { plan } = validatePlan({
+    elements: { done: { kind: "chip" }, go: { kind: "button" }, list: { kind: "panel" }, "r-1": { kind: "row" }, "r-2": { kind: "row" }, "r-3": { kind: "row" } },
+    screen: { children: ["r-1", "r-2", "r-3", "go"], id: "list", type: "panel" },
+    steps: [{ by: { click: "r-2" }, do: [{ id: "r-2", op: "set", state: "selected" }] }, { by: { click: "go" }, do: [{ id: "go", op: "set", state: "done" }] }],
+  });
+  const filled = withFillers(plan, frameFor(FORMATS["9:16"]));
+  const children = filled.states[0].layout.children;
+  assert.ok(fillerIds(filled.states[0].layout).length >= 2);
+  assert.equal(children.at(-1), "go", "the button stays after the list");
+  assert.ok(children.indexOf("r-3") < children.indexOf(fillerIds(filled.states[0].layout)[0]));
+});
+
+test("a grid of images gains whole rows, and a detail panel gains text lines", () => {
+  const { plan } = validatePlan({
+    elements: { a: { kind: "image" }, b: { kind: "image" }, c: { kind: "image" }, d: { kind: "image" }, title: { kind: "text" }, line: { kind: "bar" }, detail: { kind: "panel" } },
+    screen: { children: [{ children: ["a", "b"], type: "row" }, { children: ["c", "d"], type: "row" }, { children: ["title", "line"], id: "detail", type: "panel" }], type: "column" },
+    steps: [{ by: { click: "a" }, do: [{ id: "a", op: "set", state: "selected" }] }, { by: { click: "c" }, do: [{ id: "c", op: "set", state: "selected" }] }],
+  });
+  const filled = withFillers(plan, frameFor(FORMATS["9:16"]));
+  const root = filled.states[0].layout.children;
+  const detail = root.find((node) => node.id === "detail");
+  const rows = root.filter((node) => node.type === "row");
+  assert.ok(rows.length > 2, "the grid has filler rows");
+  assert.ok(rows.slice(2).every((row) => row.children.length === 2 && row.children.every((id) => id.startsWith("__fill-"))));
+  assert.ok(root.indexOf(detail) > root.indexOf(rows.at(-1)), "filler rows continue the grid, before the panel below it");
+  assert.ok(detail.children.filter((id) => String(id).startsWith("__fill-")).every((id) => filled.elements[id].kind === "bar"));
+  assert.ok(detail.children.length > 2, "the detail panel has filler lines");
 });

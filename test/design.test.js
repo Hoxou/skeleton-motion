@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { validatePlan } from "../src/scene-plan.js";
 import { githubRepo, isThin, pageDigest, pageSummary, productLinks } from "../worker/ai/context.js";
-import { designStories, fingerprint, normalizeBriefs } from "../worker/ai/design.js";
+import { designStories, fingerprint, limitWords, normalizeBriefs } from "../worker/ai/design.js";
 import { MOVES } from "../worker/ai/patterns.js";
 import { BRIEF_SCHEMA, STORY_SCHEMA, SURFACES, wirePlan } from "../worker/ai/prompt.js";
 import { geminiProvider, parseJsonReply, ProviderError } from "../worker/ai/providers.js";
@@ -247,4 +247,17 @@ test("a model found out of quota is skipped by later calls", async (context) => 
   asked.length = 0;
   await provider.json({ system: "s", user: "u" });
   assert.deepEqual(asked, ["second-model"]);
+});
+
+test("at most one story in a set uses words", () => {
+  const briefs = normalizeBriefs(candidates.map((candidate) => ({ ...candidate, words: "few" })));
+  assert.deepEqual(briefs.map((brief) => brief.words), ["few", "none", "none"]);
+});
+
+test("labels are capped to what the brief allows, the button and focus first", () => {
+  const plan = { elements: { a: { kind: "row", label: "Ana" }, b: { kind: "row", label: "Li" }, go: { kind: "button", label: "Pay" }, list: { kind: "panel", label: "Payouts" } } };
+  assert.ok(Object.values(limitWords(plan, "none", "b").elements).every((element) => !element.label));
+  const few = limitWords(plan, "few", "b").elements;
+  assert.deepEqual(Object.keys(few).filter((id) => few[id].label).sort(), ["b", "go"]);
+  assert.equal(few.a.kind, "row");
 });

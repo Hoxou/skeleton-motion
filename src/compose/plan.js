@@ -238,64 +238,96 @@ export function planDuration(plan) {
   return planKeys(plan).keys.at(-1).at;
 }
 
-// Lists read as real product screens when they are full. A panel holding a
-// column of rows or cards gets unlabeled skeleton siblings, as many as the
-// frame leaves room for without shrinking anything, the same count in every
-// state so an insert never overflows. Fillers carry no meaning and are never
+// Screens read as real products when they are full. Lists (a run of rows,
+// cards, or images in a column), grids (rows of cards or images), and detail
+// panels (text lines) get unlabeled skeleton siblings, as many as the frame
+// leaves room for without shrinking anything, the same count in every state
+// so an insert never overflows. The emptiest group grows first, so two
+// sides of a screen stay balanced. Fillers carry no meaning and are never
 // targeted, highlighted, or linked.
-const FILLABLE = new Set(["card", "row"]);
-const MAX_FILLERS = 5;
+const FILLABLE = new Set(["bar", "card", "image", "row"]);
+const MAX_FILLERS = 8;
 const FILL_ROOM = 0.92;
 
-function fillablePanels(plan) {
-  const kinds = {};
-  const rejected = new Set();
+const isColumn = (node) => !isItem(node) && (node.type === "column" || (node.type === "panel" && node.direction !== "row"));
+
+function sameKindRow(node, plan) {
+  if (isItem(node) || node.type !== "row" || node.children.length < 2 || !node.children.every(isItem)) return null;
+  const kinds = new Set(node.children.map((child) => plan.elements[itemId(child)]?.kind));
+  const [kind] = kinds;
+  return kinds.size === 1 && (kind === "card" || kind === "image") ? { count: node.children.length, kind } : null;
+}
+
+// What each group could be filled with, judged over every state it is in.
+function fillTargets(plan) {
+  const targets = new Map();
   const visit = (node) => {
     if (isItem(node)) return;
-    if (node.type === "panel") {
-      const items = node.children.filter(isItem).map((child) => plan.elements[itemId(child)]?.kind);
-      if (node.direction === "row" || items.length !== node.children.length || items.some((kind) => !FILLABLE.has(kind))) rejected.add(node.id);
-      else if (items.length) kinds[node.id] ??= items[0];
+    if (isColumn(node) && node.id) {
+      const kinds = node.children.filter(isItem).map((child) => plan.elements[itemId(child)]?.kind);
+      const counts = kinds.reduce((total, kind) => ({ ...total, [kind]: (total[kind] || 0) + 1 }), {});
+      const only = node.children.length > 0 && kinds.length === node.children.length && new Set(kinds).size === 1;
+      const list = ["row", "card", "image", "bar"].find((kind) => (counts[kind] || 0) >= 2 || (counts[kind] && (only || kind === "bar")));
+      const grid = node.children.map((child) => sameKindRow(child, plan)).filter(Boolean).at(-1);
+      const target = grid ? { ...grid, mode: "grid" } : list ? { kind: list, mode: "list" } : null;
+      if (target && !targets.has(node.id)) targets.set(node.id, target);
     }
     node.children.forEach(visit);
   };
   plan.states.forEach((state) => visit(state.layout));
-  return Object.entries(kinds).filter(([id]) => !rejected.has(id));
+  return targets;
 }
 
-function addFillers(plan, counts, kinds) {
+function addFillers(plan, counts, targets) {
   if (Object.values(counts).every((count) => count === 0)) return plan;
   const elements = { ...plan.elements };
-  const fillerIds = {};
-  for (const [panel, count] of Object.entries(counts)) {
-    fillerIds[panel] = Array.from({ length: count }, (_, index) => `__fill-${panel}-${index}`);
-    for (const id of fillerIds[panel]) elements[id] = { filler: true, kind: kinds[panel] };
+  const additions = {};
+  for (const [group, count] of Object.entries(counts)) {
+    const target = targets.get(group);
+    additions[group] = Array.from({ length: count }, (_, index) => {
+      if (target.mode === "list") {
+        const id = `__fill-${group}-${index}`;
+        elements[id] = { filler: true, kind: target.kind };
+        return id;
+      }
+      const children = Array.from({ length: target.count }, (_, column) => {
+        const id = `__fill-${group}-${index}-${column}`;
+        elements[id] = { filler: true, kind: target.kind };
+        return id;
+      });
+      return { children, type: "row" };
+    });
   }
-  const withIds = (node) => {
+  const withFill = (node) => {
     if (isItem(node)) return node;
-    const children = node.children.map(withIds);
-    return { ...node, children: node.type === "panel" && fillerIds[node.id] ? [...children, ...fillerIds[node.id]] : children };
+    const children = node.children.map(withFill);
+    const extra = additions[node.id];
+    if (!extra?.length) return { ...node, children };
+    const target = targets.get(node.id);
+    // Fillers continue the run they extend, so a button or chip after a list
+    // stays after it.
+    const last = children.findLastIndex((child) => (target.mode === "grid" ? Boolean(sameKindRow(child, plan)) : isItem(child) && plan.elements[itemId(child)]?.kind === target.kind));
+    const at = last >= 0 ? last + 1 : children.length;
+    return { ...node, children: [...children.slice(0, at), ...extra, ...children.slice(at)] };
   };
-  return { ...plan, elements, states: plan.states.map((state) => ({ ...state, layout: withIds(state.layout) })) };
+  return { ...plan, elements, states: plan.states.map((state) => ({ ...state, layout: withFill(state.layout) })) };
 }
 
 export function withFillers(plan, frame) {
-  const candidates = fillablePanels(plan);
-  if (candidates.length === 0) return plan;
-  const kinds = Object.fromEntries(candidates);
+  const targets = fillTargets(plan);
+  if (targets.size === 0) return plan;
   const room = { ...frame.safe, height: frame.safe.height * FILL_ROOM, y: frame.safe.y + frame.safe.height * (1 - FILL_ROOM) / 2 };
   const fits = (trial) => trial.states.every((state) => layoutTree(state.layout, room, trial, frame, {}, { minScale: 1 }).issues.length === 0);
   if (!fits(plan)) return plan;
-  const counts = Object.fromEntries(candidates.map(([id]) => [id, 0]));
+  const counts = Object.fromEntries([...targets.keys()].map((id) => [id, 0]));
   const open = new Set(Object.keys(counts));
   while (open.size) {
-    // Grow the emptiest panel first so side-by-side columns stay balanced.
-    const panel = [...open].sort((a, b) => counts[a] - counts[b])[0];
-    const next = { ...counts, [panel]: counts[panel] + 1 };
-    if (next[panel] > MAX_FILLERS || !fits(addFillers(plan, next, kinds))) open.delete(panel);
+    const group = [...open].sort((a, b) => counts[a] - counts[b])[0];
+    const next = { ...counts, [group]: counts[group] + 1 };
+    if (next[group] > MAX_FILLERS || !fits(addFillers(plan, next, targets))) open.delete(group);
     else Object.assign(counts, next);
   }
-  return addFillers(plan, counts, kinds);
+  return addFillers(plan, counts, targets);
 }
 
 function layoutsFor(plan, frame) {
@@ -361,7 +393,7 @@ function textFit(label, width, size) {
 function toneFill(element, index, use = "surface") {
   const scale = use === "mark" ? "mark" : "tag";
   if (element.tone === "accent") return "var(--accent)";
-  if (element.tone === "neutral") return use === "mark" ? "color-mix(in oklab, var(--ink) 24%, var(--surface))" : "var(--muted)";
+  if (element.tone === "neutral") return use === "mark" ? "var(--border-strong)" : "var(--muted)";
   const tag = /^tag-([1-4])$/.exec(element.tone || "");
   return `var(--${scale}-${tag ? tag[1] : (index % 4) + 1})`;
 }
@@ -485,7 +517,8 @@ function elementMarkup(id, index, element, views, keys, timeline, k, radius, typ
       body = `${timeline.element("rect", { ...rectTracks(frames), rx }, `class="ln-hair" fill="var(--surface)" stroke="var(--border)"`)}
         ${label ? text(kind.font, (rect) => ({ x: rect.x + 14 * k, y: rect.y + 14 * k + kind.font * k * 0.85 }), `font-weight="600" fill="var(--ink)" fill-opacity=".85"`)
           : timeline.element("rect", rectTracks(sized((rect) => ({ height: 7 * k, width: rect.width * 0.5, x: rect.x + 14 * k, y: rect.y + 16 * k }))), `rx="${formatNumber(3.5 * k)}" fill="var(--ink)" opacity=".2"`)}
-        ${valued ? "" : timeline.element("rect", rectTracks(sized((rect) => ({ height: 6 * k, width: rect.width * 0.62, x: rect.x + 14 * k, y: rect.y + rect.height - 26 * k }))), `class="lod-fine" rx="${formatNumber(3 * k)}" fill="var(--ink)" opacity=".1"`)}
+        ${valued ? "" : `${timeline.element("rect", rectTracks(sized((rect) => ({ height: 12 * k, width: Math.min(40 * k, rect.width * 0.3), x: rect.x + 14 * k, y: rect.y + rect.height - 29 * k }))), `rx="${formatNumber(6 * k)}" fill="${toneFill(element, index)}"`)}
+        ${timeline.element("rect", rectTracks(sized((rect) => ({ height: 6 * k, width: Math.max(0, rect.width * 0.62 - Math.min(40 * k, rect.width * 0.3) - 8 * k), x: rect.x + 22 * k + Math.min(40 * k, rect.width * 0.3), y: rect.y + rect.height - 26 * k }))), `class="lod-fine" rx="${formatNumber(3 * k)}" fill="var(--ink)" opacity=".1"`)}`}
         ${timeline.element("circle", { cx: sized((rect) => rect.x + rect.width - 22 * k), cy: sized((rect) => rect.y + rect.height - 22 * k), r: sized(() => 8 * k) }, `fill="${toneFill(element, index, "mark")}"`)}`;
       break;
     case "row":

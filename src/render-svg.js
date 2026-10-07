@@ -1,4 +1,5 @@
 import { composeScene } from "./compose/index.js";
+import { mixColors, resolveMix } from "./color.js";
 import { escapeXml } from "./utils.js";
 
 const BASE_WIDTH = 1200;
@@ -494,7 +495,7 @@ export function renderSvg(scene) {
   const accents = palette.accents?.length ? palette.accents : [palette.accent];
   const pastels = palette.pastels?.length ? palette.pastels : [];
   const accentAt = (index) => accents[index] || accents[index % accents.length] || palette.accent;
-  const tagAt = (index) => pastels[index] || `color-mix(in oklab, ${accentAt(index)} 14%, ${palette.surface})`;
+  const tagAt = (index) => resolveMix(pastels[index]) || mixColors(accentAt(index), 14, palette.surface);
   // Small identity marks (avatars, category dots) carry a multicolor brand's
   // own hues at full strength; a single-accent brand keeps them as tints.
   const markAt = (index) => (palette.colorMode === "multicolor" && accents.length > 1 ? accentAt(index) : tagAt(index));
@@ -522,10 +523,10 @@ export function renderSvg(scene) {
       --accent-2: ${accentAt(1)};
       --accent-3: ${accentAt(2)};
       --accent-4: ${accentAt(3)};
-      --accent-soft: color-mix(in oklab, ${palette.accent} 12%, ${palette.surface});
+      --accent-soft: ${mixColors(palette.accent, 12, palette.surface)};
       --background: ${palette.background};
       --border: ${palette.border};
-      --border-strong: color-mix(in oklab, ${palette.foreground} 18%, ${palette.surface});
+      --border-strong: ${mixColors(palette.foreground, 18, palette.surface)};
       --cursor-outline: ${palette.background};
       --ink: ${palette.foreground};
       --muted: ${palette.muted};

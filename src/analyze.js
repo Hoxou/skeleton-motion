@@ -109,6 +109,55 @@ function supplementalColors(primary, candidates) {
   return closest >= 0 ? candidates.filter((_, index) => index !== closest) : candidates;
 }
 
+function hexChannels(hex) {
+  return [1, 3, 5].map((index) => Number.parseInt(hex.slice(index, index + 2), 16));
+}
+
+function hexHue(hex) {
+  const [r, g, b] = hexChannels(hex).map((value) => value / 255);
+  const max = Math.max(r, g, b);
+  const delta = max - Math.min(r, g, b);
+  if (!delta) return 0;
+  const sector = max === r ? ((g - b) / delta + 6) % 6 : max === g ? (b - r) / delta + 2 : (r - g) / delta + 4;
+  return sector * 60;
+}
+
+const hueGap = (a, b) => Math.min(Math.abs(hexHue(a) - hexHue(b)), 360 - Math.abs(hexHue(a) - hexHue(b)));
+
+// Vivid, mid-to-light colors a brand's stylesheets use, most frequent
+// first, one per hue family. Pages that theme with plain hex values (no
+// utility classes or named tokens) still show their palette this way.
+export function stylesheetHues(text, max = 6) {
+  const counts = new Map();
+  for (const match of String(text || "").matchAll(/#([0-9a-f]{6})\b/gi)) {
+    const hex = `#${match[1].toLowerCase()}`;
+    const [r, g, b] = hexChannels(hex);
+    const top = Math.max(r, g, b);
+    const chroma = top ? ((top - Math.min(r, g, b)) / top) * (top / 255) : 0;
+    if (chroma >= 0.45 && top >= 180) counts.set(hex, (counts.get(hex) || 0) + 1);
+  }
+  const picked = [];
+  for (const [hex] of [...counts].sort((a, b) => b[1] - a[1])) {
+    if (picked.length >= max) break;
+    if (picked.every((other) => hueGap(hex, other) >= 40)) picked.push(hex);
+  }
+  return picked;
+}
+
+// Markup that carries the brand's own colors: inline styles, and the logo
+// (the link home, or the first graphic in the header). Other inline SVG on
+// a landing page, menus included, is mostly customer and integration logos.
+function brandMarkup(html) {
+  const source = String(html || "");
+  const home = [...source.matchAll(/<a\b[^>]*href=["'](?:\/|https?:\/\/[^/"']+\/?)["'][^>]*>[\s\S]*?<\/a>/gi)].map((match) => match[0]).slice(0, 2);
+  const header = source.match(/<header\b[\s\S]*?<\/header>/i)?.[0] || "";
+  const firstMark = header.match(/<svg\b[\s\S]*?<\/svg>/i)?.[0] || "";
+  const styles = [...source.matchAll(/\sstyle=["']([^"']*)["']/gi)].map((match) => match[1]);
+  // The logo counts double: it is the one mark guaranteed to be the brand.
+  const logo = [...home, firstMark].join("\n");
+  return [logo, logo, ...styles].join("\n");
+}
+
 function inferColorSystem(sourceText, cssText = "") {
   const familyCounts = new Map();
   const classPattern = /(?:^|[^\w-])(?:bg|text|border|from|via|to|ring|shadow)-([a-z]+)-(\d{2,3})(?:\/\d+)?/gi;
@@ -156,7 +205,7 @@ function inferColorSystem(sourceText, cssText = "") {
   // Measured colors exclude the accent, so two of them already make three hues.
   const mode = uniqueColors([...lightAccents, ...semanticColors]).length >= 3 || measuredColors.length >= 2 ? "multicolor" : "monochrome";
 
-  return { darkAccents, darkPastels, families, lightAccents, lightCanvas, lightPastels, mode };
+  return { darkAccents, darkPastels, families, lightAccents, lightCanvas, lightPastels, mode, stylesheetHues: stylesheetHues(`${cssText}\n${brandMarkup(sourceText)}`) };
 }
 
 // Used when the source exposes no brand token; callers compare against it
@@ -193,11 +242,29 @@ function buildPalette(lightVariables, darkVariables, colorSystem = {}) {
   const darkSupplementals = familyIndex >= 0
     ? (colorSystem.darkAccents || []).filter((_, index) => index !== familyIndex)
     : supplementalColors(dark.accent, colorSystem.darkAccents || []);
-  light.accents = uniqueColors([light.accent, ...lightSupplementals]).slice(0, 4);
-  dark.accents = uniqueColors([dark.accent, ...darkSupplementals]).slice(0, 4);
+  // Hues seen in the stylesheets top up a palette the tokens left short,
+  // skipping any too close to a color already in it.
+  const topUp = (accents) => {
+    const out = [...accents];
+    for (const hex of colorSystem.stylesheetHues || []) {
+      if (out.length >= 4) break;
+      if (out.every((other) => !/^#[0-9a-f]{6}$/i.test(other) || hueGap(hex, other) >= 40)) out.push(hex);
+    }
+    return out;
+  };
+  // A supplemental accent stands for a hue, so washed-out tints (status
+  // backgrounds, pastels) do not count as one.
+  const vivid = (value) => {
+    if (!/^#[0-9a-f]{6}$/i.test(value)) return true;
+    const [r, g, b] = hexChannels(value.toLowerCase());
+    const top = Math.max(r, g, b);
+    return top > 0 && ((top - Math.min(r, g, b)) / top) * (top / 255) >= 0.3;
+  };
+  light.accents = topUp(uniqueColors([light.accent, ...lightSupplementals.filter(vivid)])).slice(0, 4);
+  dark.accents = topUp(uniqueColors([dark.accent, ...darkSupplementals.filter(vivid)])).slice(0, 4);
   light.pastels = uniqueColors(colorSystem.lightPastels || []);
   dark.pastels = dark.accents.map((accent) => `color-mix(in oklab, ${accent} 22%, ${dark.surface})`);
-  light.colorMode = colorSystem.mode || "monochrome";
+  light.colorMode = colorSystem.mode === "multicolor" || light.accents.length >= 3 ? "multicolor" : "monochrome";
   dark.colorMode = light.colorMode;
   light.canvas = colorSystem.lightCanvas;
   dark.canvas = light.colorMode === "multicolor" && light.canvas
@@ -339,17 +406,26 @@ async function analyzeRepository(source) {
   };
 }
 
+// Stylesheets the page links, its own origin first. Brands often serve CSS
+// from a CDN host, so other https origins count too (the hosted Worker's
+// fetch still vets every URL).
 function extractLinkedStyles(html, url) {
-  const styles = [];
-  for (const match of html.matchAll(/<link[^>]+rel=["']stylesheet["'][^>]+href=["']([^"']+)["']/gi)) {
+  const origin = new URL(url).origin;
+  const own = [];
+  const other = [];
+  for (const [tag] of html.matchAll(/<link\b[^>]*>/gi)) {
+    if (!/\brel=["']?stylesheet\b/i.test(tag)) continue;
+    const href = tag.match(/\bhref=["']([^"']+)["']/i)?.[1];
+    if (!href) continue;
     try {
-      const linked = new URL(match[1], url);
-      if (linked.origin === new URL(url).origin) styles.push(linked.href);
+      const linked = new URL(href, url);
+      if (linked.origin === origin) own.push(linked.href);
+      else if (linked.protocol === "https:") other.push(linked.href);
     } catch {
       // Ignore malformed stylesheet links.
     }
   }
-  return styles.slice(0, 12);
+  return [...new Set([...own, ...other])].slice(0, 12);
 }
 
 async function analyzeUrl(source, fetch, measuredCss = "") {
@@ -357,7 +433,7 @@ async function analyzeUrl(source, fetch, measuredCss = "") {
   if (!response.ok) throw new Error(`URL returned ${response.status}: ${source}`);
   const html = await response.text();
   let cssText = [...html.matchAll(/<style[^>]*>([\s\S]*?)<\/style>/gi)].map((match) => match[1]).join("\n");
-  const sheets = extractLinkedStyles(html, response.url);
+  const sheets = extractLinkedStyles(html, response.url || source);
   const fetched = await Promise.allSettled(sheets.map(async (url) => {
     const sheet = await fetch(url, { headers: { "user-agent": "skeleton-motion/0.1" } });
     return sheet.ok ? sheet.text() : "";
