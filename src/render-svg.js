@@ -1,5 +1,5 @@
 import { composeScene } from "./compose/index.js";
-import { hexHue, mixColors, resolveMix, toHex } from "./color.js";
+import { hexHue, lightness, mixColors, resolveMix, toHex, withLightness } from "./color.js";
 import { escapeXml } from "./utils.js";
 
 const BASE_WIDTH = 1200;
@@ -514,6 +514,17 @@ export function renderSvg(scene) {
   const brandHue = (test) => accents.map(toHex).find((hex) => hex && strong(hex) && test(hexHue(hex)));
   const success = brandHue((hue) => hue >= 90 && hue <= 170) || "#1fa463";
   const danger = brandHue((hue) => hue >= 345 || hue <= 15) || "#e5484d";
+  // Status marks are a soft disc with a colored glyph, the glyph darker on
+  // light surfaces and lighter on dark ones, so any brand green or red keeps
+  // its contrast in both themes. A failed button is filled at a lightness
+  // that carries a white cross in either theme.
+  const darkSurface = toHex(palette.surface) ? lightness(toHex(palette.surface)) < 0.5 : false;
+  const status = (color) => ({
+    fill: withLightness(color, darkSurface ? 0.62 : 0.58),
+    ink: withLightness(color, darkSurface ? 0.8 : 0.5),
+    soft: mixColors(withLightness(color, darkSurface ? 0.7 : 0.6), darkSurface ? 26 : 16, palette.surface),
+  });
+  const [ok, failed] = [status(success), status(danger)];
   const composed = scene.composed ? composeScene(scene) : undefined;
   const viewBox = composed?.viewBox || (scene.concept === "flow"
     ? { height: COMPACT_HEIGHT, width: COMPACT_WIDTH }
@@ -562,8 +573,11 @@ export function renderSvg(scene) {
       --tint-1: ${tintAt(14)};
       --tint-2: ${tintAt(22)};
       --tint-3: ${tintAt(9)};
-      --success: ${success};
-      --danger: ${danger};
+      --success: ${ok.ink};
+      --success-soft: ${ok.soft};
+      --danger: ${failed.ink};
+      --danger-soft: ${failed.soft};
+      --danger-fill: ${failed.fill};
       ${sizeVariables(viewBox.width, viewport.width, viewport.width, viewport.width, reference)}
     }
     ${sizeTierCss(viewBox.width, reference)}

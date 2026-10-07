@@ -118,3 +118,24 @@ export function colorFamilies(weighted) {
   const keptSum = kept.reduce((total, family) => total + family.share, 0);
   return kept.map((family) => ({ hex: family.hex, share: Number((family.share / keptSum).toFixed(4)) }));
 }
+
+/** Perceived lightness (OKLab L, 0 to 1) of a hex color. */
+export function lightness(hex) {
+  return toOklab(hex)[0];
+}
+
+/**
+ * The same hue and chroma at another lightness, clamped into sRGB. Used to
+ * keep a status color legible on both light and dark surfaces.
+ */
+export function withLightness(hex, target) {
+  if (!HEX.test(hex)) return hex;
+  const [, a, b] = toOklab(hex);
+  // Lower chroma until the color fits sRGB at that lightness.
+  for (let scale = 1; scale > 0; scale -= 0.05) {
+    const out = fromOklab([target, a * scale, b * scale]);
+    const back = toOklab(out);
+    if (Math.abs(back[0] - target) < 0.02) return out;
+  }
+  return fromOklab([target, 0, 0]);
+}

@@ -468,7 +468,7 @@ function statusMarkup(element, frames, rx, statuses, timeline, k) {
     const ring = frames.map((frame) => ({ height: frame.height + 6 * k, width: frame.width + 6 * k, x: frame.x - 3 * k, y: frame.y - 3 * k }));
     out.push(layer("focused", "rect", { ...rectTracks(ring), rx: rx.map((value) => value + 3 * k) }, `fill="none" class="ln-base" stroke="var(--accent)"`));
   }
-  for (const [name, color] of [["done", "var(--success)"], ["error", "var(--danger)"]]) {
+  for (const [name, color] of [["done", "success"], ["error", "danger"]]) {
     if (!has(name)) continue;
     const badge = element.kind === "button"
       ? frames.map((frame) => ({ cx: frame.x + frame.width / 2, cy: frame.y + frame.height / 2, r: 0 }))
@@ -482,9 +482,12 @@ function statusMarkup(element, frames, rx, statuses, timeline, k) {
     const glyph = name === "done" ? CHECK : CROSS;
     const mark = badge.map((spot) => glyph(spot.cx, spot.cy, element.kind === "button" ? size : spot.r * 1.3));
     const shown = is(name);
-    // A failed button turns red itself; badges sit on the item.
-    const failed = element.kind === "button" && name === "error" ? timeline.element("rect", { ...rectTracks(frames), rx }, `fill="${color}"`) : "";
-    out.push(`<g opacity="${shown[0]}">${timeline.animate("opacity", shown)}${failed}${element.kind === "button" ? "" : timeline.element("circle", { cx: badge.map((spot) => spot.cx), cy: badge.map((spot) => spot.cy), r: badge.map((spot) => spot.r) }, `fill="${color}"`)}<path d="${mark[0]}" fill="none" stroke="#fff" stroke-width="${formatNumber(Math.max(1.5 * k, size * 0.16))}" stroke-linecap="round" stroke-linejoin="round">${timeline.animateText("d", mark)}</path></g>`);
+    // A failed button turns red itself; badges are a soft disc with a colored
+    // glyph on the item. A button's own check stays white on its fill.
+    const button = element.kind === "button";
+    const failed = button && name === "error" ? timeline.element("rect", { ...rectTracks(frames), rx }, `fill="var(--danger-fill)"`) : "";
+    const disc = button ? "" : timeline.element("circle", { cx: badge.map((spot) => spot.cx), cy: badge.map((spot) => spot.cy), r: badge.map((spot) => spot.r) }, `fill="var(--${color}-soft)"`);
+    out.push(`<g opacity="${shown[0]}">${timeline.animate("opacity", shown)}${failed}${disc}<path d="${mark[0]}" fill="none" stroke="${button ? "#fff" : `var(--${color})`}" stroke-width="${formatNumber(Math.max(1.5 * k, size * (button ? 0.16 : 0.2)))}" stroke-linecap="round" stroke-linejoin="round">${timeline.animateText("d", mark)}</path></g>`);
   }
   return out.join("");
 }

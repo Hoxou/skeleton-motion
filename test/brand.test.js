@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { analyzeSource } from "../src/analyze.js";
+import { lightness, withLightness } from "../src/color.js";
 import { parseArgs } from "../src/args.js";
 import { generateCollection } from "../src/generate.js";
 import { validatePlan } from "../src/scene-plan.js";
@@ -190,8 +191,10 @@ test("untoned marks are shades of the main color, checks green, crosses red", as
   };
   const branded = await render([["#635bff", 0.6], ["#1aae39", 0.4]]);
   assert.match(branded, /--shade-1: #635bff;/);
-  assert.match(branded, /--success: #1aae39;/, "the brand's own green marks success");
-  assert.match(branded, /--danger: #e5484d;/, "a standard red when the brand has none");
+  // Status glyphs keep the hue but take a lightness that reads on the surface.
+  assert.match(branded, new RegExp(`--success: ${withLightness("#1aae39", 0.5)};`), "the brand's own green marks success");
+  assert.match(branded, new RegExp(`--danger: ${withLightness("#e5484d", 0.5)};`), "a standard red when the brand has none");
+  assert.match(branded, /data-plan-id="a"[^]*?fill="var\(--success-soft\)"[^]*?stroke="var\(--success\)"/, "a check is a soft disc with a green glyph");
   assert.match(branded, /data-plan-id="a"[^]*?<circle [^>]*fill="var\(--shade-1\)"/);
   assert.match(branded, /data-plan-id="b"[^]*?<circle [^>]*fill="var\(--mark-2\)"/);
   const mono = await render([["#635bff", 1]]);
@@ -219,4 +222,19 @@ test("the measured call-to-action color gives way to a color that covers far mor
   const read = async (shares) => (await analyzeSource("https://chat.example/", { fetch: async () => new Response(page), measuredCss: probeToCss({ accent: "#0b5cab", shares }) })).palettes.light.accent;
   assert.equal(await read([["#730394", 0.78], ["#0b5cab", 0.22]]), "#730394");
   assert.equal(await read([["#730394", 0.4], ["#0b5cab", 0.3], ["#ffcf5e", 0.3]]), "#0b5cab");
+});
+
+test("status colors keep their contrast in both themes", async () => {
+  const page = "<html><head><title>x</title></head><body></body></html>";
+  const analysis = await analyzeSource("https://music.example/", { fetch: async () => new Response(page), measuredCss: probeToCss({ accent: "#1ed760", shares: [["#1ed760", 1]] }) });
+  const plan = validatePlan({
+    elements: { a: { kind: "row" }, b: { kind: "row" }, c: { kind: "row" }, d: { kind: "row" }, list: { kind: "panel" } },
+    screen: { children: ["a", "b", "c", "d"], id: "list", type: "panel" },
+    steps: [{ do: [{ id: "a", op: "set", state: "done" }] }, { do: [{ id: "b", op: "set", state: "error" }] }],
+  }, { driver: "system" }).plan;
+  const files = generateCollection(analysis, parseArgs(["https://music.example/", "--set", "--name", "m"], "/"), { stories: [{ copy: plan.copy, id: "m", label: plan.label, plan }] }).files;
+  const variable = (theme, name) => files.find((file) => file.name.endsWith(`.4x3.${theme}.svg`)).data.match(new RegExp(`--${name}: (#[0-9a-f]{6});`))[1];
+  assert.ok(lightness(variable("light", "success")) <= 0.52, "a bright brand green is darkened on white");
+  assert.ok(lightness(variable("dark", "success")) >= 0.78, "and lightened on a dark surface");
+  assert.ok(lightness(variable("dark", "danger-soft")) < 0.4, "soft discs stay dark in the dark theme");
 });
