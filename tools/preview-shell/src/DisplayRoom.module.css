@@ -33,6 +33,11 @@
   transition: background-color 320ms ease, color 320ms ease;
 }
 
+/* Explicit, not just the grid's default item stretch: CopyCode's trigger
+   (CopyCode.module.css) sets the same width: 100% so the two buttons match
+   regardless of how either one's layout changes later. */
+.download { width: 100%; }
+
 .scene {
   display: grid;
   place-items: center;
@@ -49,11 +54,12 @@
   .panel { position: static; order: -1; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto; align-items: end; }
   /* The panel stacks above the stage here, so only the header is subtracted. */
   .stage { --stage-fit: calc(100svh - 102px - 2 * var(--stage-padding) - 2px); min-height: 0; }
+  /* The ZIP download is a desktop/dev task; Copy code still works on phones. */
+  .download { display: none; }
 }
 
 @media (max-width: 560px) {
   .room { gap: 12px; padding: 112px 14px 14px; }
   .panel { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
-  .download { grid-column: 1 / -1; }
   .stage { --stage-padding: 18px; --stage-fit: calc(100svh - 126px - 2 * var(--stage-padding) - 2px); border-radius: 22px; }
 }

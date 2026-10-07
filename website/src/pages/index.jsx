@@ -207,7 +207,6 @@ function HomeContent() {
           <>
                       {quota?.ownKey ? `Using your own ${PROVIDERS[quota.ownKey.provider]?.label || "AI"} key. ` : quota ? `${quota.remaining} of ${quota.freeUses} free generations left. ` : ""}
                       <Button className={styles.inlineLink} type="button" onClick={() => setKeyDialog({ notice: "", open: true })}>{quota?.ownKey ? "Manage key" : "Use your own AI key"}</Button>
-                      <span className={styles.statusNote}>Generations are listed in the public gallery with their page URL.</span>
           </>
                   )}
                 </p>

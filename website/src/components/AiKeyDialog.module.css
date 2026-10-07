@@ -12,7 +12,9 @@
 .input {
   min-height: 44px;
   padding: 0 .9rem;
-  border: 0;
+  /* The popup's own background is close to --home-soft in dark mode, so a
+     fill alone doesn't read as an input; the border is what makes it one. */
+  border: 1px solid color-mix(in oklab, var(--home-ink) 16%, transparent);
   border-radius: 12px;
   outline: 0;
   background: var(--home-soft);

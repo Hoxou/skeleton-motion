@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "@base-ui/react/button";
-import { Menu } from "@base-ui/react/menu";
+import { Dialog } from "@base-ui/react/dialog";
 import styles from "./SiteHeader.module.css";
 
 // Framework-free so the Display Room (tools/preview-shell) renders the same
@@ -38,27 +38,39 @@ function ThemeToggle({ isDark, onToggle }) {
   );
 }
 
-// Phones only (see the 820px rule in SiteHeader.module.css); the theme toggle stays outside it.
+// Phones only (see the 820px rule in SiteHeader.module.css); the theme toggle
+// stays outside it. A full-height drawer rather than an anchored popup: a
+// small dropdown left no room for five link targets at a thumb-friendly size.
 function BurgerMenu({ LinkComponent }) {
+  const [open, setOpen] = useState(false);
   return (
-    <Menu.Root>
-      <Menu.Trigger className={`${styles.iconButton} ${styles.burger}`} aria-label="Open menu">
+    <Dialog.Root open={open} onOpenChange={setOpen}>
+      <Dialog.Trigger className={`${styles.iconButton} ${styles.burger}`} aria-label="Open menu">
         <svg viewBox="0 0 18 18" width="18" height="18" aria-hidden="true">
           <path d="M3 5.5h12M3 9h12M3 12.5h12" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
         </svg>
-      </Menu.Trigger>
-      <Menu.Portal>
-        <Menu.Positioner className={styles.menuPositioner} align="end" sideOffset={8}>
-          <Menu.Popup className={styles.menuPopup}>
+      </Dialog.Trigger>
+      <Dialog.Portal>
+        <Dialog.Backdrop className={styles.menuBackdrop} />
+        <Dialog.Popup className={styles.menuPanel}>
+          <div className={styles.menuPanelHead}>
+            <Dialog.Title className={styles.wordmark}>Skeleton Motion</Dialog.Title>
+            <Dialog.Close className={styles.iconButton} aria-label="Close menu">
+              <svg viewBox="0 0 18 18" width="18" height="18" aria-hidden="true">
+                <path d="M4 4l10 10M14 4 4 14" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
+              </svg>
+            </Dialog.Close>
+          </div>
+          <nav aria-label="Main navigation">
             {LINKS.map(({ label, ...target }) => (
-              <Menu.LinkItem key={label} className={styles.menuItem} closeOnClick render={<LinkComponent {...target} />}>
+              <LinkComponent key={label} className={styles.menuPanelLink} onClick={() => setOpen(false)} {...target}>
                 {label}
-              </Menu.LinkItem>
+              </LinkComponent>
             ))}
-          </Menu.Popup>
-        </Menu.Positioner>
-      </Menu.Portal>
-    </Menu.Root>
+          </nav>
+        </Dialog.Popup>
+      </Dialog.Portal>
+    </Dialog.Root>
   );
 }
 

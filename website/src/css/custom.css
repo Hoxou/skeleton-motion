@@ -33,7 +33,12 @@ html { scroll-behavior: smooth; }
 body { color: var(--motion-ink); }
 body:has(.skeleton-motion-home) .navbar { display: none; }
 body:has(.skeleton-motion-examples) .navbar { display: none; }
-.navbar { height: 72px; border: 0; box-shadow: none; background: color-mix(in oklab, var(--ifm-background-color) 90%, transparent); backdrop-filter: blur(16px); }
+/* `backdrop-filter` on .navbar would make it the containing block for its
+   fixed-position child .navbar-sidebar (the mobile menu), collapsing the
+   menu to the navbar's own 72px box instead of the full viewport. The blur
+   lives on a pseudo-element behind the nav content instead. */
+.navbar { position: relative; isolation: isolate; height: 72px; border: 0; box-shadow: none; background: none; }
+.navbar::before { content: ""; position: absolute; inset: 0; z-index: -1; background: color-mix(in oklab, var(--ifm-background-color) 90%, transparent); backdrop-filter: blur(16px); }
 .navbar [class*="colorModeToggle"] { width: 36px; height: 36px; }
 .navbar [class*="toggleIcon"] { width: 18px; height: 18px; }
 .navbar__title { font-size: 1.05rem; font-weight: 760; letter-spacing: -.05em; }

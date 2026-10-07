@@ -51,44 +51,68 @@
 
 .siteNav .burger { display: none; }
 
-/* Portaled to <body>, so it sits on chrome tokens above the fixed header. */
-.menuPositioner { z-index: 30; outline: 0; }
-.menuPopup {
-  min-width: 180px;
-  padding: 5px;
-  border: 1px solid var(--home-soft-hover);
-  border-radius: 18px;
-  background: var(--home-page);
-  box-shadow: 0 18px 48px -18px rgb(0 0 0 / 28%);
-  outline: 0;
-  transform-origin: var(--transform-origin);
-  transition: opacity 160ms ease, transform 200ms cubic-bezier(.22, 1, .36, 1);
+/* Portaled to <body>, so it sits above the fixed header on chrome tokens. */
+.menuBackdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  background: color-mix(in oklab, var(--home-ink) 32%, transparent);
+  backdrop-filter: blur(2px);
+  transition: opacity 220ms ease;
 }
-.menuPopup[data-starting-style],
-.menuPopup[data-ending-style] { opacity: 0; transform: translateY(-4px) scale(.98); }
-.menuItem {
+.menuBackdrop[data-starting-style],
+.menuBackdrop[data-ending-style] { opacity: 0; }
+
+/* A full-height drawer, not an anchored dropdown: five links need room for
+   48px tap targets, not a cramped popup squeezed under the toggle. */
+.menuPanel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 41;
+  display: flex;
+  flex-direction: column;
+  width: min(84vw, 360px);
+  padding: 18px;
+  padding-top: max(18px, env(safe-area-inset-top));
+  padding-bottom: max(18px, env(safe-area-inset-bottom));
+  background: var(--home-page);
+  box-shadow: -24px 0 60px -24px rgb(0 0 0 / 28%);
+  outline: 0;
+  transition: opacity 220ms ease, transform 280ms cubic-bezier(.22, 1, .36, 1);
+}
+.menuPanel[data-starting-style],
+.menuPanel[data-ending-style] { opacity: 0; transform: translateX(24px); }
+
+.menuPanelHead { display: flex; align-items: center; justify-content: space-between; padding: 0 .35rem 0 .5rem; margin-bottom: 1.4rem; }
+.menuPanelLink {
   display: flex;
   align-items: center;
-  min-height: 42px;
-  padding: 0 .85rem;
-  border-radius: 12px;
+  min-height: 56px;
+  padding: 0 .5rem;
+  border-top: 1px solid var(--home-soft-hover);
   color: var(--home-ink);
   font-family: "Instrument Sans Variable", "Instrument Sans", ui-sans-serif, system-ui, sans-serif;
-  font-size: .95rem;
-  font-weight: 560;
-  letter-spacing: -.02em;
+  font-size: 1.1rem;
+  font-weight: 580;
+  letter-spacing: -.025em;
   text-decoration: none;
-  outline: 0;
 }
-.menuItem:hover,
-.menuItem[data-highlighted] { background: var(--home-soft); color: var(--home-ink); text-decoration: none; }
+.menuPanelLink:hover,
+.menuPanelLink:focus-visible { color: var(--home-blue); text-decoration: none; }
 
 @media (max-width: 820px) {
   .siteHeader { padding: 22px; }
   .wordmark { white-space: nowrap; }
-  .siteNav { gap: .5rem; }
+  .siteNav { gap: .6rem; }
   .siteNav .navLink { display: none; }
   .siteNav .burger { display: grid; }
+  /* Larger thumb targets than desktop's 36px icons once they're the only
+     controls left in the bar. */
+  .iconButton { width: 44px; height: 44px; }
+  .themeToggleIcon { width: 20px; height: 20px; }
+  .siteNav .burger svg { width: 20px; height: 20px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

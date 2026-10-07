@@ -34,7 +34,6 @@
 .formActions { display: flex; gap: .45rem; }
 
 .status { min-height: 1.5rem; margin: .9rem 0 0; color: var(--home-muted); font-size: .92rem; line-height: 1.5; }
-.statusNote { display: block; margin-top: .2rem; font-size: .84rem; opacity: .8; }
 /* Text-styled button for the key settings link inside the status line. */
 .inlineLink { padding: 0; border: 0; background: none; color: var(--home-blue); font-family: inherit; font-size: inherit; font-weight: inherit; line-height: inherit; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
 .inlineLink:focus-visible { outline: 2px solid color-mix(in oklab, var(--home-blue) 40%, transparent); outline-offset: 2px; border-radius: 4px; }
