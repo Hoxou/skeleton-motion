@@ -180,8 +180,8 @@ test("untoned marks are shades of the main color, checks green, crosses red", as
   const render = async (shares) => {
     const analysis = await analyzeSource("https://pay.example/", { fetch: async () => new Response(page), measuredCss: probeToCss({ accent: "#635bff", shares }) });
     const plan = validatePlan({
-      elements: { a: { kind: "row" }, b: { kind: "row", tone: "tag-2" }, list: { kind: "panel" } },
-      screen: { children: ["a", "b"], id: "list", type: "panel" },
+      elements: { a: { kind: "row" }, b: { kind: "row", tone: "tag-2" }, c: { kind: "row" }, d: { kind: "row" }, list: { kind: "panel" } },
+      screen: { children: ["a", "b", "c", "d"], id: "list", type: "panel" },
       steps: [{ do: [{ id: "a", op: "set", state: "done" }] }, { do: [{ id: "b", op: "set", state: "error" }] }],
     }, { driver: "system" }).plan;
     const options = parseArgs(["https://pay.example/", "--set", "--name", "pay"], "/");
