@@ -19,7 +19,7 @@ for (const url of process.argv.slice(2)) {
     const ms = Date.now() - started;
     const a = await analyzeSource(url, { fetch: (x, init) => fetch(x, { ...init, headers: { "user-agent": "Mozilla/5.0 Chrome/140" } }), measuredCss: probeToCss(probe) });
     const l = a.palettes.light;
-    console.log(url.padEnd(26), `${ms}ms`, "accent", probe.accent, "|", l.colorMode, l.accents.map((c, i) => `${c} ${Math.round(l.shares[i] * 100)}%`).join("  "));
+    console.log(url.padEnd(26), `${ms}ms`, "cta", probe.accent, "->", l.accentSource, "|", l.colorMode, l.accents.map((c, i) => `${c} ${Math.round(l.shares[i] * 100)}%`).join("  "));
     console.log("   raw top:", probe.shares.slice(0, 8).map(([c, w]) => `${c}:${(w * 100).toFixed(1)}`).join(" "));
   } catch (e) { console.log(url, e.message.split("\n")[0]); }
   await page.close();

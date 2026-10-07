@@ -74,14 +74,14 @@ test("reads the marker the content quick action leaves in rendered HTML", () => 
 
 test("a light page fills the light theme with contrast-safe surfaces", () => {
   const css = probeToCss({ accent: "#533afd", background: "#ffffff", fontBody: "sohne-var, sans-serif", fontHeading: null, foreground: "#000000", radius: "4px" });
-  assert.match(css, /^:root \{ --primary: #533afd; --radius: 4px; --background: #ffffff; --foreground: #000000; --card: #ffffff; --muted: #f2f2f2; --border: #e0e0e0;/);
+  assert.match(css, /^:root \{ --measured-primary: #533afd; --radius: 4px; --background: #ffffff; --foreground: #000000; --card: #ffffff; --muted: #f2f2f2; --border: #e0e0e0;/);
   assert.doesNotMatch(css, /\.dark/);
   assert.match(css, /body \{ font-family: sohne-var, sans-serif; \}/);
 });
 
 test("a dark page fills the dark theme so the light variant is derived", () => {
   const css = probeToCss({ accent: "#5e6ad2", background: "#08090a", fontBody: null, fontHeading: "Inter", foreground: "#f7f8f8", radius: null });
-  assert.match(css, /^:root \{ --primary: #5e6ad2; \}/);
+  assert.match(css, /^:root \{ --measured-primary: #5e6ad2; \}/);
   assert.match(css, /\.dark \{ --background: #08090a; --foreground: #f7f8f8; --card: #161718;/);
 });
 
@@ -203,5 +203,19 @@ test("an accent read from stylesheets is marked as a guess the browser can corre
   assert.equal((await read(".a { background: #ffd601 } .b { color: #ee30fb }")).accentSource, "page");
   assert.equal((await read(":root { --primary: #635bff; }")).accentSource, "token");
   assert.equal((await read("")).accentSource, "default");
-  assert.equal((await read(".a { background: #ffd601 }", probeToCss({ accent: "#635bff" }))).accentSource, "token", "the measured call-to-action color counts as the brand token");
+  assert.equal((await read(".a { background: #ffd601 }", probeToCss({ accent: "#635bff" }))).accentSource, "measured", "without measured coverage the call-to-action color is trusted");
+});
+
+test("a token the page barely uses does not lead the palette", async () => {
+  const page = "<html><head><title>x</title></head><body></body></html>";
+  const analysis = await analyzeSource("https://music.example/", { fetch: async () => new Response(page), measuredCss: probeToCss({ accent: "#9e9eff", shares: [["#1ed760", 0.7], ["#af2896", 0.3]] }) });
+  assert.equal(analysis.palettes.light.accent, "#1ed760");
+  assert.deepEqual(analysis.palettes.light.accents, ["#1ed760", "#af2896"]);
+});
+
+test("the measured call-to-action color gives way to a color that covers far more of the page", async () => {
+  const page = "<html><head><title>x</title></head><body></body></html>";
+  const read = async (shares) => (await analyzeSource("https://chat.example/", { fetch: async () => new Response(page), measuredCss: probeToCss({ accent: "#0b5cab", shares }) })).palettes.light.accent;
+  assert.equal(await read([["#730394", 0.78], ["#0b5cab", 0.22]]), "#730394");
+  assert.equal(await read([["#730394", 0.4], ["#0b5cab", 0.3], ["#ffcf5e", 0.3]]), "#0b5cab");
 });

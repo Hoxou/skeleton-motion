@@ -72,6 +72,10 @@ const PROBE_BODY = `(() => {
     if (color && weight > 0 && chroma(color) >= 0.25) coverage.set(color, (coverage.get(color) || 0) + Math.sqrt(weight));
   };
   const reach = Math.min(document.documentElement.scrollHeight, innerHeight * 6);
+  // The site's own logo is the one mark sure to be the brand, so its colors
+  // count far more than content tiles of the same size.
+  const logos = new Set([...document.querySelectorAll('a[href="/"], a[href="./"], [class*="logo" i], [id*="logo" i], [aria-label*="logo" i]')].slice(0, 12));
+  const inLogo = (node) => [...logos].some((logo) => logo.contains(node));
   for (const node of [...document.querySelectorAll("body *")].slice(0, 4000)) {
     if (node.closest("img, picture, video, canvas, iframe")) continue;
     const box = node.getBoundingClientRect();
@@ -79,15 +83,15 @@ const PROBE_BODY = `(() => {
     const style = getComputedStyle(node);
     if (style.visibility === "hidden" || Number(style.opacity) === 0) continue;
     const area = Math.min(box.width, innerWidth) * Math.min(box.height, innerHeight);
-    const boost = node.matches("a, button, [role=button]") ? 3 : 1;
+    const boost = inLogo(node) ? 8 : node.matches("a, button, [role=button]") ? 3 : 1;
     const fill = hex(style.backgroundColor);
     const parent = node.parentElement ? hex(getComputedStyle(node.parentElement).backgroundColor) : null;
     if (fill && fill !== parent) add(fill, area * boost);
     const stops = gradientColors(style.backgroundImage).filter(Boolean);
     for (const color of stops) add(color, (area * boost) / stops.length);
     if (node instanceof SVGElement) {
-      add(hex(style.fill), area);
-      add(hex(style.stroke), area * 0.2);
+      add(hex(style.fill), area * boost);
+      add(hex(style.stroke), area * boost * 0.2);
     }
     if ([...node.childNodes].some((child) => child.nodeType === 3 && child.textContent.trim())) {
       const size = parseFloat(style.fontSize) || 14;
@@ -235,7 +239,9 @@ export function probeToCss(probe) {
     `--muted-foreground: ${mix(ink, page, 0.45)};`,
   ].join(" ");
   const shared = [
-    probe.accent && `--primary: ${probe.accent};`,
+    // The measured call-to-action color is a strong hint, not a brand token:
+    // the analyzer weighs it against how much of the page it covers.
+    probe.accent && `--measured-primary: ${probe.accent};`,
     probe.radius && `--radius: ${probe.radius};`,
     ...(probe.shares || []).map(([value, share], index) => `--measured-share-${index + 1}: ${value} ${share};`),
   ].filter(Boolean).join(" ");

@@ -180,15 +180,20 @@ function inferColorSystem(sourceText, cssText = "") {
 // to tell "measured" from "guessed".
 export const DEFAULT_ACCENT = "#4f46e5";
 
+// A measured call-to-action color leads only when the rendered page
+// actually uses it this much, and no other color covers far more of it;
+// otherwise the most used color does.
+const MEASURED_MIN_SHARE = 0.15;
+const DOMINANT_RATIO = 2.5;
+
 /**
  * Accents in order of how much of the page they cover, main color first,
- * with each one's share. A brand token is the main color whenever it has a
- * real share of the page; otherwise the largest family is.
+ * with each one's share. `primary` leads unless `guessed`; the other hues
+ * follow by share.
  */
-function rankAccents(primary, colorShares) {
+function rankAccents(primary, colorShares, guessed) {
   const primaryHex = toHex(primary);
   const own = primaryHex ? colorShares.find((family) => hueGap(family.hex, primaryHex) < 25) : null;
-  const guessed = primary === DEFAULT_ACCENT;
   const main = !guessed && primaryHex ? { hex: primary, share: own?.share ?? 0 } : colorShares[0] || { hex: primary, share: 1 };
   const picked = [main];
   for (const family of colorShares) {
@@ -211,11 +216,20 @@ function buildPalette(lightVariables, darkVariables, colorSystem = {}) {
     radius: token(lightVariables, ["radius", "radius-lg"], "12px"),
     surface: token(lightVariables, ["card", "popover", "surface"], "#ffffff"),
   };
-  const ranked = rankAccents(light.accent, colorSystem.colorShares || []);
+  // Where the accent comes from: a brand token in the CSS (trusted), the
+  // rendered page's call-to-action color (trusted unless measured coverage
+  // says the page hardly uses it), or the page's most used color.
+  const shares = colorSystem.colorShares || [];
+  const measuredPrimary = toHex(lightVariables["measured-primary"]);
+  const measuredShare = measuredPrimary ? shares.find((family) => hueGap(family.hex, measuredPrimary) < 25)?.share ?? 0 : 0;
+  const outweighed = (shares[0]?.share ?? 0) > measuredShare * DOMINANT_RATIO;
+  if (light.accent === DEFAULT_ACCENT && measuredPrimary && (!colorSystem.measured || (measuredShare >= MEASURED_MIN_SHARE && !outweighed))) light.accent = measuredPrimary;
+  const tokenLike = light.accent !== DEFAULT_ACCENT;
+  const ranked = rankAccents(light.accent, shares, !tokenLike);
   // Where the accent came from: a named token, the page's most used color, or
   // the built-in default. Only a token is certain; the hosted Worker
   // measures the rendered page for the other two.
-  light.accentSource = light.accent !== DEFAULT_ACCENT ? "token" : (colorSystem.colorShares || []).length ? "page" : "default";
+  light.accentSource = light.accent === measuredPrimary ? "measured" : tokenLike ? "token" : shares.length ? "page" : "default";
   if (light.accentSource === "page") light.accent = ranked[0].hex;
   const hasSourceDark = Object.keys(darkVariables).length > 0;
   const combinedDark = hasSourceDark ? { ...lightVariables, ...darkVariables } : {};
