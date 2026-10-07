@@ -1,4 +1,4 @@
-import { analyzeSource, DEFAULT_ACCENT } from "../src/analyze.js";
+import { analyzeSource } from "../src/analyze.js";
 import { parseArgs } from "../src/args.js";
 import { generateCollection } from "../src/generate.js";
 import { renderPreview } from "../src/preview.js";
@@ -127,7 +127,9 @@ export async function createJob(env, ownerHash, body) {
   // A few public product pages (features, solutions, docs) name the
   // product's other areas, so the three stories can come from different ones.
   const pagesPromise = repo ? Promise.resolve([]) : readProductPages(fetchOnce, homeHtml, pageUrl.href);
-  const needsBrand = analysis.palettes.light.accent === DEFAULT_ACCENT;
+  // A brand token is certain; a color read from stylesheets is a guess that
+  // the rendered page (coverage, call-to-action color) can correct.
+  const needsBrand = analysis.palettes.light.accentSource !== "token";
   const needsText = isThin(digest);
   // Raw HTML rarely carries the brand or the copy of JS-rendered apps; only
   // then is the (budgeted) browser worth asking.

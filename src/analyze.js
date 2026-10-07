@@ -212,8 +212,11 @@ function buildPalette(lightVariables, darkVariables, colorSystem = {}) {
     surface: token(lightVariables, ["card", "popover", "surface"], "#ffffff"),
   };
   const ranked = rankAccents(light.accent, colorSystem.colorShares || []);
-  // A page with no brand token takes its most used color as the accent.
-  if (light.accent === DEFAULT_ACCENT && (colorSystem.colorShares || []).length) light.accent = ranked[0].hex;
+  // Where the accent came from: a named token, the page's most used color, or
+  // the built-in default. Only a token is certain; the hosted Worker
+  // measures the rendered page for the other two.
+  light.accentSource = light.accent !== DEFAULT_ACCENT ? "token" : (colorSystem.colorShares || []).length ? "page" : "default";
+  if (light.accentSource === "page") light.accent = ranked[0].hex;
   const hasSourceDark = Object.keys(darkVariables).length > 0;
   const combinedDark = hasSourceDark ? { ...lightVariables, ...darkVariables } : {};
   const dark = {

@@ -196,3 +196,12 @@ test("untoned marks are shades of the main color, checks green, crosses red", as
   const mono = await render([["#635bff", 1]]);
   assert.match(mono, /--mark-1: #635bff;/, "a one-color brand's marks are full strength");
 });
+
+test("an accent read from stylesheets is marked as a guess the browser can correct", async () => {
+  const page = (css) => `<html><head><title>x</title><style>${css}</style></head><body></body></html>`;
+  const read = async (css, measuredCss) => (await analyzeSource("https://a.example/", { fetch: async () => new Response(page(css)), measuredCss })).palettes.light;
+  assert.equal((await read(".a { background: #ffd601 } .b { color: #ee30fb }")).accentSource, "page");
+  assert.equal((await read(":root { --primary: #635bff; }")).accentSource, "token");
+  assert.equal((await read("")).accentSource, "default");
+  assert.equal((await read(".a { background: #ffd601 }", probeToCss({ accent: "#635bff" }))).accentSource, "token", "the measured call-to-action color counts as the brand token");
+});
