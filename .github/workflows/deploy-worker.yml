@@ -1,0 +1,38 @@
+name: Deploy Cloudflare Worker
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# Queue deploys instead of cancelling: a cancelled run could stop between
+# the D1 migration and the Worker upload.
+concurrency:
+  group: cloudflare-worker
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: https://skeleton-motion.qa-segnatura.workers.dev
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run check
+      # Migrations run first so the new Worker never sees an older schema.
+      - run: npm run worker:migrate
+      - run: npm run worker:deploy
+      - name: Smoke check
+        run: curl --fail --silent --show-error --retry 3 --retry-delay 5 https://skeleton-motion.qa-segnatura.workers.dev/api/status
