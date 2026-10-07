@@ -84,8 +84,10 @@ function groupIds(node) {
   return [...(node.type !== "panel" && node.id ? [node.id] : []), ...node.children.flatMap(groupIds)];
 }
 
-// Where an insert or move lands: next to a sibling, or inside a group.
-function slotFor(layout, op, where, errors) {
+// Where an insert or move lands: next to a sibling, or inside a group. An
+// insert that names no place lands after what it grows from, else after the
+// step's previous insert, else at the end of the screen.
+function slotFor(layout, op, where, errors, fallback = null) {
   for (const side of ["before", "after"]) {
     if (op[side] === undefined) continue;
     const found = locate(layout, String(op[side]));
@@ -103,6 +105,10 @@ function slotFor(layout, op, where, errors) {
     }
     const at = Number.isInteger(op.at) ? Math.max(0, Math.min(group.children.length, op.at)) : group.children.length;
     return { group, index: at };
+  }
+  if (fallback) {
+    const anchor = [op.from, fallback.previous].map((id) => (id === undefined ? null : locate(layout, String(id)))).find(Boolean);
+    return anchor ? { group: anchor.group, index: anchor.index + 1 } : { group: layout, index: layout.children.length };
   }
   errors.push(`${where}: say where it goes with "into" (a panel or named group), "before", or "after" (a sibling id).`);
   return null;
@@ -145,7 +151,7 @@ function applyStep(previous, step, elements, errors, where) {
         errors.push(`${at}: "${id}" is already on screen; use "move" to move it.`);
         return;
       }
-      const slot = slotFor(layout, op, at, errors);
+      const slot = slotFor(layout, op, at, errors, { previous: record.inserted.at(-1) });
       if (!slot) return;
       slot.group.children.splice(slot.index, 0, elements[id].kind === "panel" ? { children: [], direction: "column", id, type: "panel" } : id);
       record.inserted.push(id);

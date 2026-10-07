@@ -263,3 +263,25 @@ test("a grid of images gains whole rows, and a detail panel gains text lines", (
   assert.ok(detail.children.filter((id) => String(id).startsWith("__fill-")).every((id) => filled.elements[id].kind === "bar"));
   assert.ok(detail.children.length > 2, "the detail panel has filler lines");
 });
+
+test("an insert that names no place lands after its origin or the previous insert", () => {
+  const plan = steps();
+  plan.elements["payout-new"] = { kind: "row" };
+  plan.elements["payout-tag"] = { kind: "chip" };
+  plan.steps[1].do.push({ from: "payout-ana", id: "payout-new", op: "insert" }, { id: "payout-tag", op: "insert" });
+  const { errors, plan: compiled } = validatePlan(plan);
+  assert.deepEqual(errors, []);
+  assert.deepEqual(compiled.states[2].layout.children[0].children.slice(0, 3), ["payout-ana", "payout-new", "payout-tag"]);
+});
+
+test("a form panel beside a list fills with text lines", () => {
+  const { plan } = validatePlan({
+    elements: { c1: { kind: "card" }, c2: { kind: "card" }, c3: { kind: "card" }, field: { kind: "field" }, form: { kind: "panel" }, go: { kind: "button" }, list: { kind: "panel" } },
+    screen: { children: [{ children: ["c1", "c2", "c3"], id: "list", type: "panel" }, { children: ["field", "go"], id: "form", type: "panel" }], type: "row" },
+    steps: [{ by: { click: "c1" }, do: [{ id: "c1", op: "set", state: "selected" }] }, { by: { click: "go" }, do: [{ id: "go", op: "set", state: "done" }] }],
+  });
+  const filled = withFillers(plan, frameFor(FORMATS["9:16"]));
+  const form = filled.states[0].layout.children[1];
+  assert.deepEqual(form.children.slice(0, 2), ["field", "go"]);
+  assert.ok(form.children.slice(2).length >= 2 && form.children.slice(2).every((id) => filled.elements[id].kind === "bar"));
+});

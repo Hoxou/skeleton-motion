@@ -246,7 +246,8 @@ export function planDuration(plan) {
 // sides of a screen stay balanced. Fillers carry no meaning and are never
 // targeted, highlighted, or linked.
 const FILLABLE = new Set(["bar", "card", "image", "row"]);
-const MAX_FILLERS = 8;
+// Text lines are thin, so a detail panel takes more of them than a list takes rows.
+const MAX_FILLERS = { bar: 14, card: 8, image: 8, row: 8 };
 const FILL_ROOM = 0.92;
 
 const isColumn = (node) => !isItem(node) && (node.type === "column" || (node.type === "panel" && node.direction !== "row"));
@@ -259,9 +260,11 @@ function sameKindRow(node, plan) {
 }
 
 // What each group could be filled with, judged over every state it is in.
+// A panel beside another panel with nothing to list (a form, an output)
+// takes text lines, so it does not sit half empty next to a full list.
 function fillTargets(plan) {
   const targets = new Map();
-  const visit = (node) => {
+  const visit = (node, parent) => {
     if (isItem(node)) return;
     if (isColumn(node) && node.id) {
       const kinds = node.children.filter(isItem).map((child) => plan.elements[itemId(child)]?.kind);
@@ -269,12 +272,13 @@ function fillTargets(plan) {
       const only = node.children.length > 0 && kinds.length === node.children.length && new Set(kinds).size === 1;
       const list = ["row", "card", "image", "bar"].find((kind) => (counts[kind] || 0) >= 2 || (counts[kind] && (only || kind === "bar")));
       const grid = node.children.map((child) => sameKindRow(child, plan)).filter(Boolean).at(-1);
-      const target = grid ? { ...grid, mode: "grid" } : list ? { kind: list, mode: "list" } : null;
+      const beside = node.type === "panel" && parent?.type === "row" && parent.children.filter((child) => !isItem(child)).length > 1;
+      const target = grid ? { ...grid, mode: "grid" } : list ? { kind: list, mode: "list" } : beside ? { kind: "bar", mode: "list" } : null;
       if (target && !targets.has(node.id)) targets.set(node.id, target);
     }
-    node.children.forEach(visit);
+    node.children.forEach((child) => visit(child, node));
   };
-  plan.states.forEach((state) => visit(state.layout));
+  plan.states.forEach((state) => visit(state.layout, null));
   return targets;
 }
 
@@ -324,7 +328,7 @@ export function withFillers(plan, frame) {
   while (open.size) {
     const group = [...open].sort((a, b) => counts[a] - counts[b])[0];
     const next = { ...counts, [group]: counts[group] + 1 };
-    if (next[group] > MAX_FILLERS || !fits(addFillers(plan, next, targets))) open.delete(group);
+    if (next[group] > MAX_FILLERS[targets.get(group).kind] || !fits(addFillers(plan, next, targets))) open.delete(group);
     else Object.assign(counts, next);
   }
   return addFillers(plan, counts, targets);
@@ -415,6 +419,7 @@ function cornerTrack(element, frames, radius, k) {
   });
 }
 
+const FILLER_LINES = Object.freeze([1, 0.92, 0.97, 0.64, 1, 0.88, 0.71]);
 const CHECK = (cx, cy, size) => `M${formatNumber(cx - size * 0.45)} ${formatNumber(cy)} L${formatNumber(cx - size * 0.12)} ${formatNumber(cy + size * 0.32)} L${formatNumber(cx + size * 0.48)} ${formatNumber(cy - size * 0.36)}`;
 const TREND = [0.72, 0.58, 0.64, 0.44, 0.5, 0.3, 0.22];
 
@@ -604,7 +609,9 @@ function elementMarkup(id, index, element, views, keys, timeline, k, radius, typ
         body = `${timeline.element("rect", { ...rectTracks(frames), rx: frames.map(() => 3 * k) }, `fill="var(--ink)" opacity=".1"`)}
           ${timeline.element("rect", { height: frames.map((rect) => rect.height), rx: frames.map(() => 3 * k), width: frames.map((rect, key) => rect.width * level[key]), x: frames.map((rect) => rect.x), y: frames.map((rect) => rect.y) }, `fill="var(--accent)"`)}`;
       } else {
-        body = timeline.element("rect", rectTracks(frames), `rx="${formatNumber(3 * k)}" fill="var(--ink)" opacity=".15"`);
+        // Filler lines vary in length like a paragraph, ending short.
+        const reach = element.filler ? FILLER_LINES[index % FILLER_LINES.length] : 1;
+        body = timeline.element("rect", rectTracks(frames.map((rect) => ({ ...rect, width: rect.width * reach }))), `rx="${formatNumber(3 * k)}" fill="var(--ink)" opacity=".15"`);
       }
     }
   }
