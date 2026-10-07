@@ -293,3 +293,15 @@ test("repairs stop when the set's model time runs out", async () => {
   assert.equal(result.rejected, 1, "no repair starts with too little time left");
   assert.equal(result.stories.length, 2);
 });
+
+test("a set shows the pointer in every story or in none", () => {
+  assert.ok(normalizeBriefs(candidates, "off").every((brief) => brief.driver === "system"));
+  assert.ok(normalizeBriefs(candidates, "on").every((brief) => brief.driver === "user"));
+});
+
+test("a cursor-off set designs every story without a pointer", async () => {
+  const provider = fakeProvider({ brief: { candidates, cursor: "off", product: { name: "Tracker" } } });
+  const result = await designStories(provider, context);
+  assert.equal(result.stories.length, 3);
+  assert.ok(result.stories.every((story) => story.plan.states.every((state) => !state.pointer)));
+});

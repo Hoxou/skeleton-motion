@@ -8,10 +8,11 @@ import { scenesFor, setFormats } from "./scenes.jsx";
 import styles from "./DisplayRoom.module.css";
 
 // Hosted generations live under /jobs/ on the app origin and link back to
-// it; rooms opened from disk or the Pages mirror link to the public site.
+// it; rooms opened standalone (a downloaded ZIP, a local file) link to the
+// public site instead.
 const SITE = typeof window !== "undefined" && window.location.pathname.startsWith("/jobs/")
   ? window.location.origin
-  : "https://hoxou.github.io/skeleton-motion";
+  : "https://skeleton-motion.qa-segnatura.workers.dev";
 
 // Forwards its ref so Base UI's menu can focus the header links.
 const SiteLink = React.forwardRef(function SiteLink({ href, to, ...props }, ref) {

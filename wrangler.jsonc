@@ -7,7 +7,7 @@
   "workers_dev": true,
   "preview_urls": false,
   "observability": { "enabled": true },
-  // The Docusaurus build; build it with `npm run docs:build:hosted` first.
+  // The Docusaurus build; build it with `npm run docs:build` first.
   "assets": {
     "directory": "./website/build",
     "binding": "ASSETS",

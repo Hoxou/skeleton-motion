@@ -48,9 +48,15 @@ function labelWidth(element, kind) {
   return chars * kind.font * CHAR_EM + (element.kind === "text" ? 0 : 24);
 }
 
+// Charts, trends, and images are pictures of data: like the examples' chart
+// tiles they take the room their region leaves, up to a width:height
+// ratio that keeps them readable, instead of sitting small in a big frame.
+const MEDIA_ASPECT = Object.freeze({ chart: 1.6, image: 1.25, trend: 1.8 });
+
 // Main-axis basis (source px) and whether the item grows to share space.
 function naturalSize(element, axis) {
   const kind = KINDS[element.kind];
+  if (axis === "y" && MEDIA_ASPECT[element.kind]) return { basis: kind.height, grow: true };
   if (axis === "y") return kind.height ? { basis: kind.height, grow: false } : { basis: 0, grow: true };
   if (kind.width === "label") return { basis: labelWidth(element, kind), grow: false };
   if (typeof kind.width === "number") return { basis: kind.width, grow: false };
@@ -59,7 +65,9 @@ function naturalSize(element, axis) {
 
 // A row or column of natural-size items is itself natural size: it takes
 // the space its content needs instead of growing and pushing siblings away.
-// Panels are containers and always fill.
+// Panels are containers: they need their content's size and fill whatever
+// their row or column leaves, so screens span the frame like the examples'
+// regions do. A growing group still reports the size its content needs.
 function naturalGroup(node, axis, plan, stable = {}) {
   if (isItem(node)) {
     const element = plan.elements[itemId(node)];
@@ -68,23 +76,31 @@ function naturalGroup(node, axis, plan, stable = {}) {
     return typeof node === "object" && node.grow ? { basis: 0, grow: true } : size;
   }
   if (node.type === "panel") {
-    // A panel hugs natural content vertically; across a row it still shares width.
     if (axis !== "y") return { basis: 0, grow: true };
     const inner = naturalGroup({ children: node.children || [], gap: node.gap, type: node.direction === "row" ? "row" : "column" }, "y", plan, stable);
-    if (inner.grow) return inner;
     const kind = KINDS.panel;
     const own = inner.basis + kind.pad * 2 + (plan.elements[node.id]?.label ? kind.header : 0);
-    return { basis: Math.max(own, stable[node.id] ?? 0), grow: false };
+    return { basis: Math.max(own, stable[node.id] ?? 0), grow: true };
   }
   const children = (node.children || []).map((child) => naturalGroup(child, axis, plan, stable));
-  if (children.length === 0 || children.some((child) => child.grow)) return { basis: 0, grow: true };
+  if (children.length === 0) return { basis: 0, grow: true };
   const along = (node.type === "row" ? "x" : "y") === axis;
   const gap = (GAPS[node.gap] ?? GAPS.normal) * Math.max(0, children.length - 1);
-  return { basis: along ? children.reduce((total, child) => total + child.basis, 0) + gap : Math.max(...children.map((child) => child.basis)), grow: false };
+  const basis = along ? children.reduce((total, child) => total + child.basis, 0) + gap : Math.max(...children.map((child) => child.basis));
+  return { basis, grow: children.some((child) => child.grow) };
+}
+
+// A growing picture stops at its readable ratio and keeps to the top of its
+// slot, so it lines up with the panels beside it.
+function clampMedia(rect, element, k) {
+  const ratio = MEDIA_ASPECT[element.kind];
+  const height = Math.max(KINDS[element.kind].height * k, Math.min(rect.height, rect.width / ratio));
+  return height < rect.height ? { ...rect, height } : rect;
 }
 
 function clampCross(rect, element, axis, k) {
   const kind = KINDS[element.kind];
+  if (MEDIA_ASPECT[element.kind]) return clampMedia(rect, element, k);
   if (axis === "y") {
     const width = kind.width === "label" ? labelWidth(element, kind) * k : typeof kind.width === "number" ? kind.width * k : null;
     return width && width < rect.width ? { ...rect, width } : rect;
@@ -135,10 +151,15 @@ export function layoutTree(root, rect, plan, frame, presence = {}, { minScale = 
         const element = plan.elements[itemId(child)];
         const size = naturalSize(element, direction);
         const grow = typeof child === "object" && child.grow ? true : size.grow;
-        return { basis: grow ? 0 : size.basis * k, grow: grow ? 1 : 0, id: `__${index}`, presence: presence[itemId(child)] ?? 1 };
+        // Media keep their natural size as a floor while they grow, and stop
+        // at their readable ratio down a column.
+        const ratio = MEDIA_ASPECT[element.kind];
+        const floor = grow && !ratio;
+        const max = ratio && direction === "y" ? Math.max(size.basis * k, area.width / ratio) : undefined;
+        return { basis: floor ? 0 : size.basis * k, grow: grow ? 1 : 0, id: `__${index}`, ...(max === undefined ? {} : { max }), presence: presence[itemId(child)] ?? 1 };
       }
       const size = naturalGroup(child, direction, plan, stable);
-      return { basis: size.grow ? 0 : size.basis * k, grow: size.grow ? 1 : 0, id: `__${index}`, presence: 1 };
+      return { basis: size.basis * k, grow: size.grow ? 1 : 0, id: `__${index}`, presence: 1 };
     });
     const length = direction === "x" ? area.width : area.height;
     const needed = items.reduce((total, item) => total + item.basis * item.presence, 0) + gap * Math.max(0, items.length - 1);
@@ -152,7 +173,9 @@ export function layoutTree(root, rect, plan, frame, presence = {}, { minScale = 
     // The outermost group centers instead, so a compact UI sits mid-frame.
     const lead = { basis: 0, grow: 1, id: "__lead" };
     const fill = { basis: 0, grow: 1, id: "__fill" };
-    const packed = items.every((item) => item.grow === 0) ? (center ? [lead, ...items, fill] : [...items, fill]) : items;
+    // Space a capped picture cannot take goes below the content, not into the gaps.
+    const capped = items.some((item) => item.max !== undefined) ? [...items, { basis: 0, grow: 1e-3, id: "__fill" }] : items;
+    const packed = items.every((item) => item.grow === 0) ? (center ? [lead, ...items, fill] : [...items, fill]) : capped;
     const solved = solve({ axis: direction, children: packed, gap }, area);
     children.forEach((child, index) => node(child, solved[`__${index}`], direction, `${path}/${index}`));
   }
@@ -247,8 +270,7 @@ export function planDuration(plan) {
 // targeted, highlighted, or linked.
 const FILLABLE = new Set(["bar", "card", "image", "row"]);
 // Text lines are thin, so a detail panel takes more of them than a list takes rows.
-const MAX_FILLERS = { bar: 14, card: 8, image: 8, row: 8 };
-const FILL_ROOM = 0.92;
+const MAX_FILLERS = { bar: 14, card: 8, image: 8, row: 8, stack: 8 };
 
 const isColumn = (node) => !isItem(node) && (node.type === "column" || (node.type === "panel" && node.direction !== "row"));
 
@@ -261,11 +283,22 @@ function sameKindRow(node, plan) {
 
 // What each group could be filled with, judged over every state it is in.
 // A panel beside another panel with nothing to list (a form, an output)
-// takes text lines, so it does not sit half empty next to a full list.
+// takes text lines, so it does not sit half empty next to a full list. A
+// chart or picture beside other content gets designed modules stacked
+// under it (a row of stat tiles, then list rows) instead of being stretched.
+const isMedia = (node, plan) => isItem(node) && Boolean(MEDIA_ASPECT[plan.elements[itemId(node)]?.kind]);
+
 function fillTargets(plan) {
   const targets = new Map();
   const visit = (node, parent) => {
     if (isItem(node)) return;
+    // Only a picture beside different content heads its own column; a row
+    // of pictures is a grid and fills by rows instead.
+    if (node.type === "row" && node.children.length > 1 && !node.children.every((child) => isMedia(child, plan))) {
+      for (const child of node.children) {
+        if (isMedia(child, plan) && !targets.has(`__wrap-${itemId(child)}`)) targets.set(`__wrap-${itemId(child)}`, { kind: "stack", mode: "stack", tiles: true, wrap: itemId(child) });
+      }
+    }
     if (isColumn(node) && node.id) {
       const kinds = node.children.filter(isItem).map((child) => plan.elements[itemId(child)]?.kind);
       const counts = kinds.reduce((total, kind) => ({ ...total, [kind]: (total[kind] || 0) + 1 }), {});
@@ -273,7 +306,8 @@ function fillTargets(plan) {
       const list = ["row", "card", "image", "bar"].find((kind) => (counts[kind] || 0) >= 2 || (counts[kind] && (only || kind === "bar")));
       const grid = node.children.map((child) => sameKindRow(child, plan)).filter(Boolean).at(-1);
       const beside = node.type === "panel" && parent?.type === "row" && parent.children.filter((child) => !isItem(child)).length > 1;
-      const target = grid ? { ...grid, mode: "grid" } : list ? { kind: list, mode: "list" } : beside ? { kind: "bar", mode: "list" } : null;
+      const media = node.type === "column" && node.children.some((child) => isMedia(child, plan));
+      const target = grid ? { ...grid, mode: "grid" } : list ? { kind: list, mode: "list" } : media ? { kind: "stack", mode: "stack", tiles: true } : beside ? { kind: "bar", mode: "list" } : null;
       if (target && !targets.has(node.id)) targets.set(node.id, target);
     }
     node.children.forEach((child) => visit(child, node));
@@ -289,6 +323,20 @@ function addFillers(plan, counts, targets) {
   for (const [group, count] of Object.entries(counts)) {
     const target = targets.get(group);
     additions[group] = Array.from({ length: count }, (_, index) => {
+      if (target.mode === "stack") {
+        // First a row of stat tiles, then list rows: a dashboard's shape. A
+        // column too narrow for two tiles takes rows only.
+        const id = `__fill-${group}-${index}`;
+        if (index > 0 || !target.tiles) {
+          elements[id] = { filler: true, kind: "row" };
+          return id;
+        }
+        const tiles = [0, 1].map((column) => {
+          elements[`${id}-${column}`] = { filler: true, kind: "card" };
+          return `${id}-${column}`;
+        });
+        return { children: tiles, type: "row" };
+      }
       if (target.mode === "list") {
         const id = `__fill-${group}-${index}`;
         elements[id] = { filler: true, kind: target.kind };
@@ -304,13 +352,17 @@ function addFillers(plan, counts, targets) {
   }
   const withFill = (node) => {
     if (isItem(node)) return node;
-    const children = node.children.map(withFill);
+    // A chart standing alone in a row becomes the head of its own column.
+    const children = node.children.map((child) => {
+      const wrap = isItem(child) ? additions[`__wrap-${itemId(child)}`] : null;
+      return wrap?.length ? { children: [child, ...wrap], id: `__wrap-${itemId(child)}`, type: "column" } : withFill(child);
+    });
     const extra = additions[node.id];
     if (!extra?.length) return { ...node, children };
     const target = targets.get(node.id);
     // Fillers continue the run they extend, so a button or chip after a list
-    // stays after it.
-    const last = children.findLastIndex((child) => (target.mode === "grid" ? Boolean(sameKindRow(child, plan)) : isItem(child) && plan.elements[itemId(child)]?.kind === target.kind));
+    // stays after it; stacked modules go at the end.
+    const last = target.mode === "stack" ? children.length - 1 : children.findLastIndex((child) => (target.mode === "grid" ? Boolean(sameKindRow(child, plan)) : isItem(child) && plan.elements[itemId(child)]?.kind === target.kind));
     const at = last >= 0 ? last + 1 : children.length;
     return { ...node, children: [...children.slice(0, at), ...extra, ...children.slice(at)] };
   };
@@ -320,16 +372,35 @@ function addFillers(plan, counts, targets) {
 export function withFillers(plan, frame) {
   const targets = fillTargets(plan);
   if (targets.size === 0) return plan;
-  const room = { ...frame.safe, height: frame.safe.height * FILL_ROOM, y: frame.safe.y + frame.safe.height * (1 - FILL_ROOM) / 2 };
-  const fits = (trial) => trial.states.every((state) => layoutTree(state.layout, room, trial, frame, {}, { minScale: 1 }).issues.length === 0);
-  if (!fits(plan)) return plan;
+  // Fillers may use the whole safe area (panels stretch to it anyway, so a
+  // margin would only leave their bottoms empty) but may not crowd any group
+  // the plan did not already crowd. A plan that is snug in one state can
+  // still fill its other groups.
+  const crowded = (trial) => trial.states.map((state) => new Set(layoutTree(state.layout, frame.safe, trial, frame, {}, { minScale: 1 }).issues));
+  const base = crowded(plan);
+  const fits = (trial) => crowded(trial).every((issues, index) => [...issues].every((path) => base[index].has(path)));
   const counts = Object.fromEntries([...targets.keys()].map((id) => [id, 0]));
   const open = new Set(Object.keys(counts));
   while (open.size) {
     const group = [...open].sort((a, b) => counts[a] - counts[b])[0];
     const next = { ...counts, [group]: counts[group] + 1 };
-    if (next[group] > MAX_FILLERS[targets.get(group).kind] || !fits(addFillers(plan, next, targets))) open.delete(group);
-    else Object.assign(counts, next);
+    const target = targets.get(group);
+    if (next[group] > MAX_FILLERS[target.kind]) {
+      open.delete(group);
+      continue;
+    }
+    if (fits(addFillers(plan, next, targets))) {
+      Object.assign(counts, next);
+      continue;
+    }
+    // Stat tiles that do not fit side by side become rows; anything else is done.
+    if (target.tiles && next[group] === 1) {
+      targets.set(group, { ...target, tiles: false });
+      if (fits(addFillers(plan, next, targets))) Object.assign(counts, next);
+      else open.delete(group);
+      continue;
+    }
+    open.delete(group);
   }
   return addFillers(plan, counts, targets);
 }

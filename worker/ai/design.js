@@ -41,14 +41,17 @@ function normalizeBrief(feature, index) {
 /**
  * Picks the set from the model's candidates: the most typical feature (what
  * the product is known for), then the least typical ones that differ from
- * everything picked in move, surface, and product area. At most one story is
- * system-driven. Missing moves or surfaces take unused ones.
+ * everything picked in move, surface, and product area. Missing moves or
+ * surfaces take unused ones.
+ * @param cursor "on" | "off" for the whole set: every story shows the
+ *   pointer, or none does. Without it (older replies), at most one story is
+ *   system-driven.
  */
-export function normalizeBriefs(features) {
+export function normalizeBriefs(features, cursor) {
   const pool = (Array.isArray(features) ? features : []).filter((feature) => feature && typeof feature === "object").slice(0, 8).map(normalizeBrief);
   const picked = [];
   const differs = (brief, strict) => picked.every((other) => (!brief.move || brief.move !== other.move) && (!strict || ((!brief.surface || brief.surface !== other.surface) && (!brief.area || brief.area !== other.area))));
-  const systemOk = (brief) => brief.driver === "user" || !picked.some((other) => other.driver === "system");
+  const systemOk = (brief) => cursor !== undefined || brief.driver === "user" || !picked.some((other) => other.driver === "system");
   const core = [...pool].sort((a, b) => b.typical - a.typical)[0];
   if (core) picked.push(core);
   const tail = [...pool].sort((a, b) => a.typical - b.typical);
@@ -68,7 +71,8 @@ export function normalizeBriefs(features) {
     const surface = brief.surface && !used.surface.has(brief.surface) ? brief.surface : Object.keys(SURFACES).find((name) => !used.surface.has(name));
     used.move.add(move);
     used.surface.add(surface);
-    return { ...brief, move, surface, words };
+    const driver = cursor === "off" ? "system" : cursor === "on" ? "user" : brief.driver;
+    return { ...brief, driver, move, surface, words };
   });
 }
 
@@ -184,7 +188,8 @@ export async function designStories(source, context, { budgetMs = BUDGET_MS } = 
   };
   const first = await provider.json({ schema: BRIEF_SCHEMA, system: BRIEF_PROMPT, thinking: THINKING.brief, user: briefPrompt(context) });
   const product = first.data?.product && typeof first.data.product === "object" ? first.data.product : {};
-  const briefs = normalizeBriefs(first.data?.candidates ?? first.data?.features);
+  const cursor = ["on", "off"].includes(first.data?.cursor) ? first.data.cursor : undefined;
+  const briefs = normalizeBriefs(first.data?.candidates ?? first.data?.features, cursor);
   if (briefs.length === 0) throw new ProviderError("bad-output", "The model returned no features to animate.");
 
   const inputs = briefs.map((brief) => ({ brief, others: briefs.filter((other) => other !== brief), product }));

@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import Layout from "@theme/Layout";
 import useBaseUrl from "@docusaurus/useBaseUrl";
-import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import { Button } from "@base-ui/react/button";
 import { Dialog } from "@base-ui/react/dialog";
 import { Field } from "@base-ui/react/field";
@@ -68,8 +67,6 @@ function MotionPicture({ alt, dark, light }) {
 }
 
 function HomeContent() {
-  const { siteConfig } = useDocusaurusContext();
-  const { appUrl, hosted } = siteConfig.customFields;
   const [source, setSource] = useState("");
   const [dialog, setDialog] = useState(null);
   const [working, setWorking] = useState(false);
@@ -96,18 +93,13 @@ function HomeContent() {
   useEffect(() => {
     const linked = new URLSearchParams(window.location.search).get("source");
     if (linked) setSource(linked);
-    if (hosted) fetch("/api/ai/status").then((response) => response.json()).then(setQuota).catch(() => {});
-  }, [hosted]);
+    fetch("/api/ai/status").then((response) => response.json()).then(setQuota).catch(() => {});
+  }, []);
 
   async function submit(event) {
     event.preventDefault();
     const value = source.trim();
     if (!value || working) return;
-    // The Pages mirror has no API; generation happens on the app origin.
-    if (!hosted) {
-      window.location.assign(`${appUrl}/?source=${encodeURIComponent(value)}`);
-      return;
-    }
     const ownKey = quota?.ownKey;
     if (!ownKey && quota && quota.remaining <= 0) {
       setKeyDialog({ notice: `You've used your ${quota.freeUses} free generations.`, open: true });
@@ -203,12 +195,8 @@ function HomeContent() {
                   />
                 </Form>
                 <p className={styles.status} aria-live="polite">
-                  {hosted && (
-          <>
-                      {quota?.ownKey ? `Using your own ${PROVIDERS[quota.ownKey.provider]?.label || "AI"} key. ` : quota ? `${quota.remaining} of ${quota.freeUses} free generations left. ` : ""}
-                      <Button className={styles.inlineLink} type="button" onClick={() => setKeyDialog({ notice: "", open: true })}>{quota?.ownKey ? "Manage key" : "Use your own AI key"}</Button>
-          </>
-                  )}
+                  {quota?.ownKey ? `Using your own ${PROVIDERS[quota.ownKey.provider]?.label || "AI"} key. ` : quota ? `${quota.remaining} of ${quota.freeUses} free generations left. ` : ""}
+                  <Button className={styles.inlineLink} type="button" onClick={() => setKeyDialog({ notice: "", open: true })}>{quota?.ownKey ? "Manage key" : "Use your own AI key"}</Button>
                 </p>
               </div>
             </section>

@@ -1,18 +1,15 @@
 const path = require("node:path");
 
-// One source, two hosts: GitHub Pages (static mirror) and the Cloudflare
-// Worker that also serves the generation API. Only the Worker build can
-// generate, so the mirror sends visitors to APP_URL instead.
-const HOSTED = process.env.SKELETON_MOTION_HOSTED === "1";
-const APP_URL = process.env.SKELETON_MOTION_APP_URL || "https://skeleton-motion.qa-segnatura.workers.dev";
+// The Cloudflare Worker serves the site and the generation API from the
+// same origin; override for a custom domain or a local wrangler port.
+const SITE_URL = process.env.SKELETON_MOTION_APP_URL || "https://skeleton-motion.qa-segnatura.workers.dev";
 
 const config = {
   title: "Skeleton Motion",
   tagline: "Product motion, inferred from the product itself.",
   favicon: "img/favicon.svg",
-  url: HOSTED ? APP_URL : "https://hoxou.github.io",
-  baseUrl: HOSTED ? "/" : "/skeleton-motion/",
-  customFields: { appUrl: APP_URL, hosted: HOSTED },
+  url: SITE_URL,
+  baseUrl: "/",
   organizationName: "Hoxou",
   projectName: "skeleton-motion",
   trailingSlash: false,

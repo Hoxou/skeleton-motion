@@ -9,10 +9,9 @@
   "scripts": {
     "generate": "node ./bin/skeleton-motion.js",
     "docs:build": "docusaurus build website",
-    "docs:build:hosted": "SKELETON_MOTION_HOSTED=1 docusaurus build website",
-    "worker:dev": "npm run docs:build:hosted && wrangler dev",
+    "worker:dev": "npm run docs:build && wrangler dev",
     "worker:migrate": "wrangler d1 migrations apply skeleton-motion-jobs --remote",
-    "worker:deploy": "npm run docs:build:hosted && wrangler deploy",
+    "worker:deploy": "npm run docs:build && wrangler deploy",
     "docs:serve": "docusaurus serve website",
     "docs:start": "docusaurus start website",
     "test": "node --test",

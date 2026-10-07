@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
 import Layout from "@theme/Layout";
-import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import { Button } from "@base-ui/react/button";
 import { Dialog } from "@base-ui/react/dialog";
 import { Tabs } from "@base-ui/react/tabs";
@@ -253,8 +252,6 @@ function HostedGallery() {
 }
 
 export default function Gallery() {
-  const { siteConfig } = useDocusaurusContext();
-  const { appUrl, hosted } = siteConfig.customFields;
   return (
     <Layout title="Gallery" description="Motion sets generated with Skeleton Motion: yours and everyone's.">
       <SiteHeader />
@@ -263,11 +260,7 @@ export default function Gallery() {
           <p>Gallery</p>
           <h1>See what moves.</h1>
         </header>
-        {hosted ? <HostedGallery /> : (
-          <EmptyState action={<Button className={`${buttons.actionButton} ${buttons.createButton}`} nativeButton={false} render={<a href={`${appUrl}/gallery`} />}>Open the app gallery</Button>}>
-            Generations live on the Skeleton Motion app.
-          </EmptyState>
-        )}
+        <HostedGallery />
       </main>
     </Layout>
   );

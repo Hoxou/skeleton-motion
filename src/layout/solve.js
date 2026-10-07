@@ -2,7 +2,8 @@
 //
 // node: { axis: "x" | "y", gap, children } or a leaf { id }.
 // Child fields: grow (default 1), basis (default 0), presence (0..1, default
-// 1), aspect (width / height, locks the shape like an oval or icon tile).
+// 1), aspect (width / height, locks the shape like an oval or icon tile),
+// max (largest main-axis size it grows to; the rest goes to other growers).
 
 const sum = (values) => values.reduce((total, value) => total + value, 0);
 const presenceOf = (item) => item.presence ?? 1;
@@ -18,8 +19,9 @@ function gapWeights(items) {
 }
 
 function aspectCap(item, cross, horizontal) {
-  if (!item.aspect) return Infinity;
-  return (horizontal ? cross * item.aspect : cross / item.aspect) * presenceOf(item);
+  const max = item.max === undefined ? Infinity : item.max * presenceOf(item);
+  if (!item.aspect) return max;
+  return Math.min(max, (horizontal ? cross * item.aspect : cross / item.aspect) * presenceOf(item));
 }
 
 function distribute(items, available, cross, horizontal) {

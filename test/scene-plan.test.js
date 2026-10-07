@@ -5,7 +5,7 @@ import path from "node:path";
 import test from "node:test";
 import { analyzeSource } from "../src/analyze.js";
 import { parseArgs } from "../src/args.js";
-import { __testing, planKeys, withFillers } from "../src/compose/plan.js";
+import { __testing, layoutTree, planKeys, withFillers } from "../src/compose/plan.js";
 import { frameFor, FORMATS } from "../src/layout/formats.js";
 import { generateCollection } from "../src/generate.js";
 import { validatePlan } from "../src/scene-plan.js";
@@ -293,4 +293,23 @@ test("inserting an element already on screen moves it there", () => {
   assert.deepEqual(errors, []);
   assert.deepEqual(compiled.states[2].layout.children[1].children.slice(-1), ["payout-mo"]);
   assert.ok(!compiled.states[2].layout.children[0].children.includes("payout-mo"));
+});
+
+test("a chart beside a list heads its own column of designed modules, not a stretched chart", () => {
+  const { plan } = validatePlan({
+    elements: { feed: { kind: "panel" }, "r-1": { kind: "row" }, "r-2": { kind: "row" }, "r-3": { kind: "row" }, "r-new": { kind: "row" }, volume: { kind: "trend", value: 0.4 } },
+    screen: { children: [{ children: ["r-1", "r-2", "r-3"], id: "feed", type: "panel" }, "volume"], type: "row" },
+    steps: [{ do: [{ at: 0, id: "r-new", into: "feed", op: "insert" }] }, { do: [{ id: "volume", op: "set", value: 1 }] }],
+  }, { driver: "system" });
+  const frame = frameFor(FORMATS["4:3"]);
+  const filled = withFillers(plan, frame);
+  const column = filled.states[0].layout.children[1];
+  assert.equal(column.type, "column");
+  assert.equal(column.children[0], "volume");
+  assert.equal(column.children[1].type, "row", "stat tiles come first");
+  const { rects } = layoutTree(filled.states[0].layout, frame.safe, filled, frame);
+  const trend = rects.volume;
+  assert.ok(trend.width / trend.height >= 1.8 - 1e-6, "the chart grows no taller than a readable ratio");
+  const tiles = rects[column.children[1].children[0]];
+  assert.ok(tiles.y - (trend.y + trend.height) < 40, "modules sit right under the chart, without a stretched gap");
 });

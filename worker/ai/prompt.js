@@ -51,14 +51,13 @@ const STATUS_NOTES = {
 
 export const BRIEF_PROMPT = `Role: plan a set of 3 short looping product animations for a landing page. Each shows ONE real thing the product does, as a wordless or nearly wordless skeleton of its UI. Separate designers build each animation from your brief alone.
 
-Output JSON only: {"product": {"name": string, "summary": "one sentence"}, "candidates": [brief x5]}
+Output JSON only: {"product": {"name": string, "summary": "one sentence"}, "cursor": "on | off", "candidates": [brief x5]}
 brief = {
   "area": "the part of the product this comes from, 1-3 words",
   "name": "2-4 word feature name",
   "what": "one sentence: what the person does (or the product does for them) and the visible result",
   "move": "${Object.keys(MOVES).join(" | ")}",
   "surface": "${Object.keys(SURFACES).join(" | ")}",
-  "driver": "user | system",
   "words": "none | few",
   "objects": ["3-6 of this product's own things the screen shows: names, statuses, values"],
   "typical": "0 to 1: how likely another designer would pick this same feature for this product"
@@ -71,7 +70,7 @@ ${Object.entries(SURFACES).map(([name, text]) => `  ${name} = ${text}`).join("\n
 Rules:
 - 5 candidates from 5 different areas of the product; never 5 steps of one workflow.
 - Every candidate has a different move. Prefer moves that fit the feature's real interaction, and vary the surfaces.
-- driver "system" when the product changes the screen by itself (payment arrives, build finishes, data syncs); at most 2 candidates.
+- "cursor" is one choice for the whole set: "on" when the product is shown by someone clicking and dragging; "off" when the set reads well as the product working by itself (data arriving, syncing, progress, live results). A set never mixes the two.
 - words "none" by default: skeleton shapes, color, and motion carry the story. "few" only when the feature cannot be read without one or two words; at most one candidate.
 - objects are specific to this product, never generic like "Item 1".
 - Write in English unless the product only serves one non-English market.`;
@@ -185,7 +184,6 @@ export const BRIEF_SCHEMA = {
       items: {
         properties: {
           area: { type: "string" },
-          driver: enumOf(["user", "system"]),
           move: enumOf(Object.keys(MOVES)),
           name: { type: "string" },
           objects: { items: { type: "string" }, type: "array" },
@@ -194,16 +192,17 @@ export const BRIEF_SCHEMA = {
           what: { type: "string" },
           words: enumOf(["none", "few"]),
         },
-        propertyOrdering: ["area", "name", "what", "move", "surface", "driver", "words", "objects", "typical"],
-        required: ["area", "name", "what", "move", "surface", "driver", "words", "objects", "typical"],
+        propertyOrdering: ["area", "name", "what", "move", "surface", "words", "objects", "typical"],
+        required: ["area", "name", "what", "move", "surface", "words", "objects", "typical"],
         type: "object",
       },
       type: "array",
     },
+    cursor: enumOf(["on", "off"]),
     product: { properties: { name: { type: "string" }, summary: { type: "string" } }, required: ["name", "summary"], type: "object" },
   },
-  propertyOrdering: ["product", "candidates"],
-  required: ["product", "candidates"],
+  propertyOrdering: ["product", "cursor", "candidates"],
+  required: ["product", "cursor", "candidates"],
   type: "object",
 };
 
