@@ -4,7 +4,7 @@ import { analyzeSource } from "../src/analyze.js";
 import { parseArgs } from "../src/args.js";
 import { generateCollection } from "../src/generate.js";
 import { validatePlan } from "../src/scene-plan.js";
-import { parseProbe, probeToCss, readProbe } from "../worker/brand-probe.js";
+import { parseProbe, PROBE_VERSION, probeToCss, readProbe } from "../worker/brand-probe.js";
 import { allowsSession, chargeEntries, readLimits, refusal, RESERVE_MS } from "../worker/budget.js";
 
 const limits = readLimits({ BROWSER_DAILY_MS: "180000", BROWSER_LOOKUPS: "on", BROWSER_MONTHLY_MS: "1800000", BROWSER_SESSIONS: "on" });
@@ -126,7 +126,8 @@ test("a cached probe from before color coverage was measured is measured again",
   const old = envFor({ accent: "#635bff", background: "#ffffff" });
   assert.equal((await measureBrand(old, new URL("https://pay.example/"))).source, "session");
   assert.equal(old.measured.length, 1);
-  const current = envFor({ accent: "#635bff", shares: [] });
+  assert.equal((await measureBrand(envFor({ accent: "#635bff", shares: [], version: PROBE_VERSION - 1 }), new URL("https://pay.example/"))).source, "session", "an older probe version is measured again");
+  const current = envFor({ accent: "#635bff", shares: [], version: PROBE_VERSION });
   assert.equal((await measureBrand(current, new URL("https://pay.example/"))).source, "cache");
   assert.equal(current.measured.length, 0);
 });

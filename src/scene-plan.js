@@ -146,11 +146,9 @@ function applyStep(previous, step, elements, errors, where) {
       errors.push(`${at}: "id" "${cleanText(id, 40)}" is not declared in "elements".`);
       return;
     }
+    // Inserting what is already on screen can only mean moving it there.
+    if (op.op === "insert" && onScreen(id)) op = { ...op, op: "move" };
     if (op.op === "insert") {
-      if (onScreen(id)) {
-        errors.push(`${at}: "${id}" is already on screen; use "move" to move it.`);
-        return;
-      }
       const slot = slotFor(layout, op, at, errors, { previous: record.inserted.at(-1) });
       if (!slot) return;
       slot.group.children.splice(slot.index, 0, elements[id].kind === "panel" ? { children: [], direction: "column", id, type: "panel" } : id);

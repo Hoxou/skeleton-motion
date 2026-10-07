@@ -285,3 +285,12 @@ test("a form panel beside a list fills with text lines", () => {
   assert.deepEqual(form.children.slice(0, 2), ["field", "go"]);
   assert.ok(form.children.slice(2).length >= 2 && form.children.slice(2).every((id) => filled.elements[id].kind === "bar"));
 });
+
+test("inserting an element already on screen moves it there", () => {
+  const plan = steps();
+  plan.steps[1].do.push({ after: "approve", id: "payout-mo", op: "insert" });
+  const { errors, plan: compiled } = validatePlan(plan);
+  assert.deepEqual(errors, []);
+  assert.deepEqual(compiled.states[2].layout.children[1].children.slice(-1), ["payout-mo"]);
+  assert.ok(!compiled.states[2].layout.children[0].children.includes("payout-mo"));
+});

@@ -1,4 +1,7 @@
 const MARKER_ID = "__skeleton_motion_brand";
+// Bump when what the probe measures changes, so cached measurements from an
+// older probe are taken again (worker/brand.js).
+export const PROBE_VERSION = 3;
 const MARKER = new RegExp(`<script[^>]+id="${MARKER_ID}"[^>]*>([\\s\\S]*?)</script>`);
 const HEX = /^#[0-9a-f]{6}$/i;
 const LENGTH = /^\d+(?:\.\d+)?px$/;
@@ -185,6 +188,7 @@ export function parseProbe(json) {
   const color = (value) => (HEX.test(value || "") ? value.toLowerCase() : null);
   const radius = LENGTH.test(raw.radius || "") ? `${Math.min(48, Math.round(Number.parseFloat(raw.radius)))}px` : null;
   const probe = {
+    version: PROBE_VERSION,
     accent: color(raw.accent),
     background: color(raw.background),
     shares: (Array.isArray(raw.shares) ? raw.shares : [])

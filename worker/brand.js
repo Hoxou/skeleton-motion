@@ -1,4 +1,4 @@
-import { parseProbe } from "./brand-probe.js";
+import { parseProbe, PROBE_VERSION } from "./brand-probe.js";
 
 const OK_TTL_MS = 30 * 86_400_000;
 const EMPTY_TTL_MS = 86_400_000;
@@ -10,9 +10,9 @@ async function cached(env, host) {
   if (!row) return null;
   const age = Date.now() - Date.parse(row.measured_at);
   if (age > (row.status === "ok" ? OK_TTL_MS : EMPTY_TTL_MS)) return null;
-  // Probes stored before color coverage was measured lack it; measure again
-  // rather than guess the brand's mix from stylesheets alone.
-  if (row.status === "ok" && !/"shares"\s*:/.test(row.probe || "")) return null;
+  // Measurements from an older probe are taken again, so a change to what
+  // the probe measures reaches sites already in the cache.
+  if (row.status === "ok" && (() => { try { return JSON.parse(row.probe).version !== PROBE_VERSION; } catch { return true; } })()) return null;
   return { probe: row.status === "ok" ? parseProbe(row.probe) : null };
 }
 
