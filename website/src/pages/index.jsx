@@ -1,17 +1,41 @@
 import React, { useEffect, useRef, useState } from "react";
 import Layout from "@theme/Layout";
-import Link from "@docusaurus/Link";
 import useBaseUrl from "@docusaurus/useBaseUrl";
+import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import { Button } from "@base-ui/react/button";
 import { Dialog } from "@base-ui/react/dialog";
 import { Field } from "@base-ui/react/field";
 import { Form } from "@base-ui/react/form";
 import "@fontsource-variable/instrument-sans";
+import AiKeyDialog from "../components/AiKeyDialog";
+import { PROVIDERS } from "../components/aiKey";
 import SiteHeader from "../components/SiteHeader";
 import buttons from "../components/buttons.module.css";
 import styles from "./index.module.css";
 
 const STORAGE_KEY = "skeleton-motion:v1:pending-source";
+
+const DIALOGS = {
+  folder: {
+    title: "Folder upload is coming next",
+    description: "For now, paste the public URL of the product. Skeleton Motion reads its colors, type, and layout from the live page.",
+  },
+  error: { title: "That one did not work" },
+};
+
+// Answers that mean "bring your own key" rather than "something broke".
+const KEY_WALL = new Set(["free-uses-exhausted", "hosted-busy", "hosted-unavailable", "key-unreadable", "own-keys-unavailable", "ai-auth"]);
+
+async function requestJob(source) {
+  const response = await fetch("/api/jobs", {
+    body: JSON.stringify({ source }),
+    headers: { "content-type": "application/json" },
+    method: "POST",
+  });
+  const body = await response.json().catch(() => ({}));
+  if (!response.ok) throw Object.assign(new Error(body.error || `Generation failed (${response.status})`), { code: body.code });
+  return body.job;
+}
 
 function MotionPicture({ alt, dark, light }) {
   return (
@@ -23,8 +47,13 @@ function MotionPicture({ alt, dark, light }) {
 }
 
 function HomeContent() {
+  const { siteConfig } = useDocusaurusContext();
+  const { appUrl, hosted } = siteConfig.customFields;
   const [source, setSource] = useState("");
-  const [dialogOpen, setDialogOpen] = useState(false);
+  const [dialog, setDialog] = useState(null);
+  const [working, setWorking] = useState(false);
+  const [quota, setQuota] = useState(null);
+  const [keyDialog, setKeyDialog] = useState({ notice: "", open: false });
   const folderInput = useRef(null);
 
   const asset = (name) => ({
@@ -42,21 +71,42 @@ function HomeContent() {
   };
 
   useEffect(() => {
-    const saved = window.localStorage.getItem(STORAGE_KEY);
+    const linked = new URLSearchParams(window.location.search).get("source");
+    const saved = linked || window.localStorage.getItem(STORAGE_KEY);
     if (saved) setSource(saved);
-  }, []);
+    if (hosted) fetch("/api/ai/status").then((response) => response.json()).then(setQuota).catch(() => {});
+  }, [hosted]);
 
   function remember(value) {
     setSource(value);
     window.localStorage.setItem(STORAGE_KEY, value);
   }
 
-  function submit(event) {
+  async function submit(event) {
     event.preventDefault();
     const value = source.trim();
-    if (!value) return;
+    if (!value || working) return;
     remember(value);
-    setDialogOpen(true);
+    // The Pages mirror has no API; generation happens on the app origin.
+    if (!hosted) {
+      window.location.assign(`${appUrl}/?source=${encodeURIComponent(value)}`);
+      return;
+    }
+    const ownKey = quota?.ownKey;
+    if (!ownKey && quota && quota.remaining <= 0) {
+      setKeyDialog({ notice: `You've used your ${quota.freeUses} free generations.`, open: true });
+      return;
+    }
+    setWorking(true);
+    try {
+      const job = await requestJob(value);
+      window.localStorage.removeItem(STORAGE_KEY);
+      window.location.assign(job.url);
+    } catch (error) {
+      setWorking(false);
+      if (KEY_WALL.has(error.code)) setKeyDialog({ notice: error.message, open: true });
+      else setDialog({ ...DIALOGS.error, description: error.message });
+    }
   }
 
   function chooseFolder(event) {
@@ -64,7 +114,7 @@ function HomeContent() {
     if (!file) return;
     const folderName = file.webkitRelativePath?.split("/")[0] || file.name;
     remember(folderName);
-    setDialogOpen(true);
+    setDialog(DIALOGS.folder);
     event.target.value = "";
   }
 
@@ -112,14 +162,15 @@ function HomeContent() {
                 <Field.Control
                   aria-label="Repository path or public URL"
                   autoComplete="off"
+                  disabled={working}
                   onChange={(event) => setSource(event.target.value)}
-                  placeholder="Enter a URL or locate a local folder"
+                  placeholder="Enter your product's URL"
                   value={source}
                 />
               </Field.Root>
               <div className={styles.formActions}>
                 <Button className={`${buttons.actionButton} ${buttons.folderButton}`} type="button" onClick={() => folderInput.current?.click()}>Locate folder</Button>
-                <Button className={`${buttons.actionButton} ${buttons.createButton}`} type="submit">Create</Button>
+                <Button className={`${buttons.actionButton} ${buttons.createButton}`} type="submit" disabled={working}>{working ? "Generating" : "Create"}</Button>
               </div>
               <input
                 ref={folderInput}
@@ -133,6 +184,15 @@ function HomeContent() {
                 aria-hidden="true"
               />
             </Form>
+            <p className={styles.status} aria-live="polite">
+              {working ? "Reading the product and designing its animations. This can take a minute." : hosted && (
+                <>
+                  {quota?.ownKey ? `Using your own ${PROVIDERS[quota.ownKey.provider]?.label || "AI"} key. ` : quota ? `${quota.remaining} of ${quota.freeUses} free generations left. ` : ""}
+                  <Button className={styles.inlineLink} type="button" onClick={() => setKeyDialog({ notice: "", open: true })}>{quota?.ownKey ? "Manage key" : "Use your own AI key"}</Button>
+                  <span className={styles.statusNote}>Generations are listed in the public gallery with their page URL.</span>
+                </>
+              )}
+            </p>
           </div>
         </section>
 
@@ -166,18 +226,23 @@ function HomeContent() {
         </section>
       </main>
 
-      <Dialog.Root open={dialogOpen} onOpenChange={setDialogOpen}>
+      <AiKeyDialog
+        notice={keyDialog.notice}
+        open={keyDialog.open}
+        ownKey={quota?.ownKey || null}
+        onChange={(ownKey) => setQuota((current) => ({ ...current, ownKey }))}
+        onOpenChange={(open) => setKeyDialog((current) => ({ ...current, open }))}
+      />
+
+      <Dialog.Root open={Boolean(dialog)} onOpenChange={(open) => !open && setDialog(null)}>
         <Dialog.Portal>
           <Dialog.Backdrop className={styles.dialogBackdrop} />
           <Dialog.Viewport className={styles.dialogViewport}>
             <Dialog.Popup className={styles.dialogPopup}>
-              <Dialog.Title className={styles.dialogTitle}>Connect a local planner</Dialog.Title>
-              <Dialog.Description className={styles.dialogDescription}>
-                The public site cannot run a local CLI or inspect a repository by itself. Start the local companion, then use an existing Codex or Claude Code login. Provider credentials never enter this page.
-              </Dialog.Description>
+              <Dialog.Title className={styles.dialogTitle}>{dialog?.title}</Dialog.Title>
+              <Dialog.Description className={styles.dialogDescription}>{dialog?.description}</Dialog.Description>
               <div className={styles.dialogActions}>
-                <Button className={`${buttons.actionButton} ${buttons.createButton}`} render={<Link to="/docs/agent-integrations/overview" />}>Open local setup</Button>
-                <Dialog.Close className={`${buttons.actionButton} ${buttons.folderButton}`}>Keep this source for later</Dialog.Close>
+                <Dialog.Close className={`${buttons.actionButton} ${buttons.createButton}`}>Got it</Dialog.Close>
               </div>
             </Dialog.Popup>
           </Dialog.Viewport>

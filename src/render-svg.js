@@ -96,23 +96,81 @@ function clickRipple(duration, { at, format }, click) {
   </circle>`;
 }
 
-// `visibility` is [fade-in end, fade-out start, fade-out end] so each story
-// can hide the pointer on its own beat instead of a shared one.
-export function cursor(scene, frames, clicks = [], visibility = [0.07, 0.85, 0.92]) {
-  const duration = scene.duration;
+// The translate track of the pointer and of anything it carries. A dragged
+// element given the same frames (its own positions, same times and eases)
+// moves on exactly the pointer's timing and easing, so it stays under the
+// grab point. A frame's `ease` shapes the segment arriving at it.
+export function pointerTrack(scene, frames) {
   const time = timeline(scene);
   const values = frames.map(({ x, y }) => `${x} ${y}`).join(";");
   const keyTimes = time.k(frames.map(({ at }) => at).join(";"));
-  const keySplines = easingSegments("smoothMove", frames.length - 1);
+  const keySplines = frames.slice(1).map(({ ease }) => MOTION_EASING[ease || "smoothMove"]).join(";");
+  return `<animateTransform attributeName="transform" type="translate" values="${values}" keyTimes="${keyTimes}" calcMode="spline" keySplines="${keySplines}" dur="${scene.duration}s" repeatCount="indefinite" />`;
+}
+
+// The pointer never fades: it stays on screen across the loop seam, so the
+// last frame must walk it back to where the first one rests.
+export function cursor(scene, frames, clicks = []) {
+  const duration = scene.duration;
+  const time = timeline(scene);
   return `
-    <g id="cursor" opacity="0">
+    <g id="cursor">
       <g class="cursor-glyph">
         ${clicks.map((at) => clickRipple(duration, time, at)).join("")}
         <path d="M2.5 2 V27 L10 19.8 H21.5 Z" fill="var(--accent)" stroke="var(--cursor-outline)" class="ln-cursor" stroke-linejoin="round" filter="url(#cursor-shadow)" />
       </g>
-      <animate attributeName="opacity" values="0;1;1;0;0" keyTimes="${time.k(`0;${visibility.join(";")};1`)}" dur="${duration}s" repeatCount="indefinite" />
-      <animateTransform attributeName="transform" type="translate" values="${values}" keyTimes="${keyTimes}" calcMode="spline" keySplines="${keySplines}" dur="${duration}s" repeatCount="indefinite" />
+      ${pointerTrack(scene, frames)}
     </g>`;
+}
+
+// Arc length of an absolute M/C path (the only commands the trends use),
+// sampled finely enough to stay well under a pixel on any frame.
+function cubicPathLength(d) {
+  if (/[^MC\d\s.,-]/.test(d)) throw new Error(`pathSweep supports absolute M/C paths only: ${d}`);
+  let length = 0;
+  let point;
+  for (const [, command, args] of d.matchAll(/([MC])([^MC]*)/g)) {
+    const values = args.match(/-?(?:\d+\.?\d*|\.\d+)/g).map(Number);
+    if (command === "M") {
+      point = values.slice(0, 2);
+      continue;
+    }
+    for (let index = 0; index < values.length; index += 6) {
+      const [x1, y1, x2, y2, x, y] = values.slice(index, index + 6);
+      let previous = point;
+      for (let step = 1; step <= 64; step += 1) {
+        const t = step / 64;
+        const u = 1 - t;
+        const at = (a, b, c, e) => u * u * u * a + 3 * u * u * t * b + 3 * u * t * t * c + t * t * t * e;
+        const next = [at(point[0], x1, x2, x), at(point[1], y1, y2, y)];
+        length += Math.hypot(next[0] - previous[0], next[1] - previous[1]);
+        previous = next;
+      }
+      point = [x, y];
+    }
+  }
+  return length;
+}
+
+// A marker that travels a path and inks it on the way. animateMotion's
+// keyPoints are fractions of the path length, so a dash offset of the same
+// fraction ends the colored stroke exactly under the marker, drawing forward
+// and erasing as it travels back. The length is measured here rather than
+// with pathLength="1", which not every renderer applies to dashes.
+export function pathSweep({ d, duration, marker, points, splines, times, trace }) {
+  const timing = `keyTimes="${times.join(";")}" calcMode="spline" keySplines="${splines.join(";")}" dur="${duration}s" repeatCount="indefinite"`;
+  const length = round(cubicPathLength(d), 2);
+  const offsets = points.map((point) => round((1 - point) * length, 2));
+  // The double-length gap keeps the pattern from wrapping a dash onto the
+  // path start. The marker is hidden only for static renderers, which would
+  // draw it at the origin.
+  return `<path d="${d}" stroke-dasharray="${length} ${length * 2}" stroke-dashoffset="${offsets[0]}" fill="none" ${trace}>
+      <animate attributeName="stroke-dashoffset" values="${offsets.join(";")}" ${timing} />
+    </path>
+    <circle ${marker} opacity="0">
+      <set attributeName="opacity" to="1" />
+      <animateMotion path="${d}" keyPoints="${points.join(";")}" ${timing} />
+    </circle>`;
 }
 
 function dots() {
@@ -318,16 +376,25 @@ function listScene(scene) {
   `;
 }
 
+const TREND_PATH = "M118 512 C210 460 240 486 324 410 C400 342 482 476 566 398 C654 318 730 428 812 350 C884 282 964 376 1082 322";
+
 function dashboardScene(scene) {
   const duration = scene.duration;
   const { k } = timeline(scene);
   return `
     ${[72, 386, 700].map((x, index) => `<g><rect class="ln-hair" x="${x}" y="94" width="278" height="156" rx="var(--radius)" fill="var(--surface)" stroke="var(--border)"/><circle cx="${x + 34}" cy="130" r="10" fill="var(--tag-${index + 1})"/><rect x="${x + 58}" y="124" width="82" height="8" rx="4" fill="var(--ink)" opacity=".1"/><rect x="${x + 28}" y="176" width="100" height="22" rx="5" fill="var(--ink)" opacity=".16"/><rect class="lod-fine" x="${x + 28}" y="214" width="${138 + index * 28}" height="5" rx="2.5" fill="var(--ink)" opacity=".07"/></g>`).join("")}
     <rect class="ln-hair" x="72" y="292" width="1056" height="292" rx="var(--radius)" fill="var(--surface)" stroke="var(--border)" />
-    <path class="ln-heavy" d="M118 512 C210 460 240 486 324 410 C400 342 482 476 566 398 C654 318 730 428 812 350 C884 282 964 376 1082 322" fill="none" stroke="var(--border-strong)" />
-    <path class="ln-heavy" d="M118 512 C210 460 240 486 324 410 C400 342 482 476 566 398 C654 318 730 428 812 350 C884 282 964 376 1082 322" fill="none" stroke="var(--accent)" opacity="0"><animate attributeName="opacity" values="0;0;.82;.82;0" keyTimes="${k("0;.12;.22;.9;1")}" dur="${duration}s" repeatCount="indefinite"/></path>
+    <path class="ln-heavy" d="${TREND_PATH}" fill="none" stroke="var(--border-strong)" />
     <line class="ln-hair" x1="118" y1="540" x2="1082" y2="540" stroke="var(--border)" />
-    <circle r="8" fill="var(--accent)"><animateMotion path="M118 512 C210 460 240 486 324 410 C400 342 482 476 566 398 C654 318 730 428 812 350 C884 282 964 376 1082 322" keyTimes="${k("0;.12;.72;1")}" keyPoints="0;0;1;1" dur="${duration}s" repeatCount="indefinite"/><animate attributeName="opacity" values="0;1;1;0" keyTimes="${k("0;.12;.82;1")}" dur="${duration}s" repeatCount="indefinite"/></circle>
+    ${pathSweep({
+      d: TREND_PATH,
+      duration,
+      marker: `r="8" fill="var(--accent)"`,
+      points: [0, 0, 1, 1, 0, 0],
+      splines: ["0 0 1 1", "0 0 1 1", "0 0 1 1", MOTION_EASING.smoothMove, "0 0 1 1"],
+      times: k("0;.12;.72;.84;.96;1").split(";"),
+      trace: `class="ln-heavy" stroke="var(--accent)" opacity=".82"`,
+    })}
   `;
 }
 

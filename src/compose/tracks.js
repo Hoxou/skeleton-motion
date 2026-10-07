@@ -8,9 +8,13 @@ export function formatNumber(value, digits = 2) {
 // One timeline per composition: every track shares the same keyTimes and
 // keySplines, so any instant is the same weighted blend of two solved
 // layouts for every shape. That is what keeps fill and spacing invariants
-// true between keyframes, not just on them.
+// true between keyframes, not just on them. Beats are authored on a story
+// clock whose last key is one loop, so a rewind can follow the story without
+// retiming the beats before it.
 export function createTimeline(keyframes, duration) {
-  const keyTimes = keyframes.map(({ at }) => formatNumber(at, 3)).join(";");
+  const length = keyframes.at(-1).at;
+  const time = (at) => formatNumber(at / length, 3);
+  const keyTimes = keyframes.map(({ at }) => time(at)).join(";");
   const keySplines = keyframes.slice(1).map(({ ease }) => MOTION_EASING[ease || "gentle"]).join(";");
   const timing = `keyTimes="${keyTimes}" calcMode="spline" keySplines="${keySplines}" dur="${duration}s" repeatCount="indefinite"`;
 
@@ -35,7 +39,7 @@ export function createTimeline(keyframes, duration) {
     }
     kept.push(values.length - 1);
     if (kept.length === values.length) return animateText(attribute, text);
-    const ownTimes = kept.map((index) => formatNumber(times[index], 3)).join(";");
+    const ownTimes = kept.map((index) => time(times[index])).join(";");
     const ownSplines = kept.slice(1).map((index) => MOTION_EASING[keyframes[index].ease || "gentle"]).join(";");
     return `<animate attributeName="${attribute}" values="${kept.map((index) => text[index]).join(";")}" keyTimes="${ownTimes}" calcMode="spline" keySplines="${ownSplines}" dur="${duration}s" repeatCount="indefinite" />`;
   }
@@ -48,7 +52,7 @@ export function createTimeline(keyframes, duration) {
     return `<${tag} ${initial}${attributes ? ` ${attributes}` : ""}>${motion}${children}</${tag}>`;
   }
 
-  return { animate, animateText, element, keyTimes: keyframes.map(({ at }) => at) };
+  return { animate, animateText, element, time };
 }
 
 export function rectTracks(frames) {

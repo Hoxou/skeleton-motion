@@ -5,9 +5,9 @@ import styles from "./SiteHeader.module.css";
 // Framework-free so the Display Room (tools/preview-shell) renders the same
 // header as the site. SiteHeader.jsx wires it to Docusaurus.
 const LINKS = [
+  { label: "Gallery", to: "/gallery" },
   { label: "Examples", to: "/examples" },
   { label: "Docs", to: "/docs" },
-  { label: "Roadmap", to: "/docs/roadmap" },
   { label: "Support", to: "/support" },
   { label: "GitHub", href: "https://github.com/Hoxou/skeleton-motion" },
 ];

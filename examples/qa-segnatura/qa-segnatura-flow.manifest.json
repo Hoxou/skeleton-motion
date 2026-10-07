@@ -182,7 +182,7 @@
     "4:5",
     "9:16"
   ],
-  "generatedAt": "2026-10-06T08:23:32.515Z",
+  "generatedAt": "2026-10-06T10:03:51.625Z",
   "schemaVersion": 1,
   "asset": {
     "archive": "qa-segnatura-flow.assets.zip",
@@ -203,7 +203,7 @@
           "frame": "none",
           "texture": "transparent-overlay"
         },
-        "duration": 6.2,
+        "duration": 7.3,
         "evidence": [
           {
             "file": "app/app/[projectSlug]/automations/s/[scenarioSlug]/scenario-canvas.client.tsx",
@@ -283,7 +283,7 @@
           "frame": "none",
           "texture": "transparent-overlay"
         },
-        "duration": 6.2,
+        "duration": 7.3,
         "evidence": [
           {
             "file": "app/app/[projectSlug]/automations/s/[scenarioSlug]/scenario-canvas.client.tsx",
@@ -365,7 +365,7 @@
           "frame": "none",
           "texture": "transparent-overlay"
         },
-        "duration": 6.45,
+        "duration": 7.59,
         "evidence": [
           {
             "file": "app/app/[projectSlug]/automations/s/[scenarioSlug]/scenario-canvas.client.tsx",
@@ -445,7 +445,7 @@
           "frame": "none",
           "texture": "transparent-overlay"
         },
-        "duration": 6.45,
+        "duration": 7.59,
         "evidence": [
           {
             "file": "app/app/[projectSlug]/automations/s/[scenarioSlug]/scenario-canvas.client.tsx",
@@ -527,7 +527,7 @@
           "frame": "none",
           "texture": "transparent-overlay"
         },
-        "duration": 5.95,
+        "duration": 7.01,
         "evidence": [
           {
             "file": "app/app/[projectSlug]/automations/s/[scenarioSlug]/scenario-canvas.client.tsx",
@@ -607,7 +607,7 @@
           "frame": "none",
           "texture": "transparent-overlay"
         },
-        "duration": 5.95,
+        "duration": 7.01,
         "evidence": [
           {
             "file": "app/app/[projectSlug]/automations/s/[scenarioSlug]/scenario-canvas.client.tsx",
@@ -689,7 +689,7 @@
           "frame": "none",
           "texture": "transparent-overlay"
         },
-        "duration": 6.7,
+        "duration": 7.88,
         "evidence": [
           {
             "file": "app/app/[projectSlug]/automations/s/[scenarioSlug]/scenario-canvas.client.tsx",
@@ -769,7 +769,7 @@
           "frame": "none",
           "texture": "transparent-overlay"
         },
-        "duration": 6.7,
+        "duration": 7.88,
         "evidence": [
           {
             "file": "app/app/[projectSlug]/automations/s/[scenarioSlug]/scenario-canvas.client.tsx",
@@ -851,7 +851,7 @@
           "frame": "none",
           "texture": "transparent-overlay"
         },
-        "duration": 6.94,
+        "duration": 8.18,
         "evidence": [
           {
             "file": "app/app/[projectSlug]/automations/s/[scenarioSlug]/scenario-canvas.client.tsx",
@@ -931,7 +931,7 @@
           "frame": "none",
           "texture": "transparent-overlay"
         },
-        "duration": 6.94,
+        "duration": 8.18,
         "evidence": [
           {
             "file": "app/app/[projectSlug]/automations/s/[scenarioSlug]/scenario-canvas.client.tsx",

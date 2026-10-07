@@ -82,9 +82,11 @@
     <line x1="159.26" y1="476.54" x2="1618.74" y2="476.54" class="ln-hair lod-fine" stroke="var(--border)" stroke-opacity=".6" /><line x1="159.26" y1="567.59" x2="1618.74" y2="567.59" class="ln-hair lod-fine" stroke="var(--border)" stroke-opacity=".6" /><line x1="159.26" y1="658.64" x2="1618.74" y2="658.64" class="ln-hair lod-fine" stroke="var(--border)" stroke-opacity=".6" /><line x1="159.26" y1="749.69" x2="1618.74" y2="749.69" class="ln-hair lod-fine" stroke="var(--border)" stroke-opacity=".6" />
     <line x1="159.26" y1="840.74" x2="1618.74" y2="840.74" class="ln-hair" stroke="var(--border)" />
     <path d="M159.26 770.41 C298.49 703.95 344.03 737.18 471.15 640.07 C586.16 553.22 710.36 724.39 837.48 624.74 C970.73 522.53 1085.88 663.08 1209.94 563.43 C1318.96 476.54 1440.1 596.63 1618.74 527.64" fill="none" class="ln-heavy" stroke="var(--border-strong)" />
-    <path opacity="0" d="M159.26 770.41 C298.49 703.95 344.03 737.18 471.15 640.07 C586.16 553.22 710.36 724.39 837.48 624.74 C970.73 522.53 1085.88 663.08 1209.94 563.43 C1318.96 476.54 1440.1 596.63 1618.74 527.64" fill="none" class="ln-heavy" stroke="var(--accent)"><animate attributeName="opacity" values="0;0;.82;.82;0" keyTimes="0;.12;.22;.86;1" calcMode="spline" keySplines=".22 .8 .2 1;.22 .8 .2 1;.22 .8 .2 1;.22 .8 .2 1" dur="7.4s" repeatCount="indefinite" /></path>
+    <path d="M159.26 770.41 C298.49 703.95 344.03 737.18 471.15 640.07 C586.16 553.22 710.36 724.39 837.48 624.74 C970.73 522.53 1085.88 663.08 1209.94 563.43 C1318.96 476.54 1440.1 596.63 1618.74 527.64" stroke-dasharray="1536.95 3073.9" stroke-dashoffset="1536.95" fill="none" class="ln-heavy" stroke="var(--accent)" opacity=".82">
+      <animate attributeName="stroke-dashoffset" values="1536.95;1536.95;0;0;1536.95;1536.95" keyTimes="0;.105;.632;.754;.895;1" calcMode="spline" keySplines="0 0 1 1;0 0 1 1;0 0 1 1;.65 0 .35 1;0 0 1 1" dur="8.4s" repeatCount="indefinite" />
+    </path>
     <circle r="14.81" fill="var(--accent)" opacity="0">
-    <animateMotion path="M159.26 770.41 C298.49 703.95 344.03 737.18 471.15 640.07 C586.16 553.22 710.36 724.39 837.48 624.74 C970.73 522.53 1085.88 663.08 1209.94 563.43 C1318.96 476.54 1440.1 596.63 1618.74 527.64" keyTimes="0;.12;.72;1" keyPoints="0;0;1;1" calcMode="linear" dur="7.4s" repeatCount="indefinite" />
-    <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;.12;.82;1" calcMode="spline" keySplines=".22 .8 .2 1;.22 .8 .2 1;.22 .8 .2 1" dur="7.4s" repeatCount="indefinite" />
-  </circle>
+      <set attributeName="opacity" to="1" />
+      <animateMotion path="M159.26 770.41 C298.49 703.95 344.03 737.18 471.15 640.07 C586.16 553.22 710.36 724.39 837.48 624.74 C970.73 522.53 1085.88 663.08 1209.94 563.43 C1318.96 476.54 1440.1 596.63 1618.74 527.64" keyPoints="0;0;1;1;0;0" keyTimes="0;.105;.632;.754;.895;1" calcMode="spline" keySplines="0 0 1 1;0 0 1 1;0 0 1 1;.65 0 .35 1;0 0 1 1" dur="8.4s" repeatCount="indefinite" />
+    </circle>
 </svg>

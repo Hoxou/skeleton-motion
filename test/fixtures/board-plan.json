@@ -1,0 +1,36 @@
+{
+  "label": "Move issue",
+  "copy": { "eyebrow": "Issue tracking", "title": "Move work forward.", "description": "Drag an issue into progress and the board rebalances around it." },
+  "elements": {
+    "board-todo": { "kind": "panel", "label": "Todo" },
+    "board-doing": { "kind": "panel", "label": "In progress" },
+    "issue-142": { "kind": "card", "label": "ENG-142 Login flow", "tone": "tag-1" },
+    "issue-151": { "kind": "card", "label": "ENG-151 Billing page", "tone": "tag-2" },
+    "issue-160": { "kind": "card", "label": "ENG-160 Search", "tone": "tag-3" },
+    "issue-133": { "kind": "card", "label": "ENG-133 Onboarding", "tone": "tag-4" },
+    "assigned": { "kind": "chip", "label": "Assigned to you", "tone": "accent" }
+  },
+  "states": [
+    {
+      "layout": { "type": "row", "children": [
+        { "type": "panel", "id": "board-todo", "children": ["issue-142", "issue-151", "issue-160"] },
+        { "type": "panel", "id": "board-doing", "children": ["issue-133"] }
+      ] },
+      "pointer": { "target": "issue-151", "drag": true }
+    },
+    {
+      "layout": { "type": "row", "children": [
+        { "type": "panel", "id": "board-todo", "children": ["issue-142", "issue-160"] },
+        { "type": "panel", "id": "board-doing", "children": ["issue-151", "issue-133"] }
+      ] },
+      "highlight": ["issue-151"]
+    },
+    {
+      "layout": { "type": "row", "children": [
+        { "type": "panel", "id": "board-todo", "children": ["issue-142", "issue-160"] },
+        { "type": "panel", "id": "board-doing", "children": ["issue-151", "assigned", "issue-133"] }
+      ] },
+      "highlight": ["issue-151"]
+    }
+  ]
+}

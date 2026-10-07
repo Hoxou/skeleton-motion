@@ -1,0 +1,28 @@
+/* Form parts for the AI key dialog; the popup itself uses index.module.css. */
+.popup { width: min(560px, 100%); }
+.form { display: grid; gap: 1rem; margin-top: 1.4rem; }
+
+.tabs { display: inline-flex; gap: .25rem; padding: .3rem; border-radius: 16px; background: var(--home-soft); }
+.tab { min-height: 34px; background: transparent; color: var(--home-muted); }
+.tab:hover { color: var(--home-ink); }
+.tab[data-active] { background: var(--home-page); color: var(--home-ink); }
+
+.field { display: grid; gap: .4rem; }
+.label { color: var(--home-ink); font-size: .86rem; font-weight: 630; }
+.input {
+  min-height: 44px;
+  padding: 0 .9rem;
+  border: 0;
+  border-radius: 12px;
+  outline: 0;
+  background: var(--home-soft);
+  color: var(--home-ink);
+  font-family: "Instrument Sans Variable", "Instrument Sans", ui-sans-serif, system-ui, sans-serif;
+  font-size: .95rem;
+}
+.input::placeholder { color: var(--home-muted); }
+.input:focus-visible { box-shadow: 0 0 0 3px color-mix(in oklab, var(--home-blue) 28%, transparent); }
+
+.saved { margin: 1rem 0 0; padding: .7rem .9rem; border-radius: 12px; background: var(--home-soft); color: var(--home-ink); font-size: .9rem; }
+.error { margin: 0; color: #c62828; font-size: .9rem; }
+:global([data-theme="dark"]) .error { color: #ff8a80; }

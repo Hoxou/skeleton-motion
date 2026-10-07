@@ -146,9 +146,13 @@ function inferColorSystem(sourceText, cssText = "") {
   return { darkAccents, darkPastels, families, lightAccents, lightCanvas, lightPastels, mode };
 }
 
+// Used when the source exposes no brand token; callers compare against it
+// to tell "measured" from "guessed".
+export const DEFAULT_ACCENT = "#4f46e5";
+
 function buildPalette(lightVariables, darkVariables, colorSystem = {}) {
   const light = {
-    accent: token(lightVariables, ["primary", "brand", "brand-primary"], "#4f46e5"),
+    accent: token(lightVariables, ["primary", "brand", "brand-primary"], DEFAULT_ACCENT),
     background: token(lightVariables, ["background", "page", "canvas"], "#ffffff"),
     border: token(lightVariables, ["border", "input"], "#e5e7eb"),
     foreground: token(lightVariables, ["foreground", "text", "card-foreground"], "#171717"),
@@ -335,7 +339,7 @@ function extractLinkedStyles(html, url) {
   return styles.slice(0, 12);
 }
 
-async function analyzeUrl(source) {
+async function analyzeUrl(source, fetch, measuredCss = "") {
   const response = await fetch(source, { headers: { "user-agent": "skeleton-motion/0.1" }, redirect: "follow" });
   if (!response.ok) throw new Error(`URL returned ${response.status}: ${source}`);
   const html = await response.text();
@@ -346,6 +350,8 @@ async function analyzeUrl(source) {
     return sheet.ok ? sheet.text() : "";
   }));
   for (const result of fetched) if (result.status === "fulfilled") cssText += `\n${await result.value}`;
+  // Measured values come first: theme and typography readers take the first match.
+  cssText = `${measuredCss}\n${cssText}`;
   const lightVariables = readTheme(cssText, ":root");
   const darkVariables = readTheme(cssText, ".dark");
   const title = html.match(/<title[^>]*>([^<]+)<\/title>/i)?.[1]?.trim() || new URL(response.url).hostname;
@@ -369,8 +375,11 @@ async function analyzeUrl(source) {
   };
 }
 
-export async function analyzeSource(source) {
-  const analysis = isUrl(source) ? await analyzeUrl(source) : await analyzeRepository(source);
+// The hosted Worker passes a guarded `fetch` that validates every URL the
+// analyzer requests, including redirects and linked stylesheets, and
+// `measuredCss` built from the page's computed styles when it has them.
+export async function analyzeSource(source, { fetch = globalThis.fetch, measuredCss } = {}) {
+  const analysis = isUrl(source) ? await analyzeUrl(source, fetch, measuredCss) : await analyzeRepository(source);
   return { ...analysis, slug: slugify(analysis.name) };
 }
 

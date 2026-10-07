@@ -1,6 +1,7 @@
 import { composeAssignColor } from "./assign-color.js";
 import { composeConfirmEdit } from "./confirm-edit.js";
 import { composeInsertStep } from "./insert-step.js";
+import { composePlan } from "./plan.js";
 import { composeProgressSignal } from "./progress-signal.js";
 import { composeSelectItem } from "./select-item.js";
 import { composeSnapToGrid } from "./snap-to-grid.js";
@@ -14,6 +15,8 @@ const COMPOSERS = Object.freeze({
   "assign-color": composeAssignColor,
   "chart-sweep": composeProgressSignal,
   "focus-and-confirm": composeConfirmEdit,
+  // Model-authored scene plans, one generic composer for any product story.
+  plan: composePlan,
   "select-and-reveal": composeSelectItem,
   "snap-to-grid": composeSnapToGrid,
   "voice-to-task": composeVoiceTask,

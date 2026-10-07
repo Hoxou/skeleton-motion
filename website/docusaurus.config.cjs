@@ -1,11 +1,18 @@
 const path = require("node:path");
 
+// One source, two hosts: GitHub Pages (static mirror) and the Cloudflare
+// Worker that also serves the generation API. Only the Worker build can
+// generate, so the mirror sends visitors to APP_URL instead.
+const HOSTED = process.env.SKELETON_MOTION_HOSTED === "1";
+const APP_URL = process.env.SKELETON_MOTION_APP_URL || "https://skeleton-motion.qa-segnatura.workers.dev";
+
 const config = {
   title: "Skeleton Motion",
   tagline: "Product motion, inferred from the product itself.",
   favicon: "img/favicon.svg",
-  url: "https://hoxou.github.io",
-  baseUrl: "/skeleton-motion/",
+  url: HOSTED ? APP_URL : "https://hoxou.github.io",
+  baseUrl: HOSTED ? "/" : "/skeleton-motion/",
+  customFields: { appUrl: APP_URL, hosted: HOSTED },
   organizationName: "Hoxou",
   projectName: "skeleton-motion",
   trailingSlash: false,
@@ -46,9 +53,9 @@ const config = {
     navbar: {
       title: "Skeleton Motion",
       items: [
+        { label: "Gallery", position: "right", to: "/gallery" },
         { label: "Examples", position: "right", to: "/examples" },
         { label: "Docs", position: "right", to: "/docs" },
-        { label: "Roadmap", position: "right", to: "/docs/roadmap" },
         { label: "Support", position: "right", to: "/support" },
         { href: "https://github.com/Hoxou/skeleton-motion", label: "GitHub", position: "right" },
       ],
@@ -56,9 +63,9 @@ const config = {
     footer: {
       style: "light",
       links: [
-        { title: "Build", items: [{ label: "Getting started", to: "/docs/getting-started/first-set" }, { label: "CLI reference", to: "/docs/reference/cli" }] },
-        { title: "Understand", items: [{ label: "Local AI adapters", to: "/docs/agent-integrations/overview" }, { label: "Security", to: "/docs/security-privacy" }] },
-        { title: "Project", items: [{ label: "Roadmap", to: "/docs/roadmap" }, { label: "GitHub", href: "https://github.com/Hoxou/skeleton-motion" }] },
+        { title: "Use", items: [{ label: "Create on the website", to: "/docs/website" }, { label: "Use the code", to: "/docs/code" }] },
+        { title: "Reference", items: [{ label: "CLI", to: "/docs/cli" }, { label: "Compatibility", to: "/docs/compatibility" }] },
+        { title: "Project", items: [{ label: "Gallery", to: "/gallery" }, { label: "GitHub", href: "https://github.com/Hoxou/skeleton-motion" }] },
       ],
       copyright: `Copyright © ${new Date().getFullYear()} Skeleton Motion. MIT licensed.`,
     },

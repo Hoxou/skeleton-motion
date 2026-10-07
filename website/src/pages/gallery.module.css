@@ -1,0 +1,38 @@
+/* The grid, tile spans, theme pairs, and hover overlay come from
+   examples.module.css; this file only adds the tabs and tile captions. */
+.tabs { display: inline-flex; gap: .25rem; margin-bottom: 2rem; padding: .3rem; border-radius: 18px; background: var(--home-soft); }
+.tab { background: transparent; color: var(--home-muted); }
+.tab:hover { color: var(--home-ink); }
+.tab[data-active] { background: var(--home-page); color: var(--home-ink); box-shadow: 0 1px 2px color-mix(in oklab, var(--home-ink) 12%, transparent); }
+
+/* Cards are cells of the Examples grid; feature/tall spans come from there. */
+.card { position: relative; min-width: 0; }
+.tile { width: 100%; height: 100%; }
+.caption {
+  position: absolute;
+  left: .7rem;
+  bottom: .7rem;
+  display: flex;
+  align-items: baseline;
+  gap: .5rem;
+  max-width: calc(100% - 1.4rem);
+  margin: 0;
+  padding: .35rem .65rem;
+  border-radius: 10px;
+  background: color-mix(in oklab, var(--home-page) 88%, transparent);
+  font-size: .82rem;
+  line-height: 1.3;
+  pointer-events: none;
+}
+.caption strong { overflow: hidden; color: var(--home-ink); font-weight: 630; text-overflow: ellipsis; white-space: nowrap; }
+.caption span { flex: none; color: var(--home-muted); }
+.cardAction { position: absolute; top: .7rem; right: .7rem; }
+.visibilityButton { min-height: 30px; padding: 0 .7rem; border-radius: 10px; background: color-mix(in oklab, var(--home-page) 88%, transparent); font-size: .8rem; }
+
+.empty, .recovery { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 1.5rem; }
+.empty p, .recovery p { max-width: 60ch; margin: 0; color: var(--home-muted); line-height: 1.55; }
+.recovery { margin-top: 3.5rem; padding: 1.4rem 1.6rem; border-radius: 24px; background: var(--home-soft); }
+.copyButton { background: var(--home-page); }
+.more { display: flex; justify-content: center; margin-top: 2.5rem; }
+.notice { margin: 0 0 1.5rem; color: var(--home-ink); }
+

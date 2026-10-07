@@ -1,7 +1,7 @@
 import { frameFor } from "../layout/formats.js";
-import { inset, spaceBetween } from "../layout/solve.js";
+import { inset } from "../layout/solve.js";
 import { cursor } from "../render-svg.js";
-import { backdrop, center, chooseStack, curveOver, layoutMetadata, lerp, sourceUnits } from "./kit.js";
+import { backdrop, center, curveOver, fillStack, layoutMetadata, lerp, sourceUnits, stackRects, storyClock } from "./kit.js";
 import { createTimeline, formatNumber, rectTracks } from "./tracks.js";
 
 // Source proportions (source px) for a form with a live preview. Fields have
@@ -15,12 +15,15 @@ const FORM_NATURAL = FORM.pad * 2 + FORM.header + FIELD.height * (3 + 2 * FIELD.
 const FOCUSED = 1;
 
 // The pointer travels only while the UI is still: it focuses the field, waits
-// for the preview to answer, then saves and waits for the confirmation.
+// for the preview to answer, then saves and waits for the confirmation. Once
+// it is back at rest the edit unwinds in reverse: the confirmation clears, the
+// save button returns, and the focus ring leaves last.
 const KEYS = Object.freeze([
   { at: 0 }, { at: 0.29 }, { at: 0.34, ease: "quick" }, { at: 0.38, ease: "quick" }, { at: 0.42 }, { at: 0.46 },
   { at: 0.62 }, { at: 0.63, ease: "quick" }, { at: 0.64 }, { at: 0.66, ease: "quick" }, { at: 0.68 }, { at: 0.7 },
-  { at: 0.71 }, { at: 0.72 }, { at: 0.92 }, { at: 0.96 }, { at: 1 },
+  { at: 0.71 }, { at: 0.72 }, { at: 0.86 }, { at: 0.96 }, { at: 0.98 }, { at: 1.02 }, { at: 1.06 }, { at: 1.1 }, { at: 1.16 },
 ]);
+const REWIND = Object.freeze({ cleared: 1.02, restored: 1.06, start: 0.98 });
 const curve = curveOver(KEYS);
 
 const rectAttrs = (rect) => `x="${formatNumber(rect.x)}" y="${formatNumber(rect.y)}" width="${formatNumber(rect.width)}" height="${formatNumber(rect.height)}"`;
@@ -29,9 +32,10 @@ function formLayout(panel, k) {
   const pad = FORM.pad * k;
   const button = { height: BUTTON.height * k, width: BUTTON.width * k, x: panel.x + pad, y: panel.y + panel.height - pad - BUTTON.height * k };
   const area = { height: button.y - 20 * k - (panel.y + pad + FORM.header * k), width: panel.width - pad * 2, x: panel.x + pad, y: panel.y + pad + FORM.header * k };
-  const stack = chooseStack({ counts: [3], idealGap: FIELD.gap, intrinsic: FIELD.height * k, length: area.height, minGap: 0.15, scaleRange: [0.8, 1.6] });
-  const size = stack?.size ?? Math.min(FIELD.height * k, area.height / 3.5);
-  return { area, button, fields: spaceBetween(area, "y", [size, size, size]), title: { height: 10 * k, width: 130 * k, x: panel.x + pad, y: panel.y + pad } };
+  // The focused field is the second, so a form always shows at least three.
+  const stack = fillStack({ gap: FIELD.gap, intrinsic: FIELD.height * k, length: area.height, min: 3, minGap: 0.15 })
+    ?? fillStack({ gap: FIELD.gap, intrinsic: FIELD.height * k, length: area.height, max: 3, min: 3, minGap: 0, scaleRange: [0, 1.15] });
+  return { area, button, fields: stackRects(area, "y", stack), title: { height: 10 * k, width: 130 * k, x: panel.x + pad, y: panel.y + pad } };
 }
 
 export function composeConfirmEdit(scene) {
@@ -51,12 +55,12 @@ export function composeConfirmEdit(scene) {
   const fields = form.fields.map((field, index) => {
     const local = (x, y, width, height) => ({ height: height * k, width: Math.min(width * k, field.width - 32 * k), x: field.x + x * k, y: field.y + y * k });
     const focus = index === FOCUSED
-      ? timeline.element("rect", { opacity: curve([[0, 0], [0.29, 0], [0.34, 1], [0.92, 1], [1, 0]]) }, `${rectAttrs(field)} rx="${formatNumber(radius)}" fill="none" class="ln-base" stroke="var(--accent)"`)
+      ? timeline.element("rect", { opacity: curve([[0, 0], [0.29, 0], [0.34, 1], [REWIND.restored, 1], [REWIND.restored + 0.04, 0]]) }, `${rectAttrs(field)} rx="${formatNumber(radius)}" fill="none" class="ln-base" stroke="var(--accent)"`)
       : "";
     return `<g${index === FOCUSED ? ` id="focused-field"` : ""}>
-      <rect ${rectAttrs(field)} rx="${formatNumber(radius)}" data-fill="fields" fill="var(--tag-${index + 1})" opacity=".55" />
-      <rect ${rectAttrs(local(16, 14, 80 + index * 18, 6))} rx="${formatNumber(3 * k)}" fill="var(--ink)" opacity=".12" />
-      <rect class="lod-fine" ${rectAttrs(local(16, 28, 150 - index * 16, 5))} rx="${formatNumber(2.5 * k)}" fill="var(--ink)" opacity=".07" />
+      <rect ${rectAttrs(field)} rx="${formatNumber(radius)}" data-fill="fields" fill="var(--tag-${(index % 4) + 1})" opacity=".55" />
+      <rect ${rectAttrs(local(16, 14, 80 + (index % 3) * 18, 6))} rx="${formatNumber(3 * k)}" fill="var(--ink)" opacity=".12" />
+      <rect class="lod-fine" ${rectAttrs(local(16, 28, 150 - (index % 3) * 16, 5))} rx="${formatNumber(2.5 * k)}" fill="var(--ink)" opacity=".07" />
       ${focus}
     </g>`;
   }).join("");
@@ -64,7 +68,7 @@ export function composeConfirmEdit(scene) {
   const press = curve([[0, 1], [0.62, 1], [0.63, 0.94], [0.66, 1.02], [0.7, 1], [1, 1]]);
   // Narrow frames have no room for a preview, so the save button itself
   // becomes the confirmation: it narrows into a check pill and back.
-  const morph = split ? KEYS.map(() => 0) : curve([[0, 0], [0.63, 0], [0.71, 1], [0.92, 1], [1, 0]]);
+  const morph = split ? KEYS.map(() => 0) : curve([[0, 0], [0.63, 0], [0.71, 1], [REWIND.start, 1], [REWIND.restored, 0]]);
   const buttonFrames = KEYS.map((_, key) => {
     const width = lerp(form.button.width, form.button.height * 1.4, morph[key]) * press[key];
     const height = form.button.height * press[key];
@@ -76,7 +80,7 @@ export function composeConfirmEdit(scene) {
   };
   const buttonMarkup = `<g id="save">
     ${timeline.element("rect", rectTracks(buttonFrames), `rx="${formatNumber(13 * k)}" fill="var(--accent)"`)}
-    ${split ? "" : `<path d="${checkAt(0, k)}" class="ln-strong" fill="none" stroke="var(--surface)" stroke-linecap="round" stroke-linejoin="round" opacity="0">${timeline.animate("opacity", curve([[0, 0], [0.68, 0], [0.72, 1], [0.92, 1], [0.96, 0], [1, 0]]))}${timeline.animateText("d", KEYS.map((_, key) => checkAt(key, k)))}</path>`}
+    ${split ? "" : `<path d="${checkAt(0, k)}" class="ln-strong" fill="none" stroke="var(--surface)" stroke-linecap="round" stroke-linejoin="round" opacity="0">${timeline.animate("opacity", curve([[0, 0], [0.68, 0], [0.72, 1], [REWIND.start, 1], [REWIND.cleared, 0]]))}${timeline.animateText("d", KEYS.map((_, key) => checkAt(key, k)))}</path>`}
   </g>`;
 
   let preview = "";
@@ -95,7 +99,7 @@ export function composeConfirmEdit(scene) {
     preview = `<g id="preview">
       <rect ${rectAttrs(panel)} rx="${formatNumber(radius)}" data-fill="preview" class="ln-hair" fill="var(--surface)" stroke="var(--border)" />
       ${timeline.element("circle", { r: pulse.map((value) => circleRadius * value) }, `cx="${formatNumber(middle.x)}" cy="${formatNumber(middle.y)}" fill="var(--tag-2)"`)}
-      ${timeline.element("path", { opacity: curve([[0, 0], [0.64, 0], [0.71, 1], [0.92, 1], [1, 0]]) }, `d="${check}" fill="none" class="ln-heavy" stroke="var(--accent)" stroke-linecap="round" stroke-linejoin="round"`)}
+      ${timeline.element("path", { opacity: curve([[0, 0], [0.64, 0], [0.71, 1], [REWIND.start, 1], [REWIND.cleared, 0]]) }, `d="${check}" fill="none" class="ln-heavy" stroke="var(--accent)" stroke-linecap="round" stroke-linejoin="round"`)}
       ${lineWidths.map((width, index) => `<rect${index ? ` class="lod-fine"` : ""} x="${formatNumber(middle.x - width / 2)}" y="${formatNumber(middle.y + circleRadius + (24 + index * 16) * k)}" width="${formatNumber(width)}" height="${formatNumber((index ? 5 : 7) * k)}" rx="${formatNumber(3 * k)}" fill="var(--ink)" opacity="${index ? ".08" : ".16"}" />`).join("")}
     </g>`;
   }
@@ -103,10 +107,10 @@ export function composeConfirmEdit(scene) {
   const fieldPoint = { x: form.fields[FOCUSED].x + form.fields[FOCUSED].width * 0.35, y: form.fields[FOCUSED].y + form.fields[FOCUSED].height / 2 };
   const buttonPoint = center(form.button);
   const rest = { x: safe.x + safe.width * 0.84, y: safe.y + safe.height * 0.86 };
-  const pointer = cursor({ ...scene, timing: undefined }, [
+  const pointer = cursor({ ...scene, timing: storyClock(KEYS) }, [
     { at: 0, ...rest }, { at: 0.12, ...rest }, { at: 0.26, ...fieldPoint }, { at: 0.48, ...fieldPoint },
-    { at: 0.6, ...buttonPoint }, { at: 0.92, ...buttonPoint }, { at: 1, ...rest },
-  ].map((point) => ({ at: point.at, x: formatNumber(point.x), y: formatNumber(point.y) })), [0.29, 0.63], [0.09, 0.85, 0.88]);
+    { at: 0.6, ...buttonPoint }, { at: 0.86, ...buttonPoint }, { at: 0.96, ...rest }, { at: KEYS.at(-1).at, ...rest },
+  ].map((point) => ({ at: point.at, x: formatNumber(point.x), y: formatNumber(point.y) })), [0.29, 0.63]);
 
   return {
     content: `

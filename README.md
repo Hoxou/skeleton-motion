@@ -131,12 +131,10 @@ Video fallback:
 
 Target repositories are read-only. Scanner ignores generated/dependency directories and never imports source modules or runs project scripts.
 
-## Documentation and roadmap
+## Documentation
 
-The Docusaurus site includes the CLI reference, motion grammar, Display Room contract, local Codex/Claude Code adapter design, privacy boundary, cost plan, and hosted-product roadmap.
+Create animations designed from your product at <https://skeleton-motion.qa-segnatura.workers.dev>. Usage, code import, CLI, and compatibility are documented at <https://skeleton-motion.qa-segnatura.workers.dev/docs>.
 
 ```bash
 npm run docs:start
 ```
-
-The public site is designed as documentation and a future entry point. A browser cannot safely inspect a private local repository or start a local AI tool by itself; that workflow will use a loopback companion. See [`ROADMAP.md`](ROADMAP.md).

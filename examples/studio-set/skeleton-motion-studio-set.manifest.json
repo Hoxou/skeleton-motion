@@ -55,7 +55,7 @@
       "backdrop": "dots"
     }
   },
-  "generatedAt": "2026-10-06T08:26:45.020Z",
+  "generatedAt": "2026-10-06T10:03:55.721Z",
   "schemaVersion": 2,
   "set": {
     "archive": "skeleton-motion-studio-set.assets.zip",
@@ -225,7 +225,7 @@
               "frame": "none",
               "texture": "transparent-overlay"
             },
-            "duration": 5.2,
+            "duration": 6.2,
             "evidence": [],
             "file": "skeleton-motion-studio-set.snap-to-grid.light.svg",
             "motion": "snap-to-grid",
@@ -282,7 +282,7 @@
               "frame": "none",
               "texture": "transparent-overlay"
             },
-            "duration": 5.2,
+            "duration": 6.2,
             "evidence": [],
             "file": "skeleton-motion-studio-set.snap-to-grid.dark.svg",
             "motion": "snap-to-grid",

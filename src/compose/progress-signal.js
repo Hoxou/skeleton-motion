@@ -1,6 +1,7 @@
 import { frameFor } from "../layout/formats.js";
 import { inset, spaceBetween } from "../layout/solve.js";
-import { backdrop, curveOver, layoutMetadata, sourceUnits } from "./kit.js";
+import { MOTION_EASING, pathSweep } from "../render-svg.js";
+import { backdrop, layoutMetadata, sourceUnits } from "./kit.js";
 import { createTimeline, formatNumber } from "./tracks.js";
 
 // Source proportions (source px): metric tiles have a natural height and
@@ -16,8 +17,11 @@ const TREND_MIN_ASPECT = 1.8;
 const GRIDLINES = 4;
 const FOOTNOTES = [110, 130, 96];
 
-const KEYS = Object.freeze([{ at: 0 }, { at: 0.12 }, { at: 0.22 }, { at: 0.72 }, { at: 0.78 }, { at: 0.82 }, { at: 0.86 }, { at: 1 }]);
-const curve = curveOver(KEYS);
+// The marker sweeps the trend, coloring it as it goes, rests at the latest
+// point, then travels back to the start, so the loop opens where it closed.
+// Each beat is [time, distance along the trend].
+const SWEEP = Object.freeze([[0, 0], [0.12, 0], [0.72, 1], [0.86, 1], [1.02, 0], [1.14, 0]]);
+const KEYS = Object.freeze(SWEEP.map(([at]) => ({ at })));
 
 function arrange(frame) {
   const px = sourceUnits(frame);
@@ -78,11 +82,16 @@ export function composeProgressSignal(scene) {
   const gridlines = Array.from({ length: GRIDLINES }, (_, index) => plot.y + (baseline - plot.y) * index / GRIDLINES)
     .map((y) => `<line x1="${formatNumber(plot.x)}" y1="${formatNumber(y)}" x2="${formatNumber(plot.x + plot.width)}" y2="${formatNumber(y)}" class="ln-hair lod-fine" stroke="var(--border)" stroke-opacity=".6" />`).join("");
 
-  const trace = timeline.element("path", { opacity: curve([[0, 0], [0.12, 0], [0.22, 0.82], [0.86, 0.82], [1, 0]]) }, `d="${d}" fill="none" class="ln-heavy" stroke="var(--accent)"`);
-  const marker = `<circle r="${formatNumber(6 * k)}" fill="var(--accent)" opacity="0">
-    <animateMotion path="${d}" keyTimes="0;.12;.72;1" keyPoints="0;0;1;1" calcMode="linear" dur="${scene.duration}s" repeatCount="indefinite" />
-    ${timeline.animate("opacity", curve([[0, 0], [0.12, 1], [0.82, 1], [1, 0]]))}
-  </circle>`;
+  const sweep = pathSweep({
+    d,
+    duration: scene.duration,
+    marker: `r="${formatNumber(6 * k)}" fill="var(--accent)"`,
+    points: SWEEP.map(([, point]) => point),
+    // The forward sweep reads the trend at an even pace; the way back eases.
+    splines: ["0 0 1 1", "0 0 1 1", "0 0 1 1", MOTION_EASING.smoothMove, "0 0 1 1"],
+    times: SWEEP.map(([at]) => timeline.time(at)),
+    trace: `class="ln-heavy" stroke="var(--accent)" opacity=".82"`,
+  });
 
   const regions = { chart: panel, tiles: tileRegion };
   return {
@@ -94,8 +103,7 @@ export function composeProgressSignal(scene) {
     ${gridlines}
     <line x1="${formatNumber(plot.x)}" y1="${formatNumber(baseline)}" x2="${formatNumber(plot.x + plot.width)}" y2="${formatNumber(baseline)}" class="ln-hair" stroke="var(--border)" />
     <path d="${d}" fill="none" class="ln-heavy" stroke="var(--border-strong)" />
-    ${trace}
-    ${marker}`,
+    ${sweep}`,
     model: { frame, keys: KEYS, layout, regions },
     referenceWidth: frame.referenceWidth,
     viewBox: { height: frame.height, width: frame.width },

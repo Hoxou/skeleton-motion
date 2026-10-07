@@ -1,0 +1,52 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "skeleton-motion",
+  "main": "worker/index.js",
+  "compatibility_date": "2026-10-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "workers_dev": true,
+  "preview_urls": false,
+  "observability": { "enabled": true },
+  // The Docusaurus build; build it with `npm run docs:build:hosted` first.
+  "assets": {
+    "directory": "./website/build",
+    "binding": "ASSETS",
+    "not_found_handling": "404-page",
+    "run_worker_first": ["/api/*", "/jobs/*"]
+  },
+  // The Display Room shell is bundled as text because Workers have no disk.
+  "rules": [{ "type": "Text", "globs": ["**/*.html"], "fallthrough": true }],
+  "r2_buckets": [{ "binding": "STORE", "bucket_name": "skeleton-motion-store" }],
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "skeleton-motion-jobs",
+      "database_id": "03f4a51d-8475-4367-91e8-d95e63248a88",
+      "migrations_dir": "./worker/migrations"
+    }
+  ],
+  // Browser Run is shared with every Worker on this account. All lookups go
+  // through the BrowserGate Durable Object, which enforces these caps:
+  // ~2.5 s per lookup means 3 min/day and 30 min/month allow roughly
+  // 70 and 700 fresh sites. Set BROWSER_LOOKUPS to "off" to stop all use.
+  "vars": {
+    "BROWSER_LOOKUPS": "on",
+    "BROWSER_SESSIONS": "on",
+    "BROWSER_DAILY_MS": "180000",
+    "BROWSER_MONTHLY_MS": "1800000",
+    // Shared AI key (secret GEMINI_API_KEY): free generations per browser,
+    // then visitors bring their own key; plus a ceiling on attempts per UTC
+    // day across everyone to stay inside the key's free tier.
+    "AI_FREE_USES": "10",
+    "AI_DAILY_ATTEMPTS": "150",
+    "GEMINI_MODEL": "gemini-flash-latest,gemini-3.8-flash,gemini-3.7-flash,gemini-3.6-flash,gemini-3.5-flash,gemini-flash-lite-latest"
+  },
+  // quickAction() is unsupported by local simulation, so dev uses the real
+  // (budgeted) browser.
+  "browser": { "binding": "BROWSER", "remote": true },
+  "durable_objects": { "bindings": [{ "name": "BROWSER_GATE", "class_name": "BrowserGate" }] },
+  "migrations": [{ "tag": "v1", "new_sqlite_classes": ["BrowserGate"] }],
+  "ratelimits": [
+    { "name": "CREATE_LIMIT", "namespace_id": "4101", "simple": { "limit": 8, "period": 60 } }
+  ]
+}

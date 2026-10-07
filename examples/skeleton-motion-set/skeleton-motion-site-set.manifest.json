@@ -45,6 +45,36 @@
     "concepts": {
       "evidence": [
         {
+          "file": "examples/bisonflow/ai-project-operations-for-voice-first-product-teams-bisonflow-fl.preview.html",
+          "kind": "list",
+          "score": 103
+        },
+        {
+          "file": "examples/qa-segnatura-set/qa-segnatura-motion-set.preview.html",
+          "kind": "list",
+          "score": 103
+        },
+        {
+          "file": "examples/qa-segnatura/qa-segnatura-flow.preview.html",
+          "kind": "list",
+          "score": 103
+        },
+        {
+          "file": "src/preview-shell.html",
+          "kind": "list",
+          "score": 103
+        },
+        {
+          "file": "examples/skeleton-motion-set/skeleton-motion-site-set.preview.html",
+          "kind": "list",
+          "score": 95
+        },
+        {
+          "file": "examples/studio-set/skeleton-motion-studio-set.preview.html",
+          "kind": "list",
+          "score": 95
+        },
+        {
           "file": "src/analyze.js",
           "kind": "list",
           "score": 89
@@ -53,54 +83,24 @@
           "file": "test/analyze.test.js",
           "kind": "flow",
           "score": 85
-        },
-        {
-          "file": "examples/qa-segnatura-set/qa-segnatura-motion-set.preview.html",
-          "kind": "list",
-          "score": 66
-        },
-        {
-          "file": "examples/qa-segnatura/qa-segnatura-flow.preview.html",
-          "kind": "list",
-          "score": 66
-        },
-        {
-          "file": "src/preview-shell.html",
-          "kind": "list",
-          "score": 66
-        },
-        {
-          "file": "examples/qa-segnatura-set/qa-segnatura-motion-set.manifest.json",
-          "kind": "flow",
-          "score": 60
-        },
-        {
-          "file": "examples/qa-segnatura/qa-segnatura-flow.manifest.json",
-          "kind": "flow",
-          "score": 60
-        },
-        {
-          "file": "package-lock.json",
-          "kind": "list",
-          "score": 60
         }
       ],
       "ranked": [
         {
           "kind": "list",
-          "score": 1301
-        },
-        {
-          "kind": "flow",
-          "score": 1118
+          "score": 1844
         },
         {
           "kind": "editor",
-          "score": 1054
+          "score": 1408
+        },
+        {
+          "kind": "flow",
+          "score": 1274
         },
         {
           "kind": "dashboard",
-          "score": 509
+          "score": 725
         }
       ]
     },
@@ -144,7 +144,7 @@
     },
     "source": {
       "input": "/Users/victor.toupar/Documents/dev/skeleton-motion",
-      "scannedFiles": 79,
+      "scannedFiles": 108,
       "type": "repository"
     },
     "themes": {
@@ -153,7 +153,7 @@
     },
     "typography": {
       "family": "Instrument Sans Variable",
-      "stack": "\"Instrument Sans Variable\", \"Instrument Sans\", ui-sans-serif, system-ui, sans-serif",
+      "stack": "\"Instrument Sans Variable\"",
       "file": "skeleton-motion-site-set.preview-font.ttf"
     },
     "visual": {
@@ -167,7 +167,7 @@
     "4:5",
     "9:16"
   ],
-  "generatedAt": "2026-10-06T07:35:39.086Z",
+  "generatedAt": "2026-10-06T10:03:50.402Z",
   "schemaVersion": 2,
   "set": {
     "archive": "skeleton-motion-site-set.assets.zip",
@@ -195,32 +195,32 @@
               "frame": "none",
               "texture": "transparent-overlay"
             },
-            "duration": 5.4,
+            "duration": 6.5,
             "evidence": [
               {
-                "file": "src/analyze.js",
+                "file": "examples/bisonflow/ai-project-operations-for-voice-first-product-teams-bisonflow-fl.preview.html",
                 "kind": "list",
-                "score": 89
+                "score": 103
               },
               {
                 "file": "examples/qa-segnatura-set/qa-segnatura-motion-set.preview.html",
                 "kind": "list",
-                "score": 66
+                "score": 103
               },
               {
                 "file": "examples/qa-segnatura/qa-segnatura-flow.preview.html",
                 "kind": "list",
-                "score": 66
+                "score": 103
               },
               {
                 "file": "src/preview-shell.html",
                 "kind": "list",
-                "score": 66
+                "score": 103
               },
               {
-                "file": "package-lock.json",
+                "file": "examples/skeleton-motion-set/skeleton-motion-site-set.preview.html",
                 "kind": "list",
-                "score": 60
+                "score": 95
               }
             ],
             "file": "skeleton-motion-site-set.select-item.light.svg",
@@ -259,7 +259,7 @@
             "theme": "light",
             "typography": {
               "family": "Instrument Sans Variable",
-              "stack": "\"Instrument Sans Variable\", \"Instrument Sans\", ui-sans-serif, system-ui, sans-serif",
+              "stack": "\"Instrument Sans Variable\"",
               "file": "skeleton-motion-site-set.preview-font.ttf"
             },
             "viewport": {
@@ -280,32 +280,32 @@
               "frame": "none",
               "texture": "transparent-overlay"
             },
-            "duration": 5.4,
+            "duration": 6.5,
             "evidence": [
               {
-                "file": "src/analyze.js",
+                "file": "examples/bisonflow/ai-project-operations-for-voice-first-product-teams-bisonflow-fl.preview.html",
                 "kind": "list",
-                "score": 89
+                "score": 103
               },
               {
                 "file": "examples/qa-segnatura-set/qa-segnatura-motion-set.preview.html",
                 "kind": "list",
-                "score": 66
+                "score": 103
               },
               {
                 "file": "examples/qa-segnatura/qa-segnatura-flow.preview.html",
                 "kind": "list",
-                "score": 66
+                "score": 103
               },
               {
                 "file": "src/preview-shell.html",
                 "kind": "list",
-                "score": 66
+                "score": 103
               },
               {
-                "file": "package-lock.json",
+                "file": "examples/skeleton-motion-set/skeleton-motion-site-set.preview.html",
                 "kind": "list",
-                "score": 60
+                "score": 95
               }
             ],
             "file": "skeleton-motion-site-set.select-item.dark.svg",
@@ -346,7 +346,7 @@
             "theme": "dark",
             "typography": {
               "family": "Instrument Sans Variable",
-              "stack": "\"Instrument Sans Variable\", \"Instrument Sans\", ui-sans-serif, system-ui, sans-serif",
+              "stack": "\"Instrument Sans Variable\"",
               "file": "skeleton-motion-site-set.preview-font.ttf"
             },
             "viewport": {
@@ -367,32 +367,32 @@
               "frame": "none",
               "texture": "transparent-overlay"
             },
-            "duration": 5.62,
+            "duration": 6.76,
             "evidence": [
               {
-                "file": "src/analyze.js",
+                "file": "examples/bisonflow/ai-project-operations-for-voice-first-product-teams-bisonflow-fl.preview.html",
                 "kind": "list",
-                "score": 89
+                "score": 103
               },
               {
                 "file": "examples/qa-segnatura-set/qa-segnatura-motion-set.preview.html",
                 "kind": "list",
-                "score": 66
+                "score": 103
               },
               {
                 "file": "examples/qa-segnatura/qa-segnatura-flow.preview.html",
                 "kind": "list",
-                "score": 66
+                "score": 103
               },
               {
                 "file": "src/preview-shell.html",
                 "kind": "list",
-                "score": 66
+                "score": 103
               },
               {
-                "file": "package-lock.json",
+                "file": "examples/skeleton-motion-set/skeleton-motion-site-set.preview.html",
                 "kind": "list",
-                "score": 60
+                "score": 95
               }
             ],
             "file": "skeleton-motion-site-set.select-item.4x3.light.svg",
@@ -431,7 +431,7 @@
             "theme": "light",
             "typography": {
               "family": "Instrument Sans Variable",
-              "stack": "\"Instrument Sans Variable\", \"Instrument Sans\", ui-sans-serif, system-ui, sans-serif",
+              "stack": "\"Instrument Sans Variable\"",
               "file": "skeleton-motion-site-set.preview-font.ttf"
             },
             "viewport": {
@@ -452,32 +452,32 @@
               "frame": "none",
               "texture": "transparent-overlay"
             },
-            "duration": 5.62,
+            "duration": 6.76,
             "evidence": [
               {
-                "file": "src/analyze.js",
+                "file": "examples/bisonflow/ai-project-operations-for-voice-first-product-teams-bisonflow-fl.preview.html",
                 "kind": "list",
-                "score": 89
+                "score": 103
               },
               {
                 "file": "examples/qa-segnatura-set/qa-segnatura-motion-set.preview.html",
                 "kind": "list",
-                "score": 66
+                "score": 103
               },
               {
                 "file": "examples/qa-segnatura/qa-segnatura-flow.preview.html",
                 "kind": "list",
-                "score": 66
+                "score": 103
               },
               {
                 "file": "src/preview-shell.html",
                 "kind": "list",
-                "score": 66
+                "score": 103
               },
               {
-                "file": "package-lock.json",
+                "file": "examples/skeleton-motion-set/skeleton-motion-site-set.preview.html",
                 "kind": "list",
-                "score": 60
+                "score": 95
               }
             ],
             "file": "skeleton-motion-site-set.select-item.4x3.dark.svg",
@@ -518,7 +518,7 @@
             "theme": "dark",
             "typography": {
               "family": "Instrument Sans Variable",
-              "stack": "\"Instrument Sans Variable\", \"Instrument Sans\", ui-sans-serif, system-ui, sans-serif",
+              "stack": "\"Instrument Sans Variable\"",
               "file": "skeleton-motion-site-set.preview-font.ttf"
             },
             "viewport": {
@@ -539,32 +539,32 @@
               "frame": "none",
               "texture": "transparent-overlay"
             },
-            "duration": 5.18,
+            "duration": 6.24,
             "evidence": [
               {
-                "file": "src/analyze.js",
+                "file": "examples/bisonflow/ai-project-operations-for-voice-first-product-teams-bisonflow-fl.preview.html",
                 "kind": "list",
-                "score": 89
+                "score": 103
               },
               {
                 "file": "examples/qa-segnatura-set/qa-segnatura-motion-set.preview.html",
                 "kind": "list",
-                "score": 66
+                "score": 103
               },
               {
                 "file": "examples/qa-segnatura/qa-segnatura-flow.preview.html",
                 "kind": "list",
-                "score": 66
+                "score": 103
               },
               {
                 "file": "src/preview-shell.html",
                 "kind": "list",
-                "score": 66
+                "score": 103
               },
               {
-                "file": "package-lock.json",
+                "file": "examples/skeleton-motion-set/skeleton-motion-site-set.preview.html",
                 "kind": "list",
-                "score": 60
+                "score": 95
               }
             ],
             "file": "skeleton-motion-site-set.select-item.1x1.light.svg",
@@ -603,7 +603,7 @@
             "theme": "light",
             "typography": {
               "family": "Instrument Sans Variable",
-              "stack": "\"Instrument Sans Variable\", \"Instrument Sans\", ui-sans-serif, system-ui, sans-serif",
+              "stack": "\"Instrument Sans Variable\"",
               "file": "skeleton-motion-site-set.preview-font.ttf"
             },
             "viewport": {
@@ -624,32 +624,32 @@
               "frame": "none",
               "texture": "transparent-overlay"
             },
-            "duration": 5.18,
+            "duration": 6.24,
             "evidence": [
               {
-                "file": "src/analyze.js",
+                "file": "examples/bisonflow/ai-project-operations-for-voice-first-product-teams-bisonflow-fl.preview.html",
                 "kind": "list",
-                "score": 89
+                "score": 103
               },
               {
                 "file": "examples/qa-segnatura-set/qa-segnatura-motion-set.preview.html",
                 "kind": "list",
-                "score": 66
+                "score": 103
               },
               {
                 "file": "examples/qa-segnatura/qa-segnatura-flow.preview.html",
                 "kind": "list",
-                "score": 66
+                "score": 103
               },
               {
                 "file": "src/preview-shell.html",
                 "kind": "list",
-                "score": 66
+                "score": 103
               },
               {
-                "file": "package-lock.json",
+                "file": "examples/skeleton-motion-set/skeleton-motion-site-set.preview.html",
                 "kind": "list",
-                "score": 60
+                "score": 95
               }
             ],
             "file": "skeleton-motion-site-set.select-item.1x1.dark.svg",
@@ -690,7 +690,7 @@
             "theme": "dark",
             "typography": {
               "family": "Instrument Sans Variable",
-              "stack": "\"Instrument Sans Variable\", \"Instrument Sans\", ui-sans-serif, system-ui, sans-serif",
+              "stack": "\"Instrument Sans Variable\"",
               "file": "skeleton-motion-site-set.preview-font.ttf"
             },
             "viewport": {
@@ -711,32 +711,32 @@
               "frame": "none",
               "texture": "transparent-overlay"
             },
-            "duration": 5.83,
+            "duration": 7.02,
             "evidence": [
               {
-                "file": "src/analyze.js",
+                "file": "examples/bisonflow/ai-project-operations-for-voice-first-product-teams-bisonflow-fl.preview.html",
                 "kind": "list",
-                "score": 89
+                "score": 103
               },
               {
                 "file": "examples/qa-segnatura-set/qa-segnatura-motion-set.preview.html",
                 "kind": "list",
-                "score": 66
+                "score": 103
               },
               {
                 "file": "examples/qa-segnatura/qa-segnatura-flow.preview.html",
                 "kind": "list",
-                "score": 66
+                "score": 103
               },
               {
                 "file": "src/preview-shell.html",
                 "kind": "list",
-                "score": 66
+                "score": 103
               },
               {
-                "file": "package-lock.json",
+                "file": "examples/skeleton-motion-set/skeleton-motion-site-set.preview.html",
                 "kind": "list",
-                "score": 60
+                "score": 95
               }
             ],
             "file": "skeleton-motion-site-set.select-item.4x5.light.svg",
@@ -775,7 +775,7 @@
             "theme": "light",
             "typography": {
               "family": "Instrument Sans Variable",
-              "stack": "\"Instrument Sans Variable\", \"Instrument Sans\", ui-sans-serif, system-ui, sans-serif",
+              "stack": "\"Instrument Sans Variable\"",
               "file": "skeleton-motion-site-set.preview-font.ttf"
             },
             "viewport": {
@@ -796,32 +796,32 @@
               "frame": "none",
               "texture": "transparent-overlay"
             },
-            "duration": 5.83,
+            "duration": 7.02,
             "evidence": [
               {
-                "file": "src/analyze.js",
+                "file": "examples/bisonflow/ai-project-operations-for-voice-first-product-teams-bisonflow-fl.preview.html",
                 "kind": "list",
-                "score": 89
+                "score": 103
               },
               {
                 "file": "examples/qa-segnatura-set/qa-segnatura-motion-set.preview.html",
                 "kind": "list",
-                "score": 66
+                "score": 103
               },
               {
                 "file": "examples/qa-segnatura/qa-segnatura-flow.preview.html",
                 "kind": "list",
-                "score": 66
+                "score": 103
               },
               {
                 "file": "src/preview-shell.html",
                 "kind": "list",
-                "score": 66
+                "score": 103
               },
               {
-                "file": "package-lock.json",
+                "file": "examples/skeleton-motion-set/skeleton-motion-site-set.preview.html",
                 "kind": "list",
-                "score": 60
+                "score": 95
               }
             ],
             "file": "skeleton-motion-site-set.select-item.4x5.dark.svg",
@@ -862,7 +862,7 @@
             "theme": "dark",
             "typography": {
               "family": "Instrument Sans Variable",
-              "stack": "\"Instrument Sans Variable\", \"Instrument Sans\", ui-sans-serif, system-ui, sans-serif",
+              "stack": "\"Instrument Sans Variable\"",
               "file": "skeleton-motion-site-set.preview-font.ttf"
             },
             "viewport": {
@@ -883,32 +883,32 @@
               "frame": "none",
               "texture": "transparent-overlay"
             },
-            "duration": 6.05,
+            "duration": 7.28,
             "evidence": [
               {
-                "file": "src/analyze.js",
+                "file": "examples/bisonflow/ai-project-operations-for-voice-first-product-teams-bisonflow-fl.preview.html",
                 "kind": "list",
-                "score": 89
+                "score": 103
               },
               {
                 "file": "examples/qa-segnatura-set/qa-segnatura-motion-set.preview.html",
                 "kind": "list",
-                "score": 66
+                "score": 103
               },
               {
                 "file": "examples/qa-segnatura/qa-segnatura-flow.preview.html",
                 "kind": "list",
-                "score": 66
+                "score": 103
               },
               {
                 "file": "src/preview-shell.html",
                 "kind": "list",
-                "score": 66
+                "score": 103
               },
               {
-                "file": "package-lock.json",
+                "file": "examples/skeleton-motion-set/skeleton-motion-site-set.preview.html",
                 "kind": "list",
-                "score": 60
+                "score": 95
               }
             ],
             "file": "skeleton-motion-site-set.select-item.9x16.light.svg",
@@ -947,7 +947,7 @@
             "theme": "light",
             "typography": {
               "family": "Instrument Sans Variable",
-              "stack": "\"Instrument Sans Variable\", \"Instrument Sans\", ui-sans-serif, system-ui, sans-serif",
+              "stack": "\"Instrument Sans Variable\"",
               "file": "skeleton-motion-site-set.preview-font.ttf"
             },
             "viewport": {
@@ -968,32 +968,32 @@
               "frame": "none",
               "texture": "transparent-overlay"
             },
-            "duration": 6.05,
+            "duration": 7.28,
             "evidence": [
               {
-                "file": "src/analyze.js",
+                "file": "examples/bisonflow/ai-project-operations-for-voice-first-product-teams-bisonflow-fl.preview.html",
                 "kind": "list",
-                "score": 89
+                "score": 103
               },
               {
                 "file": "examples/qa-segnatura-set/qa-segnatura-motion-set.preview.html",
                 "kind": "list",
-                "score": 66
+                "score": 103
               },
               {
                 "file": "examples/qa-segnatura/qa-segnatura-flow.preview.html",
                 "kind": "list",
-                "score": 66
+                "score": 103
               },
               {
                 "file": "src/preview-shell.html",
                 "kind": "list",
-                "score": 66
+                "score": 103
               },
               {
-                "file": "package-lock.json",
+                "file": "examples/skeleton-motion-set/skeleton-motion-site-set.preview.html",
                 "kind": "list",
-                "score": 60
+                "score": 95
               }
             ],
             "file": "skeleton-motion-site-set.select-item.9x16.dark.svg",
@@ -1034,7 +1034,619 @@
             "theme": "dark",
             "typography": {
               "family": "Instrument Sans Variable",
-              "stack": "\"Instrument Sans Variable\", \"Instrument Sans\", ui-sans-serif, system-ui, sans-serif",
+              "stack": "\"Instrument Sans Variable\"",
+              "file": "skeleton-motion-site-set.preview-font.ttf"
+            },
+            "viewport": {
+              "height": 720,
+              "width": 405
+            }
+          }
+        ]
+      },
+      {
+        "concept": "editor",
+        "copy": {
+          "description": "Focus a field, confirm the change, and let the resulting state settle into view.",
+          "eyebrow": "Focused editing",
+          "title": "Confirm the change."
+        },
+        "id": "skeleton-motion-site-set.confirm-edit",
+        "label": "Confirm edit",
+        "variants": [
+          {
+            "backdrop": "dots",
+            "colorSemantics": {
+              "categories": "primary-tints",
+              "confirmation": "primary",
+              "decorativeCycling": false,
+              "signal": "motion-role"
+            },
+            "composition": {
+              "backgroundOwner": "host",
+              "frame": "none",
+              "texture": "transparent-overlay"
+            },
+            "duration": 5.3,
+            "evidence": [],
+            "file": "skeleton-motion-site-set.confirm-edit.light.svg",
+            "format": "16:9",
+            "motion": "focus-and-confirm",
+            "motionPhysics": {
+              "anticipation": "subtle-countermove",
+              "continuity": "preserve-identity",
+              "effects": "no-overshoot",
+              "energyPath": "selection-to-preview",
+              "followThrough": "single-settle",
+              "spatial": "gentle-overshoot"
+            },
+            "motionProfile": {
+              "camera": "static",
+              "emphasis": "confirm-draw",
+              "heroMotion": "preview-expand",
+              "name": "focus-and-confirm",
+              "pointer": "cursor-click"
+            },
+            "palette": {
+              "accent": "#4f46e5",
+              "background": "#ffffff",
+              "border": "#e5e7eb",
+              "foreground": "#171717",
+              "muted": "#f4f4f5",
+              "mutedForeground": "#71717a",
+              "radius": 12,
+              "surface": "#ffffff",
+              "accents": [
+                "#4f46e5"
+              ],
+              "pastels": [],
+              "colorMode": "monochrome"
+            },
+            "theme": "light",
+            "typography": {
+              "family": "Instrument Sans Variable",
+              "stack": "\"Instrument Sans Variable\"",
+              "file": "skeleton-motion-site-set.preview-font.ttf"
+            },
+            "viewport": {
+              "height": 405,
+              "width": 720
+            }
+          },
+          {
+            "backdrop": "dots",
+            "colorSemantics": {
+              "categories": "primary-tints",
+              "confirmation": "primary",
+              "decorativeCycling": false,
+              "signal": "motion-role"
+            },
+            "composition": {
+              "backgroundOwner": "host",
+              "frame": "none",
+              "texture": "transparent-overlay"
+            },
+            "duration": 5.3,
+            "evidence": [],
+            "file": "skeleton-motion-site-set.confirm-edit.dark.svg",
+            "format": "16:9",
+            "motion": "focus-and-confirm",
+            "motionPhysics": {
+              "anticipation": "subtle-countermove",
+              "continuity": "preserve-identity",
+              "effects": "no-overshoot",
+              "energyPath": "selection-to-preview",
+              "followThrough": "single-settle",
+              "spatial": "gentle-overshoot"
+            },
+            "motionProfile": {
+              "camera": "static",
+              "emphasis": "confirm-draw",
+              "heroMotion": "preview-expand",
+              "name": "focus-and-confirm",
+              "pointer": "cursor-click"
+            },
+            "palette": {
+              "accent": "color-mix(in oklab, #4f46e5 78%, white)",
+              "background": "#111113",
+              "border": "rgb(255 255 255 / 10%)",
+              "foreground": "#fafafa",
+              "muted": "#27272a",
+              "mutedForeground": "#a1a1aa",
+              "radius": 12,
+              "surface": "#202024",
+              "accents": [
+                "color-mix(in oklab, #4f46e5 78%, white)"
+              ],
+              "pastels": [
+                "color-mix(in oklab, color-mix(in oklab, #4f46e5 78%, white) 22%, #202024)"
+              ],
+              "colorMode": "monochrome"
+            },
+            "theme": "dark",
+            "typography": {
+              "family": "Instrument Sans Variable",
+              "stack": "\"Instrument Sans Variable\"",
+              "file": "skeleton-motion-site-set.preview-font.ttf"
+            },
+            "viewport": {
+              "height": 405,
+              "width": 720
+            }
+          },
+          {
+            "backdrop": "dots",
+            "colorSemantics": {
+              "categories": "primary-tints",
+              "confirmation": "primary",
+              "decorativeCycling": false,
+              "signal": "motion-role"
+            },
+            "composition": {
+              "backgroundOwner": "host",
+              "frame": "none",
+              "texture": "transparent-overlay"
+            },
+            "duration": 5.51,
+            "evidence": [],
+            "file": "skeleton-motion-site-set.confirm-edit.4x3.light.svg",
+            "format": "4:3",
+            "motion": "focus-and-confirm",
+            "motionPhysics": {
+              "anticipation": "subtle-countermove",
+              "continuity": "preserve-identity",
+              "effects": "no-overshoot",
+              "energyPath": "selection-to-preview",
+              "followThrough": "single-settle",
+              "spatial": "gentle-overshoot"
+            },
+            "motionProfile": {
+              "camera": "static",
+              "emphasis": "confirm-draw",
+              "heroMotion": "preview-expand",
+              "name": "focus-and-confirm",
+              "pointer": "cursor-click"
+            },
+            "palette": {
+              "accent": "#4f46e5",
+              "background": "#ffffff",
+              "border": "#e5e7eb",
+              "foreground": "#171717",
+              "muted": "#f4f4f5",
+              "mutedForeground": "#71717a",
+              "radius": 12,
+              "surface": "#ffffff",
+              "accents": [
+                "#4f46e5"
+              ],
+              "pastels": [],
+              "colorMode": "monochrome"
+            },
+            "theme": "light",
+            "typography": {
+              "family": "Instrument Sans Variable",
+              "stack": "\"Instrument Sans Variable\"",
+              "file": "skeleton-motion-site-set.preview-font.ttf"
+            },
+            "viewport": {
+              "height": 405,
+              "width": 540
+            }
+          },
+          {
+            "backdrop": "dots",
+            "colorSemantics": {
+              "categories": "primary-tints",
+              "confirmation": "primary",
+              "decorativeCycling": false,
+              "signal": "motion-role"
+            },
+            "composition": {
+              "backgroundOwner": "host",
+              "frame": "none",
+              "texture": "transparent-overlay"
+            },
+            "duration": 5.51,
+            "evidence": [],
+            "file": "skeleton-motion-site-set.confirm-edit.4x3.dark.svg",
+            "format": "4:3",
+            "motion": "focus-and-confirm",
+            "motionPhysics": {
+              "anticipation": "subtle-countermove",
+              "continuity": "preserve-identity",
+              "effects": "no-overshoot",
+              "energyPath": "selection-to-preview",
+              "followThrough": "single-settle",
+              "spatial": "gentle-overshoot"
+            },
+            "motionProfile": {
+              "camera": "static",
+              "emphasis": "confirm-draw",
+              "heroMotion": "preview-expand",
+              "name": "focus-and-confirm",
+              "pointer": "cursor-click"
+            },
+            "palette": {
+              "accent": "color-mix(in oklab, #4f46e5 78%, white)",
+              "background": "#111113",
+              "border": "rgb(255 255 255 / 10%)",
+              "foreground": "#fafafa",
+              "muted": "#27272a",
+              "mutedForeground": "#a1a1aa",
+              "radius": 12,
+              "surface": "#202024",
+              "accents": [
+                "color-mix(in oklab, #4f46e5 78%, white)"
+              ],
+              "pastels": [
+                "color-mix(in oklab, color-mix(in oklab, #4f46e5 78%, white) 22%, #202024)"
+              ],
+              "colorMode": "monochrome"
+            },
+            "theme": "dark",
+            "typography": {
+              "family": "Instrument Sans Variable",
+              "stack": "\"Instrument Sans Variable\"",
+              "file": "skeleton-motion-site-set.preview-font.ttf"
+            },
+            "viewport": {
+              "height": 405,
+              "width": 540
+            }
+          },
+          {
+            "backdrop": "dots",
+            "colorSemantics": {
+              "categories": "primary-tints",
+              "confirmation": "primary",
+              "decorativeCycling": false,
+              "signal": "motion-role"
+            },
+            "composition": {
+              "backgroundOwner": "host",
+              "frame": "none",
+              "texture": "transparent-overlay"
+            },
+            "duration": 5.09,
+            "evidence": [],
+            "file": "skeleton-motion-site-set.confirm-edit.1x1.light.svg",
+            "format": "1:1",
+            "motion": "focus-and-confirm",
+            "motionPhysics": {
+              "anticipation": "subtle-countermove",
+              "continuity": "preserve-identity",
+              "effects": "no-overshoot",
+              "energyPath": "selection-to-preview",
+              "followThrough": "single-settle",
+              "spatial": "gentle-overshoot"
+            },
+            "motionProfile": {
+              "camera": "static",
+              "emphasis": "confirm-draw",
+              "heroMotion": "preview-expand",
+              "name": "focus-and-confirm",
+              "pointer": "cursor-click"
+            },
+            "palette": {
+              "accent": "#4f46e5",
+              "background": "#ffffff",
+              "border": "#e5e7eb",
+              "foreground": "#171717",
+              "muted": "#f4f4f5",
+              "mutedForeground": "#71717a",
+              "radius": 12,
+              "surface": "#ffffff",
+              "accents": [
+                "#4f46e5"
+              ],
+              "pastels": [],
+              "colorMode": "monochrome"
+            },
+            "theme": "light",
+            "typography": {
+              "family": "Instrument Sans Variable",
+              "stack": "\"Instrument Sans Variable\"",
+              "file": "skeleton-motion-site-set.preview-font.ttf"
+            },
+            "viewport": {
+              "height": 405,
+              "width": 405
+            }
+          },
+          {
+            "backdrop": "dots",
+            "colorSemantics": {
+              "categories": "primary-tints",
+              "confirmation": "primary",
+              "decorativeCycling": false,
+              "signal": "motion-role"
+            },
+            "composition": {
+              "backgroundOwner": "host",
+              "frame": "none",
+              "texture": "transparent-overlay"
+            },
+            "duration": 5.09,
+            "evidence": [],
+            "file": "skeleton-motion-site-set.confirm-edit.1x1.dark.svg",
+            "format": "1:1",
+            "motion": "focus-and-confirm",
+            "motionPhysics": {
+              "anticipation": "subtle-countermove",
+              "continuity": "preserve-identity",
+              "effects": "no-overshoot",
+              "energyPath": "selection-to-preview",
+              "followThrough": "single-settle",
+              "spatial": "gentle-overshoot"
+            },
+            "motionProfile": {
+              "camera": "static",
+              "emphasis": "confirm-draw",
+              "heroMotion": "preview-expand",
+              "name": "focus-and-confirm",
+              "pointer": "cursor-click"
+            },
+            "palette": {
+              "accent": "color-mix(in oklab, #4f46e5 78%, white)",
+              "background": "#111113",
+              "border": "rgb(255 255 255 / 10%)",
+              "foreground": "#fafafa",
+              "muted": "#27272a",
+              "mutedForeground": "#a1a1aa",
+              "radius": 12,
+              "surface": "#202024",
+              "accents": [
+                "color-mix(in oklab, #4f46e5 78%, white)"
+              ],
+              "pastels": [
+                "color-mix(in oklab, color-mix(in oklab, #4f46e5 78%, white) 22%, #202024)"
+              ],
+              "colorMode": "monochrome"
+            },
+            "theme": "dark",
+            "typography": {
+              "family": "Instrument Sans Variable",
+              "stack": "\"Instrument Sans Variable\"",
+              "file": "skeleton-motion-site-set.preview-font.ttf"
+            },
+            "viewport": {
+              "height": 405,
+              "width": 405
+            }
+          },
+          {
+            "backdrop": "dots",
+            "colorSemantics": {
+              "categories": "primary-tints",
+              "confirmation": "primary",
+              "decorativeCycling": false,
+              "signal": "motion-role"
+            },
+            "composition": {
+              "backgroundOwner": "host",
+              "frame": "none",
+              "texture": "transparent-overlay"
+            },
+            "duration": 5.72,
+            "evidence": [],
+            "file": "skeleton-motion-site-set.confirm-edit.4x5.light.svg",
+            "format": "4:5",
+            "motion": "focus-and-confirm",
+            "motionPhysics": {
+              "anticipation": "subtle-countermove",
+              "continuity": "preserve-identity",
+              "effects": "no-overshoot",
+              "energyPath": "selection-to-preview",
+              "followThrough": "single-settle",
+              "spatial": "gentle-overshoot"
+            },
+            "motionProfile": {
+              "camera": "static",
+              "emphasis": "confirm-draw",
+              "heroMotion": "preview-expand",
+              "name": "focus-and-confirm",
+              "pointer": "cursor-click"
+            },
+            "palette": {
+              "accent": "#4f46e5",
+              "background": "#ffffff",
+              "border": "#e5e7eb",
+              "foreground": "#171717",
+              "muted": "#f4f4f5",
+              "mutedForeground": "#71717a",
+              "radius": 12,
+              "surface": "#ffffff",
+              "accents": [
+                "#4f46e5"
+              ],
+              "pastels": [],
+              "colorMode": "monochrome"
+            },
+            "theme": "light",
+            "typography": {
+              "family": "Instrument Sans Variable",
+              "stack": "\"Instrument Sans Variable\"",
+              "file": "skeleton-motion-site-set.preview-font.ttf"
+            },
+            "viewport": {
+              "height": 506,
+              "width": 405
+            }
+          },
+          {
+            "backdrop": "dots",
+            "colorSemantics": {
+              "categories": "primary-tints",
+              "confirmation": "primary",
+              "decorativeCycling": false,
+              "signal": "motion-role"
+            },
+            "composition": {
+              "backgroundOwner": "host",
+              "frame": "none",
+              "texture": "transparent-overlay"
+            },
+            "duration": 5.72,
+            "evidence": [],
+            "file": "skeleton-motion-site-set.confirm-edit.4x5.dark.svg",
+            "format": "4:5",
+            "motion": "focus-and-confirm",
+            "motionPhysics": {
+              "anticipation": "subtle-countermove",
+              "continuity": "preserve-identity",
+              "effects": "no-overshoot",
+              "energyPath": "selection-to-preview",
+              "followThrough": "single-settle",
+              "spatial": "gentle-overshoot"
+            },
+            "motionProfile": {
+              "camera": "static",
+              "emphasis": "confirm-draw",
+              "heroMotion": "preview-expand",
+              "name": "focus-and-confirm",
+              "pointer": "cursor-click"
+            },
+            "palette": {
+              "accent": "color-mix(in oklab, #4f46e5 78%, white)",
+              "background": "#111113",
+              "border": "rgb(255 255 255 / 10%)",
+              "foreground": "#fafafa",
+              "muted": "#27272a",
+              "mutedForeground": "#a1a1aa",
+              "radius": 12,
+              "surface": "#202024",
+              "accents": [
+                "color-mix(in oklab, #4f46e5 78%, white)"
+              ],
+              "pastels": [
+                "color-mix(in oklab, color-mix(in oklab, #4f46e5 78%, white) 22%, #202024)"
+              ],
+              "colorMode": "monochrome"
+            },
+            "theme": "dark",
+            "typography": {
+              "family": "Instrument Sans Variable",
+              "stack": "\"Instrument Sans Variable\"",
+              "file": "skeleton-motion-site-set.preview-font.ttf"
+            },
+            "viewport": {
+              "height": 506,
+              "width": 405
+            }
+          },
+          {
+            "backdrop": "dots",
+            "colorSemantics": {
+              "categories": "primary-tints",
+              "confirmation": "primary",
+              "decorativeCycling": false,
+              "signal": "motion-role"
+            },
+            "composition": {
+              "backgroundOwner": "host",
+              "frame": "none",
+              "texture": "transparent-overlay"
+            },
+            "duration": 5.94,
+            "evidence": [],
+            "file": "skeleton-motion-site-set.confirm-edit.9x16.light.svg",
+            "format": "9:16",
+            "motion": "focus-and-confirm",
+            "motionPhysics": {
+              "anticipation": "subtle-countermove",
+              "continuity": "preserve-identity",
+              "effects": "no-overshoot",
+              "energyPath": "selection-to-preview",
+              "followThrough": "single-settle",
+              "spatial": "gentle-overshoot"
+            },
+            "motionProfile": {
+              "camera": "static",
+              "emphasis": "confirm-draw",
+              "heroMotion": "preview-expand",
+              "name": "focus-and-confirm",
+              "pointer": "cursor-click"
+            },
+            "palette": {
+              "accent": "#4f46e5",
+              "background": "#ffffff",
+              "border": "#e5e7eb",
+              "foreground": "#171717",
+              "muted": "#f4f4f5",
+              "mutedForeground": "#71717a",
+              "radius": 12,
+              "surface": "#ffffff",
+              "accents": [
+                "#4f46e5"
+              ],
+              "pastels": [],
+              "colorMode": "monochrome"
+            },
+            "theme": "light",
+            "typography": {
+              "family": "Instrument Sans Variable",
+              "stack": "\"Instrument Sans Variable\"",
+              "file": "skeleton-motion-site-set.preview-font.ttf"
+            },
+            "viewport": {
+              "height": 720,
+              "width": 405
+            }
+          },
+          {
+            "backdrop": "dots",
+            "colorSemantics": {
+              "categories": "primary-tints",
+              "confirmation": "primary",
+              "decorativeCycling": false,
+              "signal": "motion-role"
+            },
+            "composition": {
+              "backgroundOwner": "host",
+              "frame": "none",
+              "texture": "transparent-overlay"
+            },
+            "duration": 5.94,
+            "evidence": [],
+            "file": "skeleton-motion-site-set.confirm-edit.9x16.dark.svg",
+            "format": "9:16",
+            "motion": "focus-and-confirm",
+            "motionPhysics": {
+              "anticipation": "subtle-countermove",
+              "continuity": "preserve-identity",
+              "effects": "no-overshoot",
+              "energyPath": "selection-to-preview",
+              "followThrough": "single-settle",
+              "spatial": "gentle-overshoot"
+            },
+            "motionProfile": {
+              "camera": "static",
+              "emphasis": "confirm-draw",
+              "heroMotion": "preview-expand",
+              "name": "focus-and-confirm",
+              "pointer": "cursor-click"
+            },
+            "palette": {
+              "accent": "color-mix(in oklab, #4f46e5 78%, white)",
+              "background": "#111113",
+              "border": "rgb(255 255 255 / 10%)",
+              "foreground": "#fafafa",
+              "muted": "#27272a",
+              "mutedForeground": "#a1a1aa",
+              "radius": 12,
+              "surface": "#202024",
+              "accents": [
+                "color-mix(in oklab, #4f46e5 78%, white)"
+              ],
+              "pastels": [
+                "color-mix(in oklab, color-mix(in oklab, #4f46e5 78%, white) 22%, #202024)"
+              ],
+              "colorMode": "monochrome"
+            },
+            "theme": "dark",
+            "typography": {
+              "family": "Instrument Sans Variable",
+              "stack": "\"Instrument Sans Variable\"",
               "file": "skeleton-motion-site-set.preview-font.ttf"
             },
             "viewport": {
@@ -1067,22 +1679,12 @@
               "frame": "none",
               "texture": "transparent-overlay"
             },
-            "duration": 8,
+            "duration": 9.2,
             "evidence": [
               {
                 "file": "test/analyze.test.js",
                 "kind": "flow",
                 "score": 85
-              },
-              {
-                "file": "examples/qa-segnatura-set/qa-segnatura-motion-set.manifest.json",
-                "kind": "flow",
-                "score": 60
-              },
-              {
-                "file": "examples/qa-segnatura/qa-segnatura-flow.manifest.json",
-                "kind": "flow",
-                "score": 60
               }
             ],
             "file": "skeleton-motion-site-set.insert-step.light.svg",
@@ -1127,7 +1729,7 @@
             "theme": "light",
             "typography": {
               "family": "Instrument Sans Variable",
-              "stack": "\"Instrument Sans Variable\", \"Instrument Sans\", ui-sans-serif, system-ui, sans-serif",
+              "stack": "\"Instrument Sans Variable\"",
               "file": "skeleton-motion-site-set.preview-font.ttf"
             },
             "viewport": {
@@ -1148,22 +1750,12 @@
               "frame": "none",
               "texture": "transparent-overlay"
             },
-            "duration": 8,
+            "duration": 9.2,
             "evidence": [
               {
                 "file": "test/analyze.test.js",
                 "kind": "flow",
                 "score": 85
-              },
-              {
-                "file": "examples/qa-segnatura-set/qa-segnatura-motion-set.manifest.json",
-                "kind": "flow",
-                "score": 60
-              },
-              {
-                "file": "examples/qa-segnatura/qa-segnatura-flow.manifest.json",
-                "kind": "flow",
-                "score": 60
               }
             ],
             "file": "skeleton-motion-site-set.insert-step.dark.svg",
@@ -1210,7 +1802,7 @@
             "theme": "dark",
             "typography": {
               "family": "Instrument Sans Variable",
-              "stack": "\"Instrument Sans Variable\", \"Instrument Sans\", ui-sans-serif, system-ui, sans-serif",
+              "stack": "\"Instrument Sans Variable\"",
               "file": "skeleton-motion-site-set.preview-font.ttf"
             },
             "viewport": {
@@ -1231,22 +1823,12 @@
               "frame": "none",
               "texture": "transparent-overlay"
             },
-            "duration": 8.32,
+            "duration": 9.57,
             "evidence": [
               {
                 "file": "test/analyze.test.js",
                 "kind": "flow",
                 "score": 85
-              },
-              {
-                "file": "examples/qa-segnatura-set/qa-segnatura-motion-set.manifest.json",
-                "kind": "flow",
-                "score": 60
-              },
-              {
-                "file": "examples/qa-segnatura/qa-segnatura-flow.manifest.json",
-                "kind": "flow",
-                "score": 60
               }
             ],
             "file": "skeleton-motion-site-set.insert-step.4x3.light.svg",
@@ -1291,7 +1873,7 @@
             "theme": "light",
             "typography": {
               "family": "Instrument Sans Variable",
-              "stack": "\"Instrument Sans Variable\", \"Instrument Sans\", ui-sans-serif, system-ui, sans-serif",
+              "stack": "\"Instrument Sans Variable\"",
               "file": "skeleton-motion-site-set.preview-font.ttf"
             },
             "viewport": {
@@ -1312,22 +1894,12 @@
               "frame": "none",
               "texture": "transparent-overlay"
             },
-            "duration": 8.32,
+            "duration": 9.57,
             "evidence": [
               {
                 "file": "test/analyze.test.js",
                 "kind": "flow",
                 "score": 85
-              },
-              {
-                "file": "examples/qa-segnatura-set/qa-segnatura-motion-set.manifest.json",
-                "kind": "flow",
-                "score": 60
-              },
-              {
-                "file": "examples/qa-segnatura/qa-segnatura-flow.manifest.json",
-                "kind": "flow",
-                "score": 60
               }
             ],
             "file": "skeleton-motion-site-set.insert-step.4x3.dark.svg",
@@ -1374,7 +1946,7 @@
             "theme": "dark",
             "typography": {
               "family": "Instrument Sans Variable",
-              "stack": "\"Instrument Sans Variable\", \"Instrument Sans\", ui-sans-serif, system-ui, sans-serif",
+              "stack": "\"Instrument Sans Variable\"",
               "file": "skeleton-motion-site-set.preview-font.ttf"
             },
             "viewport": {
@@ -1395,22 +1967,12 @@
               "frame": "none",
               "texture": "transparent-overlay"
             },
-            "duration": 7.68,
+            "duration": 8.83,
             "evidence": [
               {
                 "file": "test/analyze.test.js",
                 "kind": "flow",
                 "score": 85
-              },
-              {
-                "file": "examples/qa-segnatura-set/qa-segnatura-motion-set.manifest.json",
-                "kind": "flow",
-                "score": 60
-              },
-              {
-                "file": "examples/qa-segnatura/qa-segnatura-flow.manifest.json",
-                "kind": "flow",
-                "score": 60
               }
             ],
             "file": "skeleton-motion-site-set.insert-step.1x1.light.svg",
@@ -1455,7 +2017,7 @@
             "theme": "light",
             "typography": {
               "family": "Instrument Sans Variable",
-              "stack": "\"Instrument Sans Variable\", \"Instrument Sans\", ui-sans-serif, system-ui, sans-serif",
+              "stack": "\"Instrument Sans Variable\"",
               "file": "skeleton-motion-site-set.preview-font.ttf"
             },
             "viewport": {
@@ -1476,22 +2038,12 @@
               "frame": "none",
               "texture": "transparent-overlay"
             },
-            "duration": 7.68,
+            "duration": 8.83,
             "evidence": [
               {
                 "file": "test/analyze.test.js",
                 "kind": "flow",
                 "score": 85
-              },
-              {
-                "file": "examples/qa-segnatura-set/qa-segnatura-motion-set.manifest.json",
-                "kind": "flow",
-                "score": 60
-              },
-              {
-                "file": "examples/qa-segnatura/qa-segnatura-flow.manifest.json",
-                "kind": "flow",
-                "score": 60
               }
             ],
             "file": "skeleton-motion-site-set.insert-step.1x1.dark.svg",
@@ -1538,7 +2090,7 @@
             "theme": "dark",
             "typography": {
               "family": "Instrument Sans Variable",
-              "stack": "\"Instrument Sans Variable\", \"Instrument Sans\", ui-sans-serif, system-ui, sans-serif",
+              "stack": "\"Instrument Sans Variable\"",
               "file": "skeleton-motion-site-set.preview-font.ttf"
             },
             "viewport": {
@@ -1559,22 +2111,12 @@
               "frame": "none",
               "texture": "transparent-overlay"
             },
-            "duration": 8.64,
+            "duration": 9.94,
             "evidence": [
               {
                 "file": "test/analyze.test.js",
                 "kind": "flow",
                 "score": 85
-              },
-              {
-                "file": "examples/qa-segnatura-set/qa-segnatura-motion-set.manifest.json",
-                "kind": "flow",
-                "score": 60
-              },
-              {
-                "file": "examples/qa-segnatura/qa-segnatura-flow.manifest.json",
-                "kind": "flow",
-                "score": 60
               }
             ],
             "file": "skeleton-motion-site-set.insert-step.4x5.light.svg",
@@ -1619,7 +2161,7 @@
             "theme": "light",
             "typography": {
               "family": "Instrument Sans Variable",
-              "stack": "\"Instrument Sans Variable\", \"Instrument Sans\", ui-sans-serif, system-ui, sans-serif",
+              "stack": "\"Instrument Sans Variable\"",
               "file": "skeleton-motion-site-set.preview-font.ttf"
             },
             "viewport": {
@@ -1640,22 +2182,12 @@
               "frame": "none",
               "texture": "transparent-overlay"
             },
-            "duration": 8.64,
+            "duration": 9.94,
             "evidence": [
               {
                 "file": "test/analyze.test.js",
                 "kind": "flow",
                 "score": 85
-              },
-              {
-                "file": "examples/qa-segnatura-set/qa-segnatura-motion-set.manifest.json",
-                "kind": "flow",
-                "score": 60
-              },
-              {
-                "file": "examples/qa-segnatura/qa-segnatura-flow.manifest.json",
-                "kind": "flow",
-                "score": 60
               }
             ],
             "file": "skeleton-motion-site-set.insert-step.4x5.dark.svg",
@@ -1702,7 +2234,7 @@
             "theme": "dark",
             "typography": {
               "family": "Instrument Sans Variable",
-              "stack": "\"Instrument Sans Variable\", \"Instrument Sans\", ui-sans-serif, system-ui, sans-serif",
+              "stack": "\"Instrument Sans Variable\"",
               "file": "skeleton-motion-site-set.preview-font.ttf"
             },
             "viewport": {
@@ -1723,22 +2255,12 @@
               "frame": "none",
               "texture": "transparent-overlay"
             },
-            "duration": 8.96,
+            "duration": 10.3,
             "evidence": [
               {
                 "file": "test/analyze.test.js",
                 "kind": "flow",
                 "score": 85
-              },
-              {
-                "file": "examples/qa-segnatura-set/qa-segnatura-motion-set.manifest.json",
-                "kind": "flow",
-                "score": 60
-              },
-              {
-                "file": "examples/qa-segnatura/qa-segnatura-flow.manifest.json",
-                "kind": "flow",
-                "score": 60
               }
             ],
             "file": "skeleton-motion-site-set.insert-step.9x16.light.svg",
@@ -1783,7 +2305,7 @@
             "theme": "light",
             "typography": {
               "family": "Instrument Sans Variable",
-              "stack": "\"Instrument Sans Variable\", \"Instrument Sans\", ui-sans-serif, system-ui, sans-serif",
+              "stack": "\"Instrument Sans Variable\"",
               "file": "skeleton-motion-site-set.preview-font.ttf"
             },
             "viewport": {
@@ -1804,22 +2326,12 @@
               "frame": "none",
               "texture": "transparent-overlay"
             },
-            "duration": 8.96,
+            "duration": 10.3,
             "evidence": [
               {
                 "file": "test/analyze.test.js",
                 "kind": "flow",
                 "score": 85
-              },
-              {
-                "file": "examples/qa-segnatura-set/qa-segnatura-motion-set.manifest.json",
-                "kind": "flow",
-                "score": 60
-              },
-              {
-                "file": "examples/qa-segnatura/qa-segnatura-flow.manifest.json",
-                "kind": "flow",
-                "score": 60
               }
             ],
             "file": "skeleton-motion-site-set.insert-step.9x16.dark.svg",
@@ -1866,619 +2378,7 @@
             "theme": "dark",
             "typography": {
               "family": "Instrument Sans Variable",
-              "stack": "\"Instrument Sans Variable\", \"Instrument Sans\", ui-sans-serif, system-ui, sans-serif",
-              "file": "skeleton-motion-site-set.preview-font.ttf"
-            },
-            "viewport": {
-              "height": 720,
-              "width": 405
-            }
-          }
-        ]
-      },
-      {
-        "concept": "editor",
-        "copy": {
-          "description": "Focus a field, confirm the change, and let the resulting state settle into view.",
-          "eyebrow": "Focused editing",
-          "title": "Confirm the change."
-        },
-        "id": "skeleton-motion-site-set.confirm-edit",
-        "label": "Confirm edit",
-        "variants": [
-          {
-            "backdrop": "dots",
-            "colorSemantics": {
-              "categories": "primary-tints",
-              "confirmation": "primary",
-              "decorativeCycling": false,
-              "signal": "motion-role"
-            },
-            "composition": {
-              "backgroundOwner": "host",
-              "frame": "none",
-              "texture": "transparent-overlay"
-            },
-            "duration": 4.6,
-            "evidence": [],
-            "file": "skeleton-motion-site-set.confirm-edit.light.svg",
-            "format": "16:9",
-            "motion": "focus-and-confirm",
-            "motionPhysics": {
-              "anticipation": "subtle-countermove",
-              "continuity": "preserve-identity",
-              "effects": "no-overshoot",
-              "energyPath": "selection-to-preview",
-              "followThrough": "single-settle",
-              "spatial": "gentle-overshoot"
-            },
-            "motionProfile": {
-              "camera": "static",
-              "emphasis": "confirm-draw",
-              "heroMotion": "preview-expand",
-              "name": "focus-and-confirm",
-              "pointer": "cursor-click"
-            },
-            "palette": {
-              "accent": "#4f46e5",
-              "background": "#ffffff",
-              "border": "#e5e7eb",
-              "foreground": "#171717",
-              "muted": "#f4f4f5",
-              "mutedForeground": "#71717a",
-              "radius": 12,
-              "surface": "#ffffff",
-              "accents": [
-                "#4f46e5"
-              ],
-              "pastels": [],
-              "colorMode": "monochrome"
-            },
-            "theme": "light",
-            "typography": {
-              "family": "Instrument Sans Variable",
-              "stack": "\"Instrument Sans Variable\", \"Instrument Sans\", ui-sans-serif, system-ui, sans-serif",
-              "file": "skeleton-motion-site-set.preview-font.ttf"
-            },
-            "viewport": {
-              "height": 405,
-              "width": 720
-            }
-          },
-          {
-            "backdrop": "dots",
-            "colorSemantics": {
-              "categories": "primary-tints",
-              "confirmation": "primary",
-              "decorativeCycling": false,
-              "signal": "motion-role"
-            },
-            "composition": {
-              "backgroundOwner": "host",
-              "frame": "none",
-              "texture": "transparent-overlay"
-            },
-            "duration": 4.6,
-            "evidence": [],
-            "file": "skeleton-motion-site-set.confirm-edit.dark.svg",
-            "format": "16:9",
-            "motion": "focus-and-confirm",
-            "motionPhysics": {
-              "anticipation": "subtle-countermove",
-              "continuity": "preserve-identity",
-              "effects": "no-overshoot",
-              "energyPath": "selection-to-preview",
-              "followThrough": "single-settle",
-              "spatial": "gentle-overshoot"
-            },
-            "motionProfile": {
-              "camera": "static",
-              "emphasis": "confirm-draw",
-              "heroMotion": "preview-expand",
-              "name": "focus-and-confirm",
-              "pointer": "cursor-click"
-            },
-            "palette": {
-              "accent": "color-mix(in oklab, #4f46e5 78%, white)",
-              "background": "#111113",
-              "border": "rgb(255 255 255 / 10%)",
-              "foreground": "#fafafa",
-              "muted": "#27272a",
-              "mutedForeground": "#a1a1aa",
-              "radius": 12,
-              "surface": "#202024",
-              "accents": [
-                "color-mix(in oklab, #4f46e5 78%, white)"
-              ],
-              "pastels": [
-                "color-mix(in oklab, color-mix(in oklab, #4f46e5 78%, white) 22%, #202024)"
-              ],
-              "colorMode": "monochrome"
-            },
-            "theme": "dark",
-            "typography": {
-              "family": "Instrument Sans Variable",
-              "stack": "\"Instrument Sans Variable\", \"Instrument Sans\", ui-sans-serif, system-ui, sans-serif",
-              "file": "skeleton-motion-site-set.preview-font.ttf"
-            },
-            "viewport": {
-              "height": 405,
-              "width": 720
-            }
-          },
-          {
-            "backdrop": "dots",
-            "colorSemantics": {
-              "categories": "primary-tints",
-              "confirmation": "primary",
-              "decorativeCycling": false,
-              "signal": "motion-role"
-            },
-            "composition": {
-              "backgroundOwner": "host",
-              "frame": "none",
-              "texture": "transparent-overlay"
-            },
-            "duration": 4.78,
-            "evidence": [],
-            "file": "skeleton-motion-site-set.confirm-edit.4x3.light.svg",
-            "format": "4:3",
-            "motion": "focus-and-confirm",
-            "motionPhysics": {
-              "anticipation": "subtle-countermove",
-              "continuity": "preserve-identity",
-              "effects": "no-overshoot",
-              "energyPath": "selection-to-preview",
-              "followThrough": "single-settle",
-              "spatial": "gentle-overshoot"
-            },
-            "motionProfile": {
-              "camera": "static",
-              "emphasis": "confirm-draw",
-              "heroMotion": "preview-expand",
-              "name": "focus-and-confirm",
-              "pointer": "cursor-click"
-            },
-            "palette": {
-              "accent": "#4f46e5",
-              "background": "#ffffff",
-              "border": "#e5e7eb",
-              "foreground": "#171717",
-              "muted": "#f4f4f5",
-              "mutedForeground": "#71717a",
-              "radius": 12,
-              "surface": "#ffffff",
-              "accents": [
-                "#4f46e5"
-              ],
-              "pastels": [],
-              "colorMode": "monochrome"
-            },
-            "theme": "light",
-            "typography": {
-              "family": "Instrument Sans Variable",
-              "stack": "\"Instrument Sans Variable\", \"Instrument Sans\", ui-sans-serif, system-ui, sans-serif",
-              "file": "skeleton-motion-site-set.preview-font.ttf"
-            },
-            "viewport": {
-              "height": 405,
-              "width": 540
-            }
-          },
-          {
-            "backdrop": "dots",
-            "colorSemantics": {
-              "categories": "primary-tints",
-              "confirmation": "primary",
-              "decorativeCycling": false,
-              "signal": "motion-role"
-            },
-            "composition": {
-              "backgroundOwner": "host",
-              "frame": "none",
-              "texture": "transparent-overlay"
-            },
-            "duration": 4.78,
-            "evidence": [],
-            "file": "skeleton-motion-site-set.confirm-edit.4x3.dark.svg",
-            "format": "4:3",
-            "motion": "focus-and-confirm",
-            "motionPhysics": {
-              "anticipation": "subtle-countermove",
-              "continuity": "preserve-identity",
-              "effects": "no-overshoot",
-              "energyPath": "selection-to-preview",
-              "followThrough": "single-settle",
-              "spatial": "gentle-overshoot"
-            },
-            "motionProfile": {
-              "camera": "static",
-              "emphasis": "confirm-draw",
-              "heroMotion": "preview-expand",
-              "name": "focus-and-confirm",
-              "pointer": "cursor-click"
-            },
-            "palette": {
-              "accent": "color-mix(in oklab, #4f46e5 78%, white)",
-              "background": "#111113",
-              "border": "rgb(255 255 255 / 10%)",
-              "foreground": "#fafafa",
-              "muted": "#27272a",
-              "mutedForeground": "#a1a1aa",
-              "radius": 12,
-              "surface": "#202024",
-              "accents": [
-                "color-mix(in oklab, #4f46e5 78%, white)"
-              ],
-              "pastels": [
-                "color-mix(in oklab, color-mix(in oklab, #4f46e5 78%, white) 22%, #202024)"
-              ],
-              "colorMode": "monochrome"
-            },
-            "theme": "dark",
-            "typography": {
-              "family": "Instrument Sans Variable",
-              "stack": "\"Instrument Sans Variable\", \"Instrument Sans\", ui-sans-serif, system-ui, sans-serif",
-              "file": "skeleton-motion-site-set.preview-font.ttf"
-            },
-            "viewport": {
-              "height": 405,
-              "width": 540
-            }
-          },
-          {
-            "backdrop": "dots",
-            "colorSemantics": {
-              "categories": "primary-tints",
-              "confirmation": "primary",
-              "decorativeCycling": false,
-              "signal": "motion-role"
-            },
-            "composition": {
-              "backgroundOwner": "host",
-              "frame": "none",
-              "texture": "transparent-overlay"
-            },
-            "duration": 4.42,
-            "evidence": [],
-            "file": "skeleton-motion-site-set.confirm-edit.1x1.light.svg",
-            "format": "1:1",
-            "motion": "focus-and-confirm",
-            "motionPhysics": {
-              "anticipation": "subtle-countermove",
-              "continuity": "preserve-identity",
-              "effects": "no-overshoot",
-              "energyPath": "selection-to-preview",
-              "followThrough": "single-settle",
-              "spatial": "gentle-overshoot"
-            },
-            "motionProfile": {
-              "camera": "static",
-              "emphasis": "confirm-draw",
-              "heroMotion": "preview-expand",
-              "name": "focus-and-confirm",
-              "pointer": "cursor-click"
-            },
-            "palette": {
-              "accent": "#4f46e5",
-              "background": "#ffffff",
-              "border": "#e5e7eb",
-              "foreground": "#171717",
-              "muted": "#f4f4f5",
-              "mutedForeground": "#71717a",
-              "radius": 12,
-              "surface": "#ffffff",
-              "accents": [
-                "#4f46e5"
-              ],
-              "pastels": [],
-              "colorMode": "monochrome"
-            },
-            "theme": "light",
-            "typography": {
-              "family": "Instrument Sans Variable",
-              "stack": "\"Instrument Sans Variable\", \"Instrument Sans\", ui-sans-serif, system-ui, sans-serif",
-              "file": "skeleton-motion-site-set.preview-font.ttf"
-            },
-            "viewport": {
-              "height": 405,
-              "width": 405
-            }
-          },
-          {
-            "backdrop": "dots",
-            "colorSemantics": {
-              "categories": "primary-tints",
-              "confirmation": "primary",
-              "decorativeCycling": false,
-              "signal": "motion-role"
-            },
-            "composition": {
-              "backgroundOwner": "host",
-              "frame": "none",
-              "texture": "transparent-overlay"
-            },
-            "duration": 4.42,
-            "evidence": [],
-            "file": "skeleton-motion-site-set.confirm-edit.1x1.dark.svg",
-            "format": "1:1",
-            "motion": "focus-and-confirm",
-            "motionPhysics": {
-              "anticipation": "subtle-countermove",
-              "continuity": "preserve-identity",
-              "effects": "no-overshoot",
-              "energyPath": "selection-to-preview",
-              "followThrough": "single-settle",
-              "spatial": "gentle-overshoot"
-            },
-            "motionProfile": {
-              "camera": "static",
-              "emphasis": "confirm-draw",
-              "heroMotion": "preview-expand",
-              "name": "focus-and-confirm",
-              "pointer": "cursor-click"
-            },
-            "palette": {
-              "accent": "color-mix(in oklab, #4f46e5 78%, white)",
-              "background": "#111113",
-              "border": "rgb(255 255 255 / 10%)",
-              "foreground": "#fafafa",
-              "muted": "#27272a",
-              "mutedForeground": "#a1a1aa",
-              "radius": 12,
-              "surface": "#202024",
-              "accents": [
-                "color-mix(in oklab, #4f46e5 78%, white)"
-              ],
-              "pastels": [
-                "color-mix(in oklab, color-mix(in oklab, #4f46e5 78%, white) 22%, #202024)"
-              ],
-              "colorMode": "monochrome"
-            },
-            "theme": "dark",
-            "typography": {
-              "family": "Instrument Sans Variable",
-              "stack": "\"Instrument Sans Variable\", \"Instrument Sans\", ui-sans-serif, system-ui, sans-serif",
-              "file": "skeleton-motion-site-set.preview-font.ttf"
-            },
-            "viewport": {
-              "height": 405,
-              "width": 405
-            }
-          },
-          {
-            "backdrop": "dots",
-            "colorSemantics": {
-              "categories": "primary-tints",
-              "confirmation": "primary",
-              "decorativeCycling": false,
-              "signal": "motion-role"
-            },
-            "composition": {
-              "backgroundOwner": "host",
-              "frame": "none",
-              "texture": "transparent-overlay"
-            },
-            "duration": 4.97,
-            "evidence": [],
-            "file": "skeleton-motion-site-set.confirm-edit.4x5.light.svg",
-            "format": "4:5",
-            "motion": "focus-and-confirm",
-            "motionPhysics": {
-              "anticipation": "subtle-countermove",
-              "continuity": "preserve-identity",
-              "effects": "no-overshoot",
-              "energyPath": "selection-to-preview",
-              "followThrough": "single-settle",
-              "spatial": "gentle-overshoot"
-            },
-            "motionProfile": {
-              "camera": "static",
-              "emphasis": "confirm-draw",
-              "heroMotion": "preview-expand",
-              "name": "focus-and-confirm",
-              "pointer": "cursor-click"
-            },
-            "palette": {
-              "accent": "#4f46e5",
-              "background": "#ffffff",
-              "border": "#e5e7eb",
-              "foreground": "#171717",
-              "muted": "#f4f4f5",
-              "mutedForeground": "#71717a",
-              "radius": 12,
-              "surface": "#ffffff",
-              "accents": [
-                "#4f46e5"
-              ],
-              "pastels": [],
-              "colorMode": "monochrome"
-            },
-            "theme": "light",
-            "typography": {
-              "family": "Instrument Sans Variable",
-              "stack": "\"Instrument Sans Variable\", \"Instrument Sans\", ui-sans-serif, system-ui, sans-serif",
-              "file": "skeleton-motion-site-set.preview-font.ttf"
-            },
-            "viewport": {
-              "height": 506,
-              "width": 405
-            }
-          },
-          {
-            "backdrop": "dots",
-            "colorSemantics": {
-              "categories": "primary-tints",
-              "confirmation": "primary",
-              "decorativeCycling": false,
-              "signal": "motion-role"
-            },
-            "composition": {
-              "backgroundOwner": "host",
-              "frame": "none",
-              "texture": "transparent-overlay"
-            },
-            "duration": 4.97,
-            "evidence": [],
-            "file": "skeleton-motion-site-set.confirm-edit.4x5.dark.svg",
-            "format": "4:5",
-            "motion": "focus-and-confirm",
-            "motionPhysics": {
-              "anticipation": "subtle-countermove",
-              "continuity": "preserve-identity",
-              "effects": "no-overshoot",
-              "energyPath": "selection-to-preview",
-              "followThrough": "single-settle",
-              "spatial": "gentle-overshoot"
-            },
-            "motionProfile": {
-              "camera": "static",
-              "emphasis": "confirm-draw",
-              "heroMotion": "preview-expand",
-              "name": "focus-and-confirm",
-              "pointer": "cursor-click"
-            },
-            "palette": {
-              "accent": "color-mix(in oklab, #4f46e5 78%, white)",
-              "background": "#111113",
-              "border": "rgb(255 255 255 / 10%)",
-              "foreground": "#fafafa",
-              "muted": "#27272a",
-              "mutedForeground": "#a1a1aa",
-              "radius": 12,
-              "surface": "#202024",
-              "accents": [
-                "color-mix(in oklab, #4f46e5 78%, white)"
-              ],
-              "pastels": [
-                "color-mix(in oklab, color-mix(in oklab, #4f46e5 78%, white) 22%, #202024)"
-              ],
-              "colorMode": "monochrome"
-            },
-            "theme": "dark",
-            "typography": {
-              "family": "Instrument Sans Variable",
-              "stack": "\"Instrument Sans Variable\", \"Instrument Sans\", ui-sans-serif, system-ui, sans-serif",
-              "file": "skeleton-motion-site-set.preview-font.ttf"
-            },
-            "viewport": {
-              "height": 506,
-              "width": 405
-            }
-          },
-          {
-            "backdrop": "dots",
-            "colorSemantics": {
-              "categories": "primary-tints",
-              "confirmation": "primary",
-              "decorativeCycling": false,
-              "signal": "motion-role"
-            },
-            "composition": {
-              "backgroundOwner": "host",
-              "frame": "none",
-              "texture": "transparent-overlay"
-            },
-            "duration": 5.15,
-            "evidence": [],
-            "file": "skeleton-motion-site-set.confirm-edit.9x16.light.svg",
-            "format": "9:16",
-            "motion": "focus-and-confirm",
-            "motionPhysics": {
-              "anticipation": "subtle-countermove",
-              "continuity": "preserve-identity",
-              "effects": "no-overshoot",
-              "energyPath": "selection-to-preview",
-              "followThrough": "single-settle",
-              "spatial": "gentle-overshoot"
-            },
-            "motionProfile": {
-              "camera": "static",
-              "emphasis": "confirm-draw",
-              "heroMotion": "preview-expand",
-              "name": "focus-and-confirm",
-              "pointer": "cursor-click"
-            },
-            "palette": {
-              "accent": "#4f46e5",
-              "background": "#ffffff",
-              "border": "#e5e7eb",
-              "foreground": "#171717",
-              "muted": "#f4f4f5",
-              "mutedForeground": "#71717a",
-              "radius": 12,
-              "surface": "#ffffff",
-              "accents": [
-                "#4f46e5"
-              ],
-              "pastels": [],
-              "colorMode": "monochrome"
-            },
-            "theme": "light",
-            "typography": {
-              "family": "Instrument Sans Variable",
-              "stack": "\"Instrument Sans Variable\", \"Instrument Sans\", ui-sans-serif, system-ui, sans-serif",
-              "file": "skeleton-motion-site-set.preview-font.ttf"
-            },
-            "viewport": {
-              "height": 720,
-              "width": 405
-            }
-          },
-          {
-            "backdrop": "dots",
-            "colorSemantics": {
-              "categories": "primary-tints",
-              "confirmation": "primary",
-              "decorativeCycling": false,
-              "signal": "motion-role"
-            },
-            "composition": {
-              "backgroundOwner": "host",
-              "frame": "none",
-              "texture": "transparent-overlay"
-            },
-            "duration": 5.15,
-            "evidence": [],
-            "file": "skeleton-motion-site-set.confirm-edit.9x16.dark.svg",
-            "format": "9:16",
-            "motion": "focus-and-confirm",
-            "motionPhysics": {
-              "anticipation": "subtle-countermove",
-              "continuity": "preserve-identity",
-              "effects": "no-overshoot",
-              "energyPath": "selection-to-preview",
-              "followThrough": "single-settle",
-              "spatial": "gentle-overshoot"
-            },
-            "motionProfile": {
-              "camera": "static",
-              "emphasis": "confirm-draw",
-              "heroMotion": "preview-expand",
-              "name": "focus-and-confirm",
-              "pointer": "cursor-click"
-            },
-            "palette": {
-              "accent": "color-mix(in oklab, #4f46e5 78%, white)",
-              "background": "#111113",
-              "border": "rgb(255 255 255 / 10%)",
-              "foreground": "#fafafa",
-              "muted": "#27272a",
-              "mutedForeground": "#a1a1aa",
-              "radius": 12,
-              "surface": "#202024",
-              "accents": [
-                "color-mix(in oklab, #4f46e5 78%, white)"
-              ],
-              "pastels": [
-                "color-mix(in oklab, color-mix(in oklab, #4f46e5 78%, white) 22%, #202024)"
-              ],
-              "colorMode": "monochrome"
-            },
-            "theme": "dark",
-            "typography": {
-              "family": "Instrument Sans Variable",
-              "stack": "\"Instrument Sans Variable\", \"Instrument Sans\", ui-sans-serif, system-ui, sans-serif",
+              "stack": "\"Instrument Sans Variable\"",
               "file": "skeleton-motion-site-set.preview-font.ttf"
             },
             "viewport": {
@@ -2511,7 +2411,7 @@
               "frame": "none",
               "texture": "transparent-overlay"
             },
-            "duration": 7.4,
+            "duration": 8.4,
             "evidence": [],
             "file": "skeleton-motion-site-set.progress-signal.light.svg",
             "format": "16:9",
@@ -2549,7 +2449,7 @@
             "theme": "light",
             "typography": {
               "family": "Instrument Sans Variable",
-              "stack": "\"Instrument Sans Variable\", \"Instrument Sans\", ui-sans-serif, system-ui, sans-serif",
+              "stack": "\"Instrument Sans Variable\"",
               "file": "skeleton-motion-site-set.preview-font.ttf"
             },
             "viewport": {
@@ -2570,7 +2470,7 @@
               "frame": "none",
               "texture": "transparent-overlay"
             },
-            "duration": 7.4,
+            "duration": 8.4,
             "evidence": [],
             "file": "skeleton-motion-site-set.progress-signal.dark.svg",
             "format": "16:9",
@@ -2610,7 +2510,7 @@
             "theme": "dark",
             "typography": {
               "family": "Instrument Sans Variable",
-              "stack": "\"Instrument Sans Variable\", \"Instrument Sans\", ui-sans-serif, system-ui, sans-serif",
+              "stack": "\"Instrument Sans Variable\"",
               "file": "skeleton-motion-site-set.preview-font.ttf"
             },
             "viewport": {
@@ -2631,7 +2531,7 @@
               "frame": "none",
               "texture": "transparent-overlay"
             },
-            "duration": 7.7,
+            "duration": 8.74,
             "evidence": [],
             "file": "skeleton-motion-site-set.progress-signal.4x3.light.svg",
             "format": "4:3",
@@ -2669,7 +2569,7 @@
             "theme": "light",
             "typography": {
               "family": "Instrument Sans Variable",
-              "stack": "\"Instrument Sans Variable\", \"Instrument Sans\", ui-sans-serif, system-ui, sans-serif",
+              "stack": "\"Instrument Sans Variable\"",
               "file": "skeleton-motion-site-set.preview-font.ttf"
             },
             "viewport": {
@@ -2690,7 +2590,7 @@
               "frame": "none",
               "texture": "transparent-overlay"
             },
-            "duration": 7.7,
+            "duration": 8.74,
             "evidence": [],
             "file": "skeleton-motion-site-set.progress-signal.4x3.dark.svg",
             "format": "4:3",
@@ -2730,7 +2630,7 @@
             "theme": "dark",
             "typography": {
               "family": "Instrument Sans Variable",
-              "stack": "\"Instrument Sans Variable\", \"Instrument Sans\", ui-sans-serif, system-ui, sans-serif",
+              "stack": "\"Instrument Sans Variable\"",
               "file": "skeleton-motion-site-set.preview-font.ttf"
             },
             "viewport": {
@@ -2751,7 +2651,7 @@
               "frame": "none",
               "texture": "transparent-overlay"
             },
-            "duration": 7.1,
+            "duration": 8.06,
             "evidence": [],
             "file": "skeleton-motion-site-set.progress-signal.1x1.light.svg",
             "format": "1:1",
@@ -2789,7 +2689,7 @@
             "theme": "light",
             "typography": {
               "family": "Instrument Sans Variable",
-              "stack": "\"Instrument Sans Variable\", \"Instrument Sans\", ui-sans-serif, system-ui, sans-serif",
+              "stack": "\"Instrument Sans Variable\"",
               "file": "skeleton-motion-site-set.preview-font.ttf"
             },
             "viewport": {
@@ -2810,7 +2710,7 @@
               "frame": "none",
               "texture": "transparent-overlay"
             },
-            "duration": 7.1,
+            "duration": 8.06,
             "evidence": [],
             "file": "skeleton-motion-site-set.progress-signal.1x1.dark.svg",
             "format": "1:1",
@@ -2850,7 +2750,7 @@
             "theme": "dark",
             "typography": {
               "family": "Instrument Sans Variable",
-              "stack": "\"Instrument Sans Variable\", \"Instrument Sans\", ui-sans-serif, system-ui, sans-serif",
+              "stack": "\"Instrument Sans Variable\"",
               "file": "skeleton-motion-site-set.preview-font.ttf"
             },
             "viewport": {
@@ -2871,7 +2771,7 @@
               "frame": "none",
               "texture": "transparent-overlay"
             },
-            "duration": 7.99,
+            "duration": 9.07,
             "evidence": [],
             "file": "skeleton-motion-site-set.progress-signal.4x5.light.svg",
             "format": "4:5",
@@ -2909,7 +2809,7 @@
             "theme": "light",
             "typography": {
               "family": "Instrument Sans Variable",
-              "stack": "\"Instrument Sans Variable\", \"Instrument Sans\", ui-sans-serif, system-ui, sans-serif",
+              "stack": "\"Instrument Sans Variable\"",
               "file": "skeleton-motion-site-set.preview-font.ttf"
             },
             "viewport": {
@@ -2930,7 +2830,7 @@
               "frame": "none",
               "texture": "transparent-overlay"
             },
-            "duration": 7.99,
+            "duration": 9.07,
             "evidence": [],
             "file": "skeleton-motion-site-set.progress-signal.4x5.dark.svg",
             "format": "4:5",
@@ -2970,7 +2870,7 @@
             "theme": "dark",
             "typography": {
               "family": "Instrument Sans Variable",
-              "stack": "\"Instrument Sans Variable\", \"Instrument Sans\", ui-sans-serif, system-ui, sans-serif",
+              "stack": "\"Instrument Sans Variable\"",
               "file": "skeleton-motion-site-set.preview-font.ttf"
             },
             "viewport": {
@@ -2991,7 +2891,7 @@
               "frame": "none",
               "texture": "transparent-overlay"
             },
-            "duration": 8.29,
+            "duration": 9.41,
             "evidence": [],
             "file": "skeleton-motion-site-set.progress-signal.9x16.light.svg",
             "format": "9:16",
@@ -3029,7 +2929,7 @@
             "theme": "light",
             "typography": {
               "family": "Instrument Sans Variable",
-              "stack": "\"Instrument Sans Variable\", \"Instrument Sans\", ui-sans-serif, system-ui, sans-serif",
+              "stack": "\"Instrument Sans Variable\"",
               "file": "skeleton-motion-site-set.preview-font.ttf"
             },
             "viewport": {
@@ -3050,7 +2950,7 @@
               "frame": "none",
               "texture": "transparent-overlay"
             },
-            "duration": 8.29,
+            "duration": 9.41,
             "evidence": [],
             "file": "skeleton-motion-site-set.progress-signal.9x16.dark.svg",
             "format": "9:16",
@@ -3090,7 +2990,7 @@
             "theme": "dark",
             "typography": {
               "family": "Instrument Sans Variable",
-              "stack": "\"Instrument Sans Variable\", \"Instrument Sans\", ui-sans-serif, system-ui, sans-serif",
+              "stack": "\"Instrument Sans Variable\"",
               "file": "skeleton-motion-site-set.preview-font.ttf"
             },
             "viewport": {

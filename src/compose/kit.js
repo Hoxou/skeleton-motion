@@ -4,8 +4,6 @@
 // avatars, rows, and panels at the same density.
 
 export const ITEM_SCALE_RANGE = Object.freeze([0.85, 1.15]);
-// Each extra item must buy a clearly better fit; a small cast reads faster.
-const EXTRA_ITEM_COST = 0.25;
 
 export function sourceUnits(frame) {
   return (value) => value / frame.unitPx;
@@ -28,27 +26,56 @@ export function center(rect) {
 export function curveOver(keys) {
   return (points) => keys.map(({ at }) => {
     const next = points.findIndex(([time]) => time >= at);
-    if (next <= 0) return points[Math.max(0, next)][1];
+    if (next === -1) return points.at(-1)[1];
+    if (next === 0) return points[0][1];
     const [t0, v0] = points[next - 1];
     const [t1, v1] = points[next];
     return v0 + (v1 - v0) * (at - t0) / (t1 - t0);
   });
 }
 
-// How many items of a given natural height fill `length`, and at what scale.
-// The scale stays near 1 so items read at the same size in every asset; the
-// remaining slack becomes spacing, measured against the source rhythm.
-// `sizeRange` lets the caller bound the item by what the other axis allows
-// (a column that may not grow wider, for instance).
-export function chooseStack({ counts, idealGap, intrinsic, length, minGap = 0.2, scaleRange = ITEM_SCALE_RANGE, sizeRange = [0, Infinity] }) {
-  const options = counts.map((count) => {
-    const ideal = length / (intrinsic * (count + (count - 1) * idealGap));
+// Pointer timing on the same story clock as `createTimeline`: the last key
+// maps to the end of the loop.
+export function storyClock(keys) {
+  return { beats: [[0, 0], [keys.at(-1).at, 1]] };
+}
+
+// Lists fill their region the way the product would: items keep their
+// natural size and the source gap, and the region takes as many items as fit.
+// Leftover space goes into item scale (within `scaleRange`), and only what
+// that cannot absorb widens the gap; a few items spread apart reads as an
+// empty, unfinished list. `sizeRange` bounds the item by what the other axis
+// allows (a column that may not grow wider, for instance). Ties go to the
+// fuller list.
+export function fillStack({ gap, intrinsic, length, max = 16, min = 1, minGap = gap * 0.5, scaleRange = ITEM_SCALE_RANGE, sizeRange = [0, Infinity] }) {
+  let best;
+  for (let count = min; count <= max; count += 1) {
+    const ideal = length / (intrinsic * (count + (count - 1) * gap));
     const size = Math.min(sizeRange[1], Math.max(sizeRange[0], intrinsic * Math.min(scaleRange[1], Math.max(scaleRange[0], ideal))));
-    const scale = size / intrinsic;
-    const gap = count > 1 ? (length - count * size) / ((count - 1) * size) : 0;
-    return { cost: Math.abs(gap - idealGap) + Math.abs(scale - 1) + (count - counts[0]) * EXTRA_ITEM_COST, count, gap, scale, size };
-  }).filter(({ gap, scale }) => gap >= minGap && scale >= scaleRange[0] - 1e-9 && scale <= scaleRange[1] + 1e-9);
-  return options.reduce((best, option) => (!best || option.cost < best.cost ? option : best), undefined);
+    const actual = count > 1 ? (length - count * size) / ((count - 1) * size) : 0;
+    if (count > 1 && actual < minGap) continue;
+    const cost = Math.abs(actual - gap) + Math.abs(size / intrinsic - 1);
+    if (!best || cost <= best.cost + 1e-9) best = { cost, count, gap: actual, scale: size / intrinsic, size };
+  }
+  return best;
+}
+
+// Fixed positions of a filled stack, including the ones just past either
+// edge (index -1, `count`), so a list that grows or shrinks moves items slot
+// to slot and lets the one pushed out leave over the edge, instead of
+// re-spacing what stays.
+export function stackSlots(region, axis, { count, gap, size }) {
+  const horizontal = axis === "x";
+  const start = (horizontal ? region.x : region.y) + (count > 1 ? 0 : ((horizontal ? region.width : region.height) - size) / 2);
+  const pitch = size * (1 + gap);
+  return (index) => (horizontal
+    ? { height: region.height, width: size, x: start + index * pitch, y: region.y }
+    : { height: size, width: region.width, x: region.x, y: start + index * pitch });
+}
+
+export function stackRects(region, axis, stack) {
+  const slot = stackSlots(region, axis, stack);
+  return Array.from({ length: stack.count }, (_, index) => slot(index));
 }
 
 export function glyphLines(kind, cx, cy, half) {

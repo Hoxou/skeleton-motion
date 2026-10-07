@@ -182,7 +182,7 @@
     "4:5",
     "9:16"
   ],
-  "generatedAt": "2026-10-06T08:23:31.646Z",
+  "generatedAt": "2026-10-06T10:03:55.544Z",
   "schemaVersion": 2,
   "set": {
     "archive": "qa-segnatura-motion-set.assets.zip",
@@ -210,7 +210,7 @@
               "frame": "none",
               "texture": "transparent-overlay"
             },
-            "duration": 5.4,
+            "duration": 6.5,
             "evidence": [
               {
                 "file": "app/app/[projectSlug]/test-cases/test-case-table.client.tsx",
@@ -290,7 +290,7 @@
               "frame": "none",
               "texture": "transparent-overlay"
             },
-            "duration": 5.4,
+            "duration": 6.5,
             "evidence": [
               {
                 "file": "app/app/[projectSlug]/test-cases/test-case-table.client.tsx",
@@ -372,7 +372,7 @@
               "frame": "none",
               "texture": "transparent-overlay"
             },
-            "duration": 5.62,
+            "duration": 6.76,
             "evidence": [
               {
                 "file": "app/app/[projectSlug]/test-cases/test-case-table.client.tsx",
@@ -452,7 +452,7 @@
               "frame": "none",
               "texture": "transparent-overlay"
             },
-            "duration": 5.62,
+            "duration": 6.76,
             "evidence": [
               {
                 "file": "app/app/[projectSlug]/test-cases/test-case-table.client.tsx",
@@ -534,7 +534,7 @@
               "frame": "none",
               "texture": "transparent-overlay"
             },
-            "duration": 5.18,
+            "duration": 6.24,
             "evidence": [
               {
                 "file": "app/app/[projectSlug]/test-cases/test-case-table.client.tsx",
@@ -614,7 +614,7 @@
               "frame": "none",
               "texture": "transparent-overlay"
             },
-            "duration": 5.18,
+            "duration": 6.24,
             "evidence": [
               {
                 "file": "app/app/[projectSlug]/test-cases/test-case-table.client.tsx",
@@ -696,7 +696,7 @@
               "frame": "none",
               "texture": "transparent-overlay"
             },
-            "duration": 5.83,
+            "duration": 7.02,
             "evidence": [
               {
                 "file": "app/app/[projectSlug]/test-cases/test-case-table.client.tsx",
@@ -776,7 +776,7 @@
               "frame": "none",
               "texture": "transparent-overlay"
             },
-            "duration": 5.83,
+            "duration": 7.02,
             "evidence": [
               {
                 "file": "app/app/[projectSlug]/test-cases/test-case-table.client.tsx",
@@ -858,7 +858,7 @@
               "frame": "none",
               "texture": "transparent-overlay"
             },
-            "duration": 6.05,
+            "duration": 7.28,
             "evidence": [
               {
                 "file": "app/app/[projectSlug]/test-cases/test-case-table.client.tsx",
@@ -938,7 +938,7 @@
               "frame": "none",
               "texture": "transparent-overlay"
             },
-            "duration": 6.05,
+            "duration": 7.28,
             "evidence": [
               {
                 "file": "app/app/[projectSlug]/test-cases/test-case-table.client.tsx",
@@ -1032,7 +1032,7 @@
               "frame": "none",
               "texture": "transparent-overlay"
             },
-            "duration": 6.2,
+            "duration": 7.3,
             "evidence": [
               {
                 "file": "app/app/[projectSlug]/automations/s/[scenarioSlug]/scenario-canvas.client.tsx",
@@ -1112,7 +1112,7 @@
               "frame": "none",
               "texture": "transparent-overlay"
             },
-            "duration": 6.2,
+            "duration": 7.3,
             "evidence": [
               {
                 "file": "app/app/[projectSlug]/automations/s/[scenarioSlug]/scenario-canvas.client.tsx",
@@ -1194,7 +1194,7 @@
               "frame": "none",
               "texture": "transparent-overlay"
             },
-            "duration": 6.45,
+            "duration": 7.59,
             "evidence": [
               {
                 "file": "app/app/[projectSlug]/automations/s/[scenarioSlug]/scenario-canvas.client.tsx",
@@ -1274,7 +1274,7 @@
               "frame": "none",
               "texture": "transparent-overlay"
             },
-            "duration": 6.45,
+            "duration": 7.59,
             "evidence": [
               {
                 "file": "app/app/[projectSlug]/automations/s/[scenarioSlug]/scenario-canvas.client.tsx",
@@ -1356,7 +1356,7 @@
               "frame": "none",
               "texture": "transparent-overlay"
             },
-            "duration": 5.95,
+            "duration": 7.01,
             "evidence": [
               {
                 "file": "app/app/[projectSlug]/automations/s/[scenarioSlug]/scenario-canvas.client.tsx",
@@ -1436,7 +1436,7 @@
               "frame": "none",
               "texture": "transparent-overlay"
             },
-            "duration": 5.95,
+            "duration": 7.01,
             "evidence": [
               {
                 "file": "app/app/[projectSlug]/automations/s/[scenarioSlug]/scenario-canvas.client.tsx",
@@ -1518,7 +1518,7 @@
               "frame": "none",
               "texture": "transparent-overlay"
             },
-            "duration": 6.7,
+            "duration": 7.88,
             "evidence": [
               {
                 "file": "app/app/[projectSlug]/automations/s/[scenarioSlug]/scenario-canvas.client.tsx",
@@ -1598,7 +1598,7 @@
               "frame": "none",
               "texture": "transparent-overlay"
             },
-            "duration": 6.7,
+            "duration": 7.88,
             "evidence": [
               {
                 "file": "app/app/[projectSlug]/automations/s/[scenarioSlug]/scenario-canvas.client.tsx",
@@ -1680,7 +1680,7 @@
               "frame": "none",
               "texture": "transparent-overlay"
             },
-            "duration": 6.94,
+            "duration": 8.18,
             "evidence": [
               {
                 "file": "app/app/[projectSlug]/automations/s/[scenarioSlug]/scenario-canvas.client.tsx",
@@ -1760,7 +1760,7 @@
               "frame": "none",
               "texture": "transparent-overlay"
             },
-            "duration": 6.94,
+            "duration": 8.18,
             "evidence": [
               {
                 "file": "app/app/[projectSlug]/automations/s/[scenarioSlug]/scenario-canvas.client.tsx",
@@ -1854,7 +1854,7 @@
               "frame": "none",
               "texture": "transparent-overlay"
             },
-            "duration": 4.6,
+            "duration": 5.3,
             "evidence": [],
             "file": "qa-segnatura-motion-set.confirm-edit.light.svg",
             "format": "16:9",
@@ -1913,7 +1913,7 @@
               "frame": "none",
               "texture": "transparent-overlay"
             },
-            "duration": 4.6,
+            "duration": 5.3,
             "evidence": [],
             "file": "qa-segnatura-motion-set.confirm-edit.dark.svg",
             "format": "16:9",
@@ -1974,7 +1974,7 @@
               "frame": "none",
               "texture": "transparent-overlay"
             },
-            "duration": 4.78,
+            "duration": 5.51,
             "evidence": [],
             "file": "qa-segnatura-motion-set.confirm-edit.4x3.light.svg",
             "format": "4:3",
@@ -2033,7 +2033,7 @@
               "frame": "none",
               "texture": "transparent-overlay"
             },
-            "duration": 4.78,
+            "duration": 5.51,
             "evidence": [],
             "file": "qa-segnatura-motion-set.confirm-edit.4x3.dark.svg",
             "format": "4:3",
@@ -2094,7 +2094,7 @@
               "frame": "none",
               "texture": "transparent-overlay"
             },
-            "duration": 4.42,
+            "duration": 5.09,
             "evidence": [],
             "file": "qa-segnatura-motion-set.confirm-edit.1x1.light.svg",
             "format": "1:1",
@@ -2153,7 +2153,7 @@
               "frame": "none",
               "texture": "transparent-overlay"
             },
-            "duration": 4.42,
+            "duration": 5.09,
             "evidence": [],
             "file": "qa-segnatura-motion-set.confirm-edit.1x1.dark.svg",
             "format": "1:1",
@@ -2214,7 +2214,7 @@
               "frame": "none",
               "texture": "transparent-overlay"
             },
-            "duration": 4.97,
+            "duration": 5.72,
             "evidence": [],
             "file": "qa-segnatura-motion-set.confirm-edit.4x5.light.svg",
             "format": "4:5",
@@ -2273,7 +2273,7 @@
               "frame": "none",
               "texture": "transparent-overlay"
             },
-            "duration": 4.97,
+            "duration": 5.72,
             "evidence": [],
             "file": "qa-segnatura-motion-set.confirm-edit.4x5.dark.svg",
             "format": "4:5",
@@ -2334,7 +2334,7 @@
               "frame": "none",
               "texture": "transparent-overlay"
             },
-            "duration": 5.15,
+            "duration": 5.94,
             "evidence": [],
             "file": "qa-segnatura-motion-set.confirm-edit.9x16.light.svg",
             "format": "9:16",
@@ -2393,7 +2393,7 @@
               "frame": "none",
               "texture": "transparent-overlay"
             },
-            "duration": 5.15,
+            "duration": 5.94,
             "evidence": [],
             "file": "qa-segnatura-motion-set.confirm-edit.9x16.dark.svg",
             "format": "9:16",
@@ -2466,7 +2466,7 @@
               "frame": "none",
               "texture": "transparent-overlay"
             },
-            "duration": 7.4,
+            "duration": 8.4,
             "evidence": [],
             "file": "qa-segnatura-motion-set.progress-signal.light.svg",
             "format": "16:9",
@@ -2525,7 +2525,7 @@
               "frame": "none",
               "texture": "transparent-overlay"
             },
-            "duration": 7.4,
+            "duration": 8.4,
             "evidence": [],
             "file": "qa-segnatura-motion-set.progress-signal.dark.svg",
             "format": "16:9",
@@ -2586,7 +2586,7 @@
               "frame": "none",
               "texture": "transparent-overlay"
             },
-            "duration": 7.7,
+            "duration": 8.74,
             "evidence": [],
             "file": "qa-segnatura-motion-set.progress-signal.4x3.light.svg",
             "format": "4:3",
@@ -2645,7 +2645,7 @@
               "frame": "none",
               "texture": "transparent-overlay"
             },
-            "duration": 7.7,
+            "duration": 8.74,
             "evidence": [],
             "file": "qa-segnatura-motion-set.progress-signal.4x3.dark.svg",
             "format": "4:3",
@@ -2706,7 +2706,7 @@
               "frame": "none",
               "texture": "transparent-overlay"
             },
-            "duration": 7.1,
+            "duration": 8.06,
             "evidence": [],
             "file": "qa-segnatura-motion-set.progress-signal.1x1.light.svg",
             "format": "1:1",
@@ -2765,7 +2765,7 @@
               "frame": "none",
               "texture": "transparent-overlay"
             },
-            "duration": 7.1,
+            "duration": 8.06,
             "evidence": [],
             "file": "qa-segnatura-motion-set.progress-signal.1x1.dark.svg",
             "format": "1:1",
@@ -2826,7 +2826,7 @@
               "frame": "none",
               "texture": "transparent-overlay"
             },
-            "duration": 7.99,
+            "duration": 9.07,
             "evidence": [],
             "file": "qa-segnatura-motion-set.progress-signal.4x5.light.svg",
             "format": "4:5",
@@ -2885,7 +2885,7 @@
               "frame": "none",
               "texture": "transparent-overlay"
             },
-            "duration": 7.99,
+            "duration": 9.07,
             "evidence": [],
             "file": "qa-segnatura-motion-set.progress-signal.4x5.dark.svg",
             "format": "4:5",
@@ -2946,7 +2946,7 @@
               "frame": "none",
               "texture": "transparent-overlay"
             },
-            "duration": 8.29,
+            "duration": 9.41,
             "evidence": [],
             "file": "qa-segnatura-motion-set.progress-signal.9x16.light.svg",
             "format": "9:16",
@@ -3005,7 +3005,7 @@
               "frame": "none",
               "texture": "transparent-overlay"
             },
-            "duration": 8.29,
+            "duration": 9.41,
             "evidence": [],
             "file": "qa-segnatura-motion-set.progress-signal.9x16.dark.svg",
             "format": "9:16",

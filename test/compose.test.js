@@ -7,7 +7,12 @@ import { lerpRect } from "../src/layout/solve.js";
 import { planScene } from "../src/plan.js";
 import { renderSvg } from "../src/render-svg.js";
 
-const { CARD, HANDOFF, OPTION } = __testing;
+const { CARD, HANDOFF, IDEAL_GAP, OPTION } = __testing;
+const clip = (rect, region) => {
+  const x = Math.max(rect.x, region.x);
+  const y = Math.max(rect.y, region.y);
+  return { height: Math.max(0, Math.min(rect.y + rect.height, region.y + region.height) - y), width: Math.max(0, Math.min(rect.x + rect.width, region.x + region.width) - x), x, y };
+};
 
 const analysis = {
   concepts: { evidence: [{ file: "scenario-canvas.tsx", kind: "flow", score: 80 }], ranked: [{ kind: "flow", score: 80 }] },
@@ -67,10 +72,21 @@ test("steps keep their source shape and options keep their natural height in eve
   }
 });
 
-test("each frame shows a small cast instead of filling space with more items", () => {
+// A list reads full when it holds as many items as fit at the source gap; a
+// few items spread apart reads as an empty, unfinished one.
+test("steps and options fill their regions at the source rhythm instead of spreading apart", () => {
   for (const { model, scene } of composed) {
-    assert.ok(model.sizes.count >= 3 && model.sizes.count <= 4, `${scene.format.id} shows ${model.sizes.count} steps`);
-    assert.ok(model.sizes.optionCount >= 2 && model.sizes.optionCount <= 3, `${scene.format.id} shows ${model.sizes.optionCount} options`);
+    const { cardHeight, count } = model.sizes;
+    const gap = model.arrangement.gap;
+    const steps = model.regions.steps;
+    assert.ok(count >= 3, `${scene.format.id} shows ${count} steps`);
+    assert.ok(gap <= IDEAL_GAP + (1 + IDEAL_GAP) / (count - 1) + 1e-6, `${scene.format.id} spreads steps ${gap.toFixed(2)} apart instead of adding one`);
+    assert.ok(cardHeight * ((count + 1) + count * IDEAL_GAP * 0.7) > steps.height, `${scene.format.id} has room for another step`);
+    const options = Object.entries(model.layers).filter(([id]) => id.startsWith("option-")).map(([, layer]) => layer.frames[0]);
+    if (options.length > 1) {
+      const optionGap = (options[1].y - options[0].y - options[0].height) / options[0].height;
+      assert.ok(optionGap <= 10 / OPTION.height + 1 / (options.length - 1) + 1e-6, `${scene.format.id} spreads options ${optionGap.toFixed(2)} apart`);
+    }
   }
 });
 
@@ -79,11 +95,18 @@ test("each frame shows a small cast instead of filling space with more items", (
 test("the steps region stays full at every instant", () => {
   for (const { model, scene } of composed) {
     for (const instant of instants(model)) {
-      const settled = stepLayers(model).filter((layer) => settledAt(layer, instant.index));
+      // A step fading over the edge still covers it while it is on screen.
+      const settled = stepLayers(model).filter((layer) => settledAt(layer, instant.index) || (layer.overflow && (visibleAt(layer, instant.index) || visibleAt(layer, instant.index + 1))));
       if (settled.length === 0) continue;
-      const rects = settled.map(instant.rect);
+      // A step pushed over the edge still covers it; only the part inside counts.
+      const rects = settled.map(instant.rect).map((rect) => clip(rect, model.regions.steps));
+      // While the list scrolls one slot, its edge can pass through the gap
+      // between two steps, never more.
+      const scrolling = stepLayers(model).some((layer) => layer.overflow && layer.frames[instant.index].y !== layer.frames[instant.index + 1].y);
+      const scrollEdge = model.arrangement.axis === "rows" ? "top" : "bottom";
       for (const [edge, gap] of Object.entries(edgeGaps(rects, model.regions.steps))) {
-        assert.ok(Math.abs(gap) < TOLERANCE, `${scene.format.id} ${edge} gap ${gap.toFixed(2)} at ${instant.label}`);
+        const allowed = scrolling && edge === scrollEdge ? model.arrangement.gap * model.sizes.cardHeight : 0;
+        assert.ok(gap > -TOLERANCE && gap < allowed + TOLERANCE, `${scene.format.id} ${edge} gap ${gap.toFixed(2)} at ${instant.label}`);
       }
     }
   }
@@ -106,13 +129,19 @@ test("docked pickers fill their region and the frame is tiled by regions", () =>
 });
 
 // Exits and entrances drift into the frame margin while they fade; content at
-// rest stays inside the safe area.
+// rest stays inside the safe area. The step a growing list pushes out leaves
+// over the region edge, so it is only ever outside it while fading or hidden.
 test("nothing leaves the frame and steps never collide", () => {
   for (const { model, scene } of composed) {
     const bounds = { height: model.frame.height, width: model.frame.width, x: 0, y: 0 };
     for (const instant of instants(model)) {
       for (const [id, layer] of Object.entries(model.layers)) {
         if (!visibleAt(layer, instant.index) && !visibleAt(layer, instant.index + 1)) continue;
+        if (layer.overflow) {
+          const inside = contains(model.regions.steps, instant.rect(layer), TOLERANCE);
+          assert.ok(inside || fadingAt(layer, instant.index), `${scene.format.id} ${id} rests outside its region at ${instant.label}`);
+          continue;
+        }
         const area = fadingAt(layer, instant.index) ? bounds : model.frame.safe;
         assert.ok(contains(area, instant.rect(layer), TOLERANCE), `${scene.format.id} ${id} leaves the ${fadingAt(layer, instant.index) ? "frame" : "safe area"} at ${instant.label}`);
       }

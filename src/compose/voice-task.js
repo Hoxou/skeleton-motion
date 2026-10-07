@@ -1,6 +1,5 @@
 import { frameFor } from "../layout/formats.js";
-import { spaceBetween } from "../layout/solve.js";
-import { backdrop, center, chooseStack, curveOver, layoutMetadata, lerpRect, sourceUnits } from "./kit.js";
+import { backdrop, center, curveOver, fillStack, layoutMetadata, lerpRect, sourceUnits, stackRects } from "./kit.js";
 import { createTimeline, formatNumber, rectTracks } from "./tracks.js";
 
 // Source proportions (source px) from the voice-first task list: list rows
@@ -9,7 +8,8 @@ import { createTimeline, formatNumber, rectTracks } from "./tracks.js";
 const ROW_HEIGHT = 64;
 const ROW_GAP = 33 / ROW_HEIGHT;
 const ROW_MIN_WIDTH = 348;
-const ROW_COUNTS = [3, 4];
+// The spoken task swaps with the one above it, so a list shows at least three.
+const ROW_COUNTS = Object.freeze({ max: 16, min: 3 });
 const PANEL = Object.freeze({ footer: 50, pad: 16, tile: { height: 84, width: 146 }, width: 178 });
 const PANEL_MIN = Object.freeze({ tallHeight: 210, tallWidth: 178, wideHeight: 80, wideWidth: 300 });
 const SHARE_RANGE = [0.38, 0.72];
@@ -19,20 +19,22 @@ const WAVE = Object.freeze({ barWidth: 8, count: 5, pitch: 22 });
 
 // Beats: listen (ambient), the spoken task is recognized and highlighted,
 // lifts over the task at the top, the displaced task drops into the freed
-// slot, then the change is confirmed.
+// slot, then the change is confirmed. The rewind clears the confirmation and
+// plays the swap backwards.
 const KEYS = Object.freeze([
   { at: 0 }, { at: 0.36 }, { at: 0.42 }, { at: 0.46 }, { at: 0.48 }, { at: 0.5 },
   { at: 0.56 }, { at: 0.62 }, { at: 0.66, ease: "quick" }, { at: 0.68 }, { at: 0.72 }, { at: 0.76 },
-  { at: 0.86 }, { at: 0.9 }, { at: 0.95 }, { at: 1 },
+  { at: 0.86 }, { at: 0.88 }, { at: 0.89 }, { at: 0.92 }, { at: 1.02 }, { at: 1.1 }, { at: 1.12 }, { at: 1.16 }, { at: 1.2 },
 ]);
 const curve = curveOver(KEYS);
 const WAVE_TIMES = "0;.125;.25;.375;.5;.625;.75;.875;1";
 
 // Lift and drop keeps the top edge covered: the spoken task arrives over the
-// top slot before the displaced task leaves it, and the reset reverses that
-// order. Anticipation and overshoot only point into the list.
-const SPOKEN = curve([[0, 0], [0.48, 0], [0.5, -0.04], [0.62, 1], [0.95, 1], [1, 0]]);
-const DISPLACED = curve([[0, 0], [0.62, 0], [0.72, 1.04], [0.76, 1], [0.9, 1], [0.95, 0], [1, 0]]);
+// top slot before the displaced task leaves it, and the rewind reverses that
+// order: the displaced task is home under it before the spoken one drops.
+// Anticipation and overshoot only point into the list.
+const SPOKEN = curve([[0, 0], [0.48, 0], [0.5, -0.04], [0.62, 1], [1.02, 1], [1.1, -0.03], [1.12, 0]]);
+const DISPLACED = curve([[0, 0], [0.62, 0], [0.72, 1.04], [0.76, 1], [0.92, 1], [1.02, 0]]);
 
 function arrange(frame) {
   const px = sourceUnits(frame);
@@ -42,15 +44,15 @@ function arrange(frame) {
   const across = safe.width - gutter;
   const panelWidth = Math.max(px(PANEL_MIN.tallWidth), across * (1 - SHARE_RANGE[1]));
   if (across - panelWidth >= px(ROW_MIN_WIDTH)) {
-    const stack = chooseStack({ counts: ROW_COUNTS, idealGap: ROW_GAP, intrinsic, length: safe.height });
+    const stack = fillStack({ ...ROW_COUNTS, gap: ROW_GAP, intrinsic, length: safe.height });
     if (stack) candidates.push({ axis: "columns", ...stack, panel: "tall", rowHeight: stack.size, size: across - panelWidth });
   }
-  for (const count of ROW_COUNTS) {
+  for (let count = ROW_COUNTS.min; count <= ROW_COUNTS.max; count += 1) {
     const natural = intrinsic * (count + (count - 1) * ROW_GAP);
     const length = Math.min(natural, safe.height - gutter - px(PANEL_MIN.wideHeight));
-    const stack = chooseStack({ counts: [count], idealGap: ROW_GAP, intrinsic, length });
+    const stack = fillStack({ gap: ROW_GAP, intrinsic, length, max: count, min: count });
     const share = length / (safe.height - gutter);
-    if (!stack || share < SHARE_RANGE[0]) continue;
+    if (!stack || share < SHARE_RANGE[0] || share > SHARE_RANGE[1]) continue;
     const panelHeight = safe.height - gutter - length;
     const panel = panelHeight >= px(PANEL_MIN.tallHeight) * 1.6 && safe.width < px(PANEL_MIN.wideWidth) * 1.4 ? "tall" : "wide";
     // Stacked frames should read list-first without leaving the control mostly empty.
@@ -133,18 +135,18 @@ function taskRow(timeline, frames, index, k, spoken, radius) {
   const pill = fromRight(92, 19);
   const shape = (point, width, height) => ({ height: frames.map(() => height * k), width: frames.map(() => width * k), x: point.x, y: point.y });
   const pillRect = shape(pill, 66, 26);
-  const highlight = spoken ? timeline.element("rect", { ...tracks, opacity: curve([[0, 0], [0.42, 0], [0.5, 0.08], [0.62, 0.3], [0.72, 0.18], [0.9, 0.18], [1, 0]]) }, `rx="${formatNumber(radius)}" class="ln-hair" fill="var(--accent-soft)" stroke="var(--accent)"`) : "";
+  const highlight = spoken ? timeline.element("rect", { ...tracks, opacity: curve([[0, 0], [0.42, 0], [0.5, 0.08], [0.62, 0.3], [0.72, 0.18], [1.12, 0.18], [1.16, 0]]) }, `rx="${formatNumber(radius)}" class="ln-hair" fill="var(--accent-soft)" stroke="var(--accent)"`) : "";
   const check = KEYS.map((_, key) => `M${formatNumber(pill.x[key] + 23 * k)} ${formatNumber(pill.y[key] + 13 * k)}l${formatNumber(6 * k)} ${formatNumber(6 * k)} ${formatNumber(12 * k)}-${formatNumber(13 * k)}`);
-  const confirm = spoken ? `${timeline.element("rect", { ...pillRect, opacity: curve([[0, 0], [0.56, 0], [0.66, 1], [0.9, 1], [1, 0]]) }, `rx="${formatNumber(13 * k)}" fill="var(--accent)"`)}
-    <path d="${check[0]}" class="ln-strong" fill="none" stroke="var(--surface)" stroke-linecap="round" stroke-linejoin="round" opacity="0">${timeline.animate("opacity", curve([[0, 0], [0.62, 0], [0.68, 1], [0.9, 1], [1, 0]]))}${timeline.animateText("d", check)}</path>` : "";
+  const confirm = spoken ? `${timeline.element("rect", { ...pillRect, opacity: curve([[0, 0], [0.56, 0], [0.66, 1], [0.88, 1], [0.92, 0]]) }, `rx="${formatNumber(13 * k)}" fill="var(--accent)"`)}
+    <path d="${check[0]}" class="ln-strong" fill="none" stroke="var(--surface)" stroke-linecap="round" stroke-linejoin="round" opacity="0">${timeline.animate("opacity", curve([[0, 0], [0.62, 0], [0.68, 1], [0.86, 1], [0.89, 0]]))}${timeline.animateText("d", check)}</path>` : "";
   return `<g${spoken ? ` id="voice-updated-task"` : ""}>
     ${timeline.element("rect", tracks, `rx="${formatNumber(radius)}" data-fill="list" class="ln-hair" fill="var(--surface)" stroke="var(--border)"`)}
     ${highlight}
-    ${timeline.element("circle", { cx: avatar.x, cy: avatar.y }, `r="${formatNumber(12 * k)}" fill="var(--tag-${index + 1})"`)}
-    ${timeline.element("circle", { cx: avatar.x, cy: avatar.y }, `r="${formatNumber(4 * k)}" fill="var(--accent-${index + 1})" opacity=".78"`)}
+    ${timeline.element("circle", { cx: avatar.x, cy: avatar.y }, `r="${formatNumber(12 * k)}" fill="var(--tag-${(index % 4) + 1})"`)}
+    ${timeline.element("circle", { cx: avatar.x, cy: avatar.y }, `r="${formatNumber(4 * k)}" fill="var(--accent-${(index % 4) + 1})" opacity=".78"`)}
     ${timeline.element("rect", shape(title, TITLE_WIDTHS[index % 4], 7), `rx="${formatNumber(3.5 * k)}" fill="var(--ink)" opacity=".18"`)}
     ${timeline.element("rect", shape(detail, DETAIL_WIDTHS[index % 4], 5), `class="lod-fine" rx="${formatNumber(2.5 * k)}" fill="var(--ink)" opacity=".08"`)}
-    ${timeline.element("rect", pillRect, `rx="${formatNumber(13 * k)}" fill="var(--tag-${index + 1})"`)}
+    ${timeline.element("rect", pillRect, `rx="${formatNumber(13 * k)}" fill="var(--tag-${(index % 4) + 1})"`)}
     ${confirm}
   </g>`;
 }
@@ -157,7 +159,7 @@ export function composeVoiceTask(scene) {
   const k = px(1) * arrangement.scale;
   const radius = Math.max(0, (scene.palette.radius ?? 0) / frame.unitPx);
   const timeline = createTimeline(KEYS, scene.duration);
-  const slots = spaceBetween(regions.list, "y", Array(arrangement.count).fill(arrangement.rowHeight));
+  const slots = stackRects(regions.list, "y", { count: arrangement.count, gap: arrangement.gap, size: arrangement.rowHeight });
   const layers = {};
   const rows = slots.map((slot, index) => {
     let frames = KEYS.map(() => slot);
@@ -172,7 +174,7 @@ export function composeVoiceTask(scene) {
   const spoken = layers["row-1"].frames;
   const connector = arrangement.axis === "columns"
     ? timeline.element("line", {
-      opacity: curve([[0, 0], [0.36, 0.16], [0.46, 0.72], [0.68, 0.72], [0.86, 0.2], [1, 0]]),
+      opacity: curve([[0, 0], [0.36, 0.16], [0.46, 0.72], [0.68, 0.72], [0.86, 0.2], [1.12, 0.2], [1.16, 0]]),
       y1: spoken.map((rect) => rect.y + rect.height / 2),
       y2: spoken.map((rect) => rect.y + rect.height / 2),
     }, `x1="${formatNumber(regions.list.x + regions.list.width)}" x2="${formatNumber(regions.voice.x)}" class="ln-base" stroke="var(--accent)"`)

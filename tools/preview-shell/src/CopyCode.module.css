@@ -1,0 +1,43 @@
+/* Chrome only: uses the site's --home-* tokens, never the source palette. */
+.trigger { width: 100%; background: var(--home-page); }
+
+.backdrop { position: fixed; inset: 0; z-index: 40; background: color-mix(in oklab, var(--home-ink) 28%, transparent); }
+.popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  z-index: 41;
+  display: grid;
+  gap: .9rem;
+  width: min(760px, calc(100vw - 2rem));
+  max-height: calc(100vh - 2rem);
+  overflow: auto;
+  padding: 1.6rem;
+  border-radius: 28px;
+  background: var(--home-page);
+  color: var(--home-ink);
+  transform: translate(-50%, -50%);
+}
+.title { margin: 0; font-size: 1.35rem; font-weight: 620; letter-spacing: -.035em; }
+.description { margin: 0; color: var(--home-muted); font-size: .94rem; line-height: 1.55; }
+
+.tabs { display: inline-flex; gap: .25rem; padding: .3rem; border-radius: 16px; background: var(--home-soft); }
+.tab { min-height: 34px; background: transparent; color: var(--home-muted); }
+.tab:hover { color: var(--home-ink); }
+.tab[data-active] { background: var(--home-page); color: var(--home-ink); }
+
+.label { margin: .3rem 0 -.4rem; color: var(--home-muted); font-size: .8rem; font-weight: 630; letter-spacing: .04em; text-transform: uppercase; }
+.code {
+  margin: 0;
+  padding: 1rem 1.1rem;
+  overflow: auto;
+  border-radius: 16px;
+  background: var(--home-soft);
+  color: var(--home-ink);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: .8rem;
+  line-height: 1.55;
+  white-space: pre;
+}
+.source { max-height: 300px; }
+.actions { display: flex; flex-wrap: wrap; gap: .5rem; }

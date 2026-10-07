@@ -1,12 +1,16 @@
 import React, { useState } from "react";
 import SiteHeaderView from "../../../website/src/components/SiteHeaderView.jsx";
 import buttons from "../../../website/src/components/buttons.module.css";
+import CopyCode from "./CopyCode.jsx";
 import RoomSelect from "./RoomSelect.jsx";
 import { scenesFor } from "./scenes.jsx";
 import styles from "./DisplayRoom.module.css";
 
-// The room is opened from disk or from the site, so header links are absolute.
-const SITE = "https://hoxou.github.io/skeleton-motion";
+// Hosted generations live under /jobs/ on the app origin and link back to
+// it; rooms opened from disk or the Pages mirror link to the public site.
+const SITE = typeof window !== "undefined" && window.location.pathname.startsWith("/jobs/")
+  ? window.location.origin
+  : "https://hoxou.github.io/skeleton-motion";
 
 function SiteLink({ href, to, ...props }) {
   return <a href={href ?? `${SITE}${to}`} {...props} />;
@@ -103,6 +107,7 @@ export default function DisplayRoom({ data }) {
           <a className={`${buttons.actionButton} ${buttons.createButton} ${styles.download}`} href={`./${archive}`} download>
             Download ZIP
           </a>
+          <CopyCode asset={asset} />
         </aside>
       </div>
     </>

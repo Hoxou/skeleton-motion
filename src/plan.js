@@ -88,15 +88,16 @@ function motionProfile(concept, evidence, analysis) {
 // Each motion owns its loop length and beat map so a set never loops in
 // lockstep. Beats remap authored keyTimes ([authored, played]): longer travel
 // gets more time, quick confirmations stay short, and every reset lands apart.
+// Composed stories ignore the beats; their durations include the rewind.
 const MOTION_TIMING = {
-  "add-step": { beats: [[0, 0], [0.3, 0.26], [0.62, 0.6], [0.9, 0.87], [1, 1]], duration: 6.2 },
-  "assign-color": { beats: [[0, 0], [0.28, 0.24], [0.4, 0.4], [0.9, 0.88], [1, 1]], duration: 4.8 },
-  "chart-sweep": { beats: [[0, 0], [0.12, 0.06], [0.72, 0.8], [0.9, 0.95], [1, 1]], duration: 7.4 },
-  "focus-and-confirm": { beats: [[0, 0], [0.1, 0.14], [0.45, 0.5], [0.75, 0.8], [0.9, 0.93], [1, 1]], duration: 4.6 },
+  "add-step": { beats: [[0, 0], [0.3, 0.26], [0.62, 0.6], [0.9, 0.87], [1, 1]], duration: 7.3 },
+  "assign-color": { beats: [[0, 0], [0.28, 0.24], [0.4, 0.4], [0.9, 0.88], [1, 1]], duration: 5.4 },
+  "chart-sweep": { beats: [[0, 0], [0.12, 0.06], [0.72, 0.8], [0.9, 0.95], [1, 1]], duration: 8.4 },
+  "focus-and-confirm": { beats: [[0, 0], [0.1, 0.14], [0.45, 0.5], [0.75, 0.8], [0.9, 0.93], [1, 1]], duration: 5.3 },
   "route-propagation": { beats: [[0, 0], [0.5, 0.44], [0.9, 0.82], [1, 1]], duration: 5.8 },
-  "select-and-reveal": { beats: [[0, 0], [0.1, 0.06], [0.45, 0.36], [0.74, 0.7], [0.9, 0.84], [1, 1]], duration: 5.4 },
-  "snap-to-grid": { beats: [[0, 0], [0.3, 0.26], [0.55, 0.56], [0.9, 0.88], [1, 1]], duration: 5.2 },
-  "voice-to-task": { beats: [[0, 0], [0.42, 0.36], [0.62, 0.6], [0.9, 0.9], [1, 1]], duration: 8 },
+  "select-and-reveal": { beats: [[0, 0], [0.1, 0.06], [0.45, 0.36], [0.74, 0.7], [0.9, 0.84], [1, 1]], duration: 6.5 },
+  "snap-to-grid": { beats: [[0, 0], [0.3, 0.26], [0.55, 0.56], [0.9, 0.88], [1, 1]], duration: 6.2 },
+  "voice-to-task": { beats: [[0, 0], [0.42, 0.36], [0.62, 0.6], [0.9, 0.9], [1, 1]], duration: 9.2 },
 };
 
 // Taller frames travel farther between the same story beats, so they get a

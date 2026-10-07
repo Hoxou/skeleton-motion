@@ -92,3 +92,16 @@ test("assign-color without picks keeps the single tint pick", () => {
   assert.equal(svg.match(/class="ln-cursor-ripple"/g).length, 1);
   assert.equal(svg.match(/fill="none" class="ln-strong" stroke="var\(--accent\)"/g).length, 1);
 });
+
+// Regression: `<g data-drag>` rendered fine inlined in HTML but broke every
+// <img> embed, which parses the file as XML and rejects valueless attributes.
+test("every composed asset is well-formed XML for <img> embeds", () => {
+  const attributes = /^<[\w:-]+((\s+[\w:-]+="[^"]*")*)\s*\/?>$/;
+  for (const story of STORIES) {
+    for (const id of DEFAULT_ASPECTS) {
+      for (const [tag] of renderSvg(plan(story, id)).matchAll(/<[a-zA-Z][^>]*>/g)) {
+        assert.match(tag, attributes, `${story.motion} ${id}: ${tag.slice(0, 80)}`);
+      }
+    }
+  }
+});

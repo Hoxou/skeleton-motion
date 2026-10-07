@@ -132,11 +132,16 @@
       "backdrop": "none"
     }
   },
+  "formats": [
+    "16:9"
+  ],
+  "generatedAt": "2026-10-06T10:03:54.624Z",
+  "schemaVersion": 1,
   "asset": {
+    "archive": "ai-project-operations-for-voice-first-product-teams-bisonflow-fl.assets.zip",
     "concept": "flow",
     "name": "ai-project-operations-for-voice-first-product-teams-bisonflow-fl",
     "oneAssetPerRun": true,
-    "archive": "ai-project-operations-for-voice-first-product-teams-bisonflow-fl.assets.zip",
     "variants": [
       {
         "backdrop": "none",
@@ -151,6 +156,7 @@
           "frame": "none",
           "texture": "none"
         },
+        "duration": 9.2,
         "evidence": [
           {
             "file": "https://bisonflow.com/en",
@@ -159,6 +165,7 @@
           }
         ],
         "file": "ai-project-operations-for-voice-first-product-teams-bisonflow-fl.light.svg",
+        "format": "16:9",
         "motion": "voice-to-task",
         "motionPhysics": {
           "anticipation": "subtle-countermove",
@@ -228,6 +235,7 @@
           "frame": "none",
           "texture": "none"
         },
+        "duration": 9.2,
         "evidence": [
           {
             "file": "https://bisonflow.com/en",
@@ -236,6 +244,7 @@
           }
         ],
         "file": "ai-project-operations-for-voice-first-product-teams-bisonflow-fl.dark.svg",
+        "format": "16:9",
         "motion": "voice-to-task",
         "motionPhysics": {
           "anticipation": "subtle-countermove",
@@ -293,7 +302,5 @@
         }
       }
     ]
-  },
-  "generatedAt": "2026-10-06T03:41:59.881Z",
-  "schemaVersion": 1
+  }
 }
