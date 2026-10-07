@@ -269,3 +269,19 @@ test("labels are capped to what the brief allows, the button and focus first", (
   assert.deepEqual(Object.keys(few).filter((id) => few[id].label).sort(), ["b", "go"]);
   assert.equal(few.a.kind, "row");
 });
+
+test("Gemini moves past a model that times out", async (context) => {
+  const asked = [];
+  const original = globalThis.fetch;
+  context.after(() => { globalThis.fetch = original; });
+  globalThis.fetch = async (url) => {
+    asked.push(String(url).match(/models\/([^:]+)/)[1]);
+    if (String(url).includes("slow-model")) throw Object.assign(new Error("timed out"), { name: "TimeoutError" });
+    return new Response(JSON.stringify({ candidates: [{ content: { parts: [{ text: "{\"ok\":true}" }] } }] }), { status: 200 });
+  };
+  const provider = geminiProvider({ key: "test-key", model: "slow-model,fast-model" });
+  assert.deepEqual((await provider.json({ system: "s", user: "u" })).data, { ok: true });
+  asked.length = 0;
+  await provider.json({ system: "s", user: "u" });
+  assert.deepEqual(asked, ["fast-model"], "a model that timed out is skipped for the rest of the job");
+});

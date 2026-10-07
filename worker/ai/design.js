@@ -5,7 +5,8 @@ import { BRIEF_PROMPT, BRIEF_SCHEMA, briefPrompt, colorShares, MONOCHROME_SHARE,
 
 const WANTED = 3;
 const REPAIR_ROUNDS = 2;
-const THINKING = "low";
+// Planning picks from short candidate lists; designing a story needs a little more thought.
+const THINKING = { brief: "minimal", story: "low" };
 
 function slug(value, taken) {
   const base = String(value || "story").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 28) || "story";
@@ -133,7 +134,7 @@ async function designStory(provider, context, input, retry = null) {
   let calls = 1;
   let failure = null;
   let schema = STORY_SCHEMA;
-  const ask = (user) => provider.json({ schema, system: STORY_PROMPT, thinking: THINKING, user }).catch((error) => {
+  const ask = (user) => provider.json({ schema, system: STORY_PROMPT, thinking: THINKING.story, user }).catch((error) => {
     failure = error;
     return null;
   });
@@ -174,7 +175,7 @@ export async function designStories(source, context) {
       }
     },
   };
-  const first = await provider.json({ schema: BRIEF_SCHEMA, system: BRIEF_PROMPT, thinking: THINKING, user: briefPrompt(context) });
+  const first = await provider.json({ schema: BRIEF_SCHEMA, system: BRIEF_PROMPT, thinking: THINKING.brief, user: briefPrompt(context) });
   const product = first.data?.product && typeof first.data.product === "object" ? first.data.product : {};
   const briefs = normalizeBriefs(first.data?.candidates ?? first.data?.features);
   if (briefs.length === 0) throw new ProviderError("bad-output", "The model returned no features to animate.");

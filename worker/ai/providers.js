@@ -61,7 +61,7 @@ export async function request(url, { body, headers, method = "POST", secret }) {
     try {
       response = await fetch(url, { body: body === undefined ? undefined : JSON.stringify(body), headers: { "content-type": "application/json", ...headers }, method, redirect: "manual", signal: AbortSignal.timeout(TIMEOUT_MS) });
     } catch (error) {
-      throw new ProviderError("unavailable", error.name === "TimeoutError" ? "The AI provider took too long to answer." : "The AI provider could not be reached.");
+      throw new ProviderError("unavailable", error.name === "TimeoutError" ? "The AI provider took too long to answer." : "The AI provider could not be reached.", error.name === "TimeoutError" ? 408 : 0);
     }
     const payload = await response.json().catch(() => null);
     if (response.ok) return payload;
@@ -76,9 +76,9 @@ export async function request(url, { body, headers, method = "POST", secret }) {
   }
 }
 
-// Worth trying the next model: this one is overloaded, retired, or out of
-// quota (Gemini quotas are per model, so the next one may still have room).
-const tryNextModel = (error) => error instanceof ProviderError && (error.status === 404 || error.status === 429 || error.status >= 500);
+// Worth trying the next model: this one is overloaded, retired, too slow, or
+// out of quota (Gemini quotas are per model, so the next one may have room).
+const tryNextModel = (error) => error instanceof ProviderError && [404, 408, 429].includes(error.status) || (error instanceof ProviderError && error.status >= 500);
 
 // Gemini 3 degrades below its default temperature of 1.0 (Google's Gemini 3
 // guide), and diversity matters more than determinism here.
@@ -142,7 +142,7 @@ export function geminiProvider({ key, model = "gemini-3.8-flash,gemini-3.7-flash
         } catch (error) {
           lastError = error;
           if (!tryNextModel(error)) throw error;
-          if (error.status === 429) exhausted.add(name);
+          if (error.status === 429 || error.status === 408) exhausted.add(name);
         }
       }
       throw lastError;
