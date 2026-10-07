@@ -160,7 +160,8 @@ export async function designStories(source, context) {
     calls,
     product,
     rejected: failures.length,
-    rejections: failures.map((failure) => failure.errors.slice(0, 6)),
+    // Provider errors are kind and status only; their text is never kept.
+    rejections: failures.map((failure) => [...(failure.failure ? [`provider ${failure.failure.kind} ${failure.failure.status || ""}`.trim()] : []), ...failure.errors.slice(0, 6)]),
     stories,
     timings,
   };

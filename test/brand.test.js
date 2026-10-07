@@ -129,3 +129,10 @@ test("a cached probe from before brand colors were measured is measured again", 
   assert.equal((await measureBrand(current, new URL("https://pay.example/"))).source, "cache");
   assert.equal(current.measured.length, 0);
 });
+
+test("only real colors become accents", async () => {
+  const css = ":root { --primary: #1877f2; --status-success: #31a24c; --status-filter: invert(77%) sepia(29%) saturate(200%); --chart-blue: hsl(214, 89%, 52%); --chart-ramp: linear-gradient(red, blue); }";
+  const html = `<html><head><title>x</title><style>${css}</style></head><body><i style="color: var(--status-success)"></i><i style="filter: var(--status-filter)"></i><i style="color: var(--chart-blue)"></i><i style="background: var(--chart-ramp)"></i></body></html>`;
+  const analysis = await analyzeSource("https://social.example/", { fetch: async () => new Response(html) });
+  assert.deepEqual(analysis.palettes.light.accents, ["#1877f2", "#31a24c", "hsl(214, 89%, 52%)"]);
+});

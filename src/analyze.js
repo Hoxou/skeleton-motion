@@ -69,11 +69,16 @@ function readTheme(cssText, selector, inherited = {}) {
   return { ...inherited, ...parseVariables(block) };
 }
 
+// Status and chart variables sometimes hold filters or gradients rather
+// than colors; only plain color syntax may become a palette role.
+const CSS_COLOR = /^(?:#[0-9a-f]{3,8}|(?:rgba?|hsla?|hwb|lab|lch|oklab|oklch|color)\([\d\s.,%/+a-z-]*\)|[a-z]{3,20})$/i;
+const COLOR_KEYWORD_BLOCKLIST = /^(?:initial|inherit|unset|revert|none|transparent|currentcolor|auto|normal)$/i;
+
 function uniqueColors(values) {
   const seen = new Set();
   return values.filter((value) => {
     const key = String(value || "").trim().toLowerCase();
-    if (!key || seen.has(key) || /^(?:initial|inherit|none|transparent)$/.test(key)) return false;
+    if (!key || seen.has(key) || !CSS_COLOR.test(key) || COLOR_KEYWORD_BLOCKLIST.test(key)) return false;
     seen.add(key);
     return true;
   });
