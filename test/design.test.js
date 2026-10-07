@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { validatePlan } from "../src/scene-plan.js";
 import { githubRepo, isThin, pageDigest, pageSummary, productLinks } from "../worker/ai/context.js";
-import { designStories, fingerprint, limitWords, normalizeBriefs } from "../worker/ai/design.js";
+import { budgetColors, designStories, fingerprint, limitWords, normalizeBriefs } from "../worker/ai/design.js";
 import { MOVES } from "../worker/ai/patterns.js";
 import { BRIEF_SCHEMA, STORY_SCHEMA, SURFACES, wirePlan } from "../worker/ai/prompt.js";
 import { geminiProvider, parseJsonReply, ProviderError } from "../worker/ai/providers.js";
@@ -147,13 +147,21 @@ test("move patterns each work differently", () => {
   assert.equal(new Set(marks).size, marks.length);
 });
 
-test("tells each story how many real brand hues its tones map to", async () => {
+test("tells each story how much of the brand each hue covers", async () => {
   const colorful = fakeProvider({});
-  await designStories(colorful, { ...context, colors: 3 });
-  assert.match(colorful.prompts[1].user, /tag-2 to tag-3 are the brand's other hues/);
+  await designStories(colorful, { ...context, colors: [0.66, 0.34] });
+  assert.match(colorful.prompts[1].user, /tag-1 66%, tag-2 34%/);
   const single = fakeProvider({});
-  await designStories(single, context);
-  assert.match(single.prompts[1].user, /one hue; tag-1 to tag-4 are soft tints/);
+  await designStories(single, { ...context, colors: [0.95, 0.05] });
+  assert.match(single.prompts[1].user, /a one-color brand/);
+});
+
+test("secondary hues follow the brand's mix", () => {
+  const plan = { elements: { a: { kind: "row", tone: "tag-2" }, b: { kind: "row", tone: "tag-3" }, c: { kind: "card", tone: "tag-2" }, d: { kind: "row" }, e: { kind: "row", tone: "tag-1" }, list: { kind: "panel" } } };
+  const tones = (result) => Object.fromEntries(Object.entries(result.elements).map(([id, element]) => [id, element.tone ?? null]));
+  assert.deepEqual(tones(budgetColors(plan, [0.95, 0.05])), { a: null, b: null, c: null, d: null, e: "tag-1", list: null }, "a one-color brand keeps only its main color");
+  assert.deepEqual(tones(budgetColors(plan, [0.66, 0.34])), { a: "tag-2", b: null, c: "tag-2", d: null, e: "tag-1", list: null }, "a third of five colored items, and no hue the brand lacks");
+  assert.deepEqual(tones(budgetColors(plan, [0.4, 0.3, 0.3])), { a: "tag-2", b: "tag-3", c: "tag-2", d: null, e: "tag-1", list: null });
 });
 
 test("marks page text as data, never instructions", async () => {

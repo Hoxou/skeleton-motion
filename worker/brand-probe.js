@@ -59,38 +59,44 @@ const PROBE_BODY = `(() => {
   }
   for (const shape of [...document.querySelectorAll("header svg *, nav svg *")].slice(0, 80)) tally(hex(getComputedStyle(shape).fill), 2);
   const top = (map) => [...map].sort((a, b) => b[1] - a[1])[0]?.[0] || null;
-  // Secondary brand colors live outside the controls too: icons, badges,
-  // illustrations, gradient stops. One color per hue family, distinct from
-  // the accent, so a colorful brand keeps its range.
-  const hue = (h) => {
-    const [r, g, b] = [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16) / 255);
-    const max = Math.max(r, g, b);
-    const d = max - Math.min(r, g, b);
-    if (!d) return 0;
-    const x = max === r ? ((g - b) / d + 6) % 6 : max === g ? (b - r) / d + 2 : (r - g) / d + 4;
-    return x * 60;
+  // Coverage of every vivid color on the page: fills and gradient stops by
+  // box size (a gradient's stops share it), SVG shapes by their box, text by
+  // its glyph area. Each element counts by the square root of its area, so a
+  // color the page repeats (buttons, links, icons, tags) outweighs one that
+  // paints a few big content tiles. Photos, video, and canvas are skipped:
+  // their colors are content, not brand. Controls count triple, as a call to
+  // action is small but central. Sections that switch between dark and
+  // light backgrounds only add neutrals, which never count.
+  const coverage = new Map();
+  const add = (color, weight) => {
+    if (color && weight > 0 && chroma(color) >= 0.25) coverage.set(color, (coverage.get(color) || 0) + Math.sqrt(weight));
   };
-  const apart = (a, b) => Math.min(Math.abs(hue(a) - hue(b)), 360 - Math.abs(hue(a) - hue(b))) >= 35;
-  const range = new Map();
-  const note = (color, weight) => {
-    if (color && color !== surface && chroma(color) >= 0.25) range.set(color, (range.get(color) || 0) + weight);
-  };
-  for (const node of [...document.querySelectorAll("body *")].slice(0, 1500)) {
-    if (!shown(node)) continue;
+  const reach = Math.min(document.documentElement.scrollHeight, innerHeight * 6);
+  for (const node of [...document.querySelectorAll("body *")].slice(0, 4000)) {
+    if (node.closest("img, picture, video, canvas, iframe")) continue;
+    const box = node.getBoundingClientRect();
+    if (box.width < 2 || box.height < 2 || box.top + scrollY > reach) continue;
     const style = getComputedStyle(node);
-    note(hex(style.backgroundColor), 1);
-    for (const color of gradientColors(style.backgroundImage)) note(color, 1);
+    if (style.visibility === "hidden" || Number(style.opacity) === 0) continue;
+    const area = Math.min(box.width, innerWidth) * Math.min(box.height, innerHeight);
+    const boost = node.matches("a, button, [role=button]") ? 3 : 1;
+    const fill = hex(style.backgroundColor);
+    const parent = node.parentElement ? hex(getComputedStyle(node.parentElement).backgroundColor) : null;
+    if (fill && fill !== parent) add(fill, area * boost);
+    const stops = gradientColors(style.backgroundImage).filter(Boolean);
+    for (const color of stops) add(color, (area * boost) / stops.length);
     if (node instanceof SVGElement) {
-      note(hex(style.fill), 1);
-      note(hex(style.stroke), 0.5);
+      add(hex(style.fill), area);
+      add(hex(style.stroke), area * 0.2);
+    }
+    if ([...node.childNodes].some((child) => child.nodeType === 3 && child.textContent.trim())) {
+      const size = parseFloat(style.fontSize) || 14;
+      add(hex(style.color), node.textContent.trim().length * size * size * 0.5 * boost);
     }
   }
   const accent = top(vivid) || top(neutral);
-  const colors = [];
-  for (const [color, weight] of [...range].sort((a, b) => b[1] - a[1])) {
-    if (colors.length >= 3 || weight < 2) break;
-    if ([accent, ...colors].every((other) => !other || apart(color, other))) colors.push(color);
-  }
+  const total = [...coverage.values()].reduce((sum, weight) => sum + weight, 0) || 1;
+  const shares = [...coverage].sort((a, b) => b[1] - a[1]).slice(0, 16).map(([color, weight]) => [color, Number((weight / total).toFixed(5))]);
   radii.sort((a, b) => a - b);
   const bodyStyle = getComputedStyle(document.body);
   const heading = document.querySelector("h1, h2");
@@ -108,7 +114,7 @@ const PROBE_BODY = `(() => {
   return {
     accent,
     background: surface,
-    colors,
+    shares,
     content,
     fontBody: bodyStyle.fontFamily,
     fontHeading: heading ? getComputedStyle(heading).fontFamily : null,
@@ -177,7 +183,10 @@ export function parseProbe(json) {
   const probe = {
     accent: color(raw.accent),
     background: color(raw.background),
-    colors: [...new Set((Array.isArray(raw.colors) ? raw.colors : []).map(color).filter(Boolean))].filter((value) => value !== color(raw.accent)).slice(0, 3),
+    shares: (Array.isArray(raw.shares) ? raw.shares : [])
+      .filter((entry) => Array.isArray(entry) && color(entry[0]) && Number.isFinite(entry[1]) && entry[1] > 0 && entry[1] <= 1)
+      .slice(0, 16)
+      .map(([value, share]) => [color(value), Number(share)]),
     fontBody: cleanFont(raw.fontBody),
     fontHeading: cleanFont(raw.fontHeading),
     foreground: color(raw.foreground),
@@ -228,7 +237,7 @@ export function probeToCss(probe) {
   const shared = [
     probe.accent && `--primary: ${probe.accent};`,
     probe.radius && `--radius: ${probe.radius};`,
-    ...(probe.colors || []).map((value, index) => `--measured-accent-${index + 1}: ${value};`),
+    ...(probe.shares || []).map(([value, share], index) => `--measured-share-${index + 1}: ${value} ${share};`),
   ].filter(Boolean).join(" ");
   const font = probe.fontHeading || probe.fontBody;
   return [

@@ -85,18 +85,19 @@ test("a dark page fills the dark theme so the light variant is derived", () => {
   assert.match(css, /\.dark \{ --background: #08090a; --foreground: #f7f8f8; --card: #161718;/);
 });
 
-test("keeps only distinct hex secondary colors from a probe", () => {
-  const probe = parseProbe(JSON.stringify({ accent: "#635bff", colors: ["#00D4FF", "#635bff", "red", "#ff5996", "#00d4ff", "#ffb800", "#11efe3"] }));
-  assert.deepEqual(probe.colors, ["#00d4ff", "#ff5996", "#ffb800"]);
+test("keeps only well-formed color coverage from a probe", () => {
+  const probe = parseProbe(JSON.stringify({ accent: "#635bff", shares: [["#635BFF", 0.6], ["red", 0.2], ["#ffd601", 0.3], ["#00d4ff", 2], ["#ee30fb", -1], "#000000", ["#ff5996", 0.1]] }));
+  assert.deepEqual(probe.shares, [["#635bff", 0.6], ["#ffd601", 0.3], ["#ff5996", 0.1]]);
 });
 
 test("a colorful brand's measured colors reach the marks of a designed story", async () => {
   const page = "<html><head><title>Payments</title></head><body><main><h1>Payments</h1></main></body></html>";
   const fetch = async () => new Response(page, { headers: { "content-type": "text/html" } });
-  const measuredCss = probeToCss({ accent: "#635bff", background: "#ffffff", colors: ["#00d4ff", "#ff5996"], foreground: "#0a2540" });
+  const measuredCss = probeToCss({ accent: "#635bff", background: "#ffffff", foreground: "#0a2540", shares: [["#635bff", 0.5], ["#00d4ff", 0.3], ["#ff5996", 0.2]] });
   const analysis = await analyzeSource("https://pay.example/", { fetch, measuredCss });
   assert.equal(analysis.palettes.light.colorMode, "multicolor");
   assert.deepEqual(analysis.palettes.light.accents, ["#635bff", "#00d4ff", "#ff5996"]);
+  assert.deepEqual(analysis.palettes.light.shares, [0.5, 0.3, 0.2]);
 
   const plan = validatePlan({
     copy: { title: "Get paid" },
@@ -111,9 +112,9 @@ test("a colorful brand's measured colors reach the marks of a designed story", a
   assert.match(svg, /data-plan-id="paid"[^]*?<rect [^>]*fill="var\(--tag-2\)"/);
 });
 
-test("a cached probe from before brand colors were measured is measured again", async () => {
+test("a cached probe from before color coverage was measured is measured again", async () => {
   const { measureBrand } = await import("../worker/brand.js");
-  const fresh = { accent: "#635bff", colors: ["#00d4ff"] };
+  const fresh = { accent: "#635bff", shares: [["#00d4ff", 1]] };
   const envFor = (probe) => {
     const measured = [];
     return {
@@ -125,7 +126,7 @@ test("a cached probe from before brand colors were measured is measured again", 
   const old = envFor({ accent: "#635bff", background: "#ffffff" });
   assert.equal((await measureBrand(old, new URL("https://pay.example/"))).source, "session");
   assert.equal(old.measured.length, 1);
-  const current = envFor({ accent: "#635bff", colors: [] });
+  const current = envFor({ accent: "#635bff", shares: [] });
   assert.equal((await measureBrand(current, new URL("https://pay.example/"))).source, "cache");
   assert.equal(current.measured.length, 0);
 });
@@ -134,7 +135,8 @@ test("only real colors become accents", async () => {
   const css = ":root { --primary: #1877f2; --status-success: #31a24c; --status-filter: invert(77%) sepia(29%) saturate(200%); --chart-blue: hsl(214, 89%, 52%); --chart-ramp: linear-gradient(red, blue); }";
   const html = `<html><head><title>x</title><style>${css}</style></head><body><i style="color: var(--status-success)"></i><i style="filter: var(--status-filter)"></i><i style="color: var(--chart-blue)"></i><i style="background: var(--chart-ramp)"></i></body></html>`;
   const analysis = await analyzeSource("https://social.example/", { fetch: async () => new Response(html) });
-  assert.deepEqual(analysis.palettes.light.accents, ["#1877f2", "#31a24c", "hsl(214, 89%, 52%)"]);
+  // hsl(214, 89%, 52%) is the primary's own blue, so it adds share, not an accent.
+  assert.deepEqual(analysis.palettes.light.accents, ["#1877f2", "#31a24c"]);
 });
 
 test("brand hues come from stylesheets and the site's own logo, not customer logos", async () => {
@@ -160,4 +162,37 @@ test("stylesheets on a CDN host count toward the palette", async () => {
   const analysis = await analyzeSource("https://pay.example/", { fetch });
   assert.ok(fetched.includes("https://cdn.example/site.css"));
   assert.equal(analysis.palettes.light.accents.length, 4);
+});
+
+test("measured coverage decides the main color and when a brand reads as one color", async () => {
+  const page = "<html><head><title>x</title></head><body></body></html>";
+  const fetch = async () => new Response(page);
+  const mono = await analyzeSource("https://one.example/", { fetch, measuredCss: probeToCss({ accent: "#635bff", shares: [["#635bff", 0.93], ["#ffd601", 0.07]] }) });
+  assert.equal(mono.palettes.light.colorMode, "monochrome");
+  const mixed = await analyzeSource("https://two.example/", { fetch, measuredCss: probeToCss({ shares: [["#ffd601", 0.66], ["#8a5a2b", 0.0], ["#ff6118", 0.02], ["#00a3ff", 0.32]] }) });
+  assert.equal(mixed.palettes.light.accent, "#ffd601", "with no brand token the most used color leads");
+  assert.deepEqual(mixed.palettes.light.accents, ["#ffd601", "#00a3ff"]);
+  assert.equal(mixed.palettes.light.colorMode, "multicolor");
+});
+
+test("untoned marks are shades of the main color, checks green, crosses red", async () => {
+  const page = "<html><head><title>x</title></head><body></body></html>";
+  const render = async (shares) => {
+    const analysis = await analyzeSource("https://pay.example/", { fetch: async () => new Response(page), measuredCss: probeToCss({ accent: "#635bff", shares }) });
+    const plan = validatePlan({
+      elements: { a: { kind: "row" }, b: { kind: "row", tone: "tag-2" }, list: { kind: "panel" } },
+      screen: { children: ["a", "b"], id: "list", type: "panel" },
+      steps: [{ do: [{ id: "a", op: "set", state: "done" }] }, { do: [{ id: "b", op: "set", state: "error" }] }],
+    }, { driver: "system" }).plan;
+    const options = parseArgs(["https://pay.example/", "--set", "--name", "pay"], "/");
+    return generateCollection(analysis, options, { stories: [{ copy: plan.copy, id: "pay", label: plan.label, plan }] }).files.find((file) => file.name.endsWith(".light.svg")).data;
+  };
+  const branded = await render([["#635bff", 0.6], ["#1aae39", 0.4]]);
+  assert.match(branded, /--shade-1: #635bff;/);
+  assert.match(branded, /--success: #1aae39;/, "the brand's own green marks success");
+  assert.match(branded, /--danger: #e5484d;/, "a standard red when the brand has none");
+  assert.match(branded, /data-plan-id="a"[^]*?<circle [^>]*fill="var\(--shade-1\)"/);
+  assert.match(branded, /data-plan-id="b"[^]*?<circle [^>]*fill="var\(--mark-2\)"/);
+  const mono = await render([["#635bff", 1]]);
+  assert.match(mono, /--mark-1: #635bff;/, "a one-color brand's marks are full strength");
 });

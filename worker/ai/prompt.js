@@ -40,7 +40,8 @@ const KIND_NOTES = {
 
 const STATUS_NOTES = {
   dim: "faded, e.g. filtered out",
-  done: "completed: check mark (a button turns into a check)",
+  done: "completed or approved: green check (a button turns into a check)",
+  error: "failed, declined, or rejected: red cross",
   focused: "focus ring (fields: with a caret)",
   idle: "default",
   on: "active, e.g. toggle switched on or filter chip on",
@@ -129,11 +130,21 @@ export function briefPrompt(context) {
   return `Propose 5 candidate animations for the product described below. ${DATA_LINE}\n----\n${productLines(context)}`;
 }
 
-function brandColors(count = 1) {
-  const hues = Math.max(1, Math.min(4, Number(count) || 1));
-  return hues > 1
-    ? `Brand colors: tag-1 is the main brand hue; tag-2${hues > 2 ? ` to tag-${hues}` : ""} are the brand's other hues, so a tone there shows a real brand color.`
-    : "Brand colors: the brand has one hue; tag-1 to tag-4 are soft tints of it.";
+// The main color covering this much of the product makes it a one-color brand.
+export const MONOCHROME_SHARE = 0.9;
+
+/** Brand hue shares, main first, from the palette's shares or (older callers) a hue count. */
+export function colorShares(colors) {
+  if (Array.isArray(colors)) return colors.map(Number).filter((share) => Number.isFinite(share) && share > 0).slice(0, 4);
+  const hues = Math.max(1, Math.min(4, Number(colors) || 1));
+  return Array.from({ length: hues }, () => 1 / hues);
+}
+
+function brandColors(colors) {
+  const shares = colorShares(colors);
+  if (shares.length < 2 || shares[0] >= MONOCHROME_SHARE) return "Brand colors: a one-color brand. Untoned elements already use shades of it; use no tag tones (done shows green and error red on their own).";
+  const list = shares.map((share, index) => `tag-${index + 1} ${Math.round(share * 100)}%`).join(", ");
+  return `Brand colors by how much of the product they cover: ${list}. tag-1 is the main color and untoned elements already use its shades, so leave most elements untoned. Give tag-2${shares.length > 2 ? ` to tag-${shares.length}` : ""} only to elements whose color means something (a category, a person, a status), about as often as their share.`;
 }
 
 // Patterns are stored as id maps; the model sees the list form it must write.

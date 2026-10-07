@@ -1,5 +1,5 @@
 import { composeScene } from "./compose/index.js";
-import { mixColors, resolveMix } from "./color.js";
+import { hexHue, mixColors, resolveMix, toHex } from "./color.js";
 import { escapeXml } from "./utils.js";
 
 const BASE_WIDTH = 1200;
@@ -497,8 +497,17 @@ export function renderSvg(scene) {
   const accentAt = (index) => accents[index] || accents[index % accents.length] || palette.accent;
   const tagAt = (index) => resolveMix(pastels[index]) || mixColors(accentAt(index), 14, palette.surface);
   // Small identity marks (avatars, category dots) carry a multicolor brand's
-  // own hues at full strength; a single-accent brand keeps them as tints.
-  const markAt = (index) => (palette.colorMode === "multicolor" && accents.length > 1 ? accentAt(index) : tagAt(index));
+  // own hues at full strength.
+  // Untoned items take shades of the main color, so other hues appear only
+  // where the story gives an element one for a reason. A one-color brand's
+  // marks are those shades too, at full strength first.
+  const shadeAt = (amount) => mixColors(accentAt(0), amount, palette.surface);
+  const markAt = (index) => (palette.colorMode === "multicolor" && accents.length > 1 ? accentAt(index) : shadeAt([100, 72, 50, 36][index]));
+  const tintAt = (amount) => mixColors(accentAt(0), amount, palette.surface);
+  // Checks read green and crosses red; the brand's own green or red when it has one.
+  const brandHue = (test) => accents.map(toHex).find((hex) => hex && test(hexHue(hex)));
+  const success = brandHue((hue) => hue >= 90 && hue <= 170) || "#1fa463";
+  const danger = brandHue((hue) => hue >= 345 || hue <= 15) || "#e5484d";
   const composed = scene.composed ? composeScene(scene) : undefined;
   const viewBox = composed?.viewBox || (scene.concept === "flow"
     ? { height: COMPACT_HEIGHT, width: COMPACT_WIDTH }
@@ -541,6 +550,14 @@ export function renderSvg(scene) {
       --mark-2: ${markAt(1)};
       --mark-3: ${markAt(2)};
       --mark-4: ${markAt(3)};
+      --shade-1: ${shadeAt(100)};
+      --shade-2: ${shadeAt(72)};
+      --shade-3: ${shadeAt(50)};
+      --tint-1: ${tintAt(14)};
+      --tint-2: ${tintAt(22)};
+      --tint-3: ${tintAt(9)};
+      --success: ${success};
+      --danger: ${danger};
       ${sizeVariables(viewBox.width, viewport.width, viewport.width, viewport.width, reference)}
     }
     ${sizeTierCss(viewBox.width, reference)}

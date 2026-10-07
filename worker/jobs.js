@@ -146,7 +146,7 @@ export async function createJob(env, ownerHash, body) {
 
   let design;
   try {
-    design = await designStories(access.provider, { ...content, colors: analysis.palettes.light.accents?.length || 1, pages, repo: repoInfo, url: url.href });
+    design = await designStories(access.provider, { ...content, colors: analysis.palettes.light.shares || analysis.palettes.light.accents?.length || 1, pages, repo: repoInfo, url: url.href });
   } catch (error) {
     if (error instanceof ProviderError) {
       // The reason is the provider's short status text; keys never appear in it.

@@ -1,5 +1,6 @@
 import fs from "node:fs/promises";
 import path from "node:path";
+import { colorFamilies, hueGap, mixColors, toHex } from "./color.js";
 import { collectFilesByExtensions, collectTextFiles, isUrl, readText, slugify } from "./utils.js";
 
 const SIGNALS = {
@@ -84,78 +85,45 @@ function uniqueColors(values) {
   });
 }
 
-function hexRgb(value) {
-  const match = String(value || "").trim().match(/^#([0-9a-f]{3}|[0-9a-f]{6})$/i);
-  if (!match) return undefined;
-  const hex = match[1].length === 3 ? [...match[1]].map((digit) => digit + digit).join("") : match[1];
-  return [0, 2, 4].map((offset) => Number.parseInt(hex.slice(offset, offset + 2), 16));
-}
+// The main color carrying this much of the page means the brand reads as one color.
+const MONOCHROME_SHARE = 0.9;
+const MAX_ACCENTS = 4;
 
-function closestColorIndex(primary, candidates, maxDistance = 96) {
-  const primaryRgb = hexRgb(primary);
-  if (!primaryRgb) return -1;
-  const closest = candidates
-    .map((candidate, index) => {
-      const rgb = hexRgb(candidate);
-      const distance = rgb ? Math.hypot(...rgb.map((value, channel) => value - primaryRgb[channel])) : Number.POSITIVE_INFINITY;
-      return { distance, index };
-    })
-    .sort((a, b) => a.distance - b.distance)[0];
-  return closest?.distance < maxDistance ? closest.index : -1;
-}
+// Every color a page uses, weighted by how much of the page it likely
+// covers: fills and backgrounds count most, text and borders least, and a
+// gradient's stops share its weight. The palette is read from these weights
+// as hue families with a share each, so the main color is the one the page
+// is mostly made of and the rest appear about as often as they do there.
+const PROPERTY_WEIGHTS = [
+  [/^background(?:-color|-image)?$/, 3],
+  [/^(?:fill|stroke|stop-color)$/, 2],
+  [/^(?:color|border(?:-[a-z]+)*|outline(?:-color)?|caret-color|accent-color|text-decoration-color)$/, 1],
+];
+const COLOR_IN_VALUE = /#[0-9a-f]{8}\b|#[0-9a-f]{6}\b|#[0-9a-f]{3}\b|rgba?\([^)]*\)/gi;
 
-function supplementalColors(primary, candidates) {
-  const closest = closestColorIndex(primary, candidates);
-  return closest >= 0 ? candidates.filter((_, index) => index !== closest) : candidates;
-}
-
-function hexChannels(hex) {
-  return [1, 3, 5].map((index) => Number.parseInt(hex.slice(index, index + 2), 16));
-}
-
-function hexHue(hex) {
-  const [r, g, b] = hexChannels(hex).map((value) => value / 255);
-  const max = Math.max(r, g, b);
-  const delta = max - Math.min(r, g, b);
-  if (!delta) return 0;
-  const sector = max === r ? ((g - b) / delta + 6) % 6 : max === g ? (b - r) / delta + 2 : (r - g) / delta + 4;
-  return sector * 60;
-}
-
-const hueGap = (a, b) => Math.min(Math.abs(hexHue(a) - hexHue(b)), 360 - Math.abs(hexHue(a) - hexHue(b)));
-
-// Vivid, mid-to-light colors a brand's stylesheets use, most frequent
-// first, one per hue family. Pages that theme with plain hex values (no
-// utility classes or named tokens) still show their palette this way.
-export function stylesheetHues(text, max = 6) {
-  const counts = new Map();
-  for (const match of String(text || "").matchAll(/#([0-9a-f]{6})\b/gi)) {
-    const hex = `#${match[1].toLowerCase()}`;
-    const [r, g, b] = hexChannels(hex);
-    const top = Math.max(r, g, b);
-    const chroma = top ? ((top - Math.min(r, g, b)) / top) * (top / 255) : 0;
-    if (chroma >= 0.45 && top >= 180) counts.set(hex, (counts.get(hex) || 0) + 1);
+function declaredColorWeights(css) {
+  const weights = [];
+  for (const match of String(css || "").matchAll(/(?:^|[;{\s])(-{0,2}[a-z][\w-]*)\s*:\s*([^;{}]+)/gi)) {
+    const property = match[1].toLowerCase();
+    const weight = property.startsWith("--") ? 0.5 : PROPERTY_WEIGHTS.find(([pattern]) => pattern.test(property))?.[1] ?? 0.5;
+    const colors = match[2].match(COLOR_IN_VALUE) || [];
+    const each = /gradient\(/i.test(match[2]) ? weight / Math.max(1, colors.length) : weight;
+    for (const color of colors) weights.push([color, each]);
   }
-  const picked = [];
-  for (const [hex] of [...counts].sort((a, b) => b[1] - a[1])) {
-    if (picked.length >= max) break;
-    if (picked.every((other) => hueGap(hex, other) >= 40)) picked.push(hex);
-  }
-  return picked;
+  return weights;
 }
 
 // Markup that carries the brand's own colors: inline styles, and the logo
 // (the link home, or the first graphic in the header). Other inline SVG on
 // a landing page, menus included, is mostly customer and integration logos.
-function brandMarkup(html) {
+function markupColorWeights(html) {
   const source = String(html || "");
   const home = [...source.matchAll(/<a\b[^>]*href=["'](?:\/|https?:\/\/[^/"']+\/?)["'][^>]*>[\s\S]*?<\/a>/gi)].map((match) => match[0]).slice(0, 2);
   const header = source.match(/<header\b[\s\S]*?<\/header>/i)?.[0] || "";
-  const firstMark = header.match(/<svg\b[\s\S]*?<\/svg>/i)?.[0] || "";
-  const styles = [...source.matchAll(/\sstyle=["']([^"']*)["']/gi)].map((match) => match[1]);
-  // The logo counts double: it is the one mark guaranteed to be the brand.
-  const logo = [...home, firstMark].join("\n");
-  return [logo, logo, ...styles].join("\n");
+  const logo = [...home, header.match(/<svg\b[\s\S]*?<\/svg>/i)?.[0] || ""].join("\n");
+  const styles = [...source.matchAll(/\sstyle=["']([^"']*)["']/gi)].map((match) => `;${match[1]}`).join("\n");
+  // The logo is the one mark guaranteed to be the brand; it counts like a fill.
+  return [...(logo.match(COLOR_IN_VALUE) || []).map((color) => [color, 3]), ...declaredColorWeights(styles)];
 }
 
 function inferColorSystem(sourceText, cssText = "") {
@@ -175,42 +143,62 @@ function inferColorSystem(sourceText, cssText = "") {
   const resolveFamily = (family, shades) => shades
     .map((shade) => resolveVariable(variables[`color-${family}-${shade}`], variables))
     .find(Boolean);
-
-  const semanticColors = Object.entries(variables)
+  // Utility-class sites name their palette directly; dark themes take the lighter shade.
+  const darkShades = {};
+  const utilityWeights = families.flatMap((family) => {
+    const light = toHex(resolveFamily(family, [600, 500, 700, 400]));
+    const dark = toHex(resolveFamily(family, [400, 500, 300, 600]));
+    if (light && dark) darkShades[light] = dark;
+    return light ? [[light, familyCounts.get(family) * 3]] : [];
+  });
+  const semanticWeights = Object.entries(variables)
     .filter(([name]) => /(?:^|[-_])(chart|tag|status|success|warning|info)(?:[-_]|$)/i.test(name) && sourceText.includes(`--${name}`))
-    .map(([, value]) => resolveVariable(value, variables));
-  // Colors a rendered page showed (see worker/brand-probe.js), for brands
-  // whose palette is not in utility classes or named tokens.
+    .map(([, value]) => [resolveVariable(value, variables), 2]);
+
+  // A rendered page's measured coverage (see worker/brand-probe.js) is the
+  // truth when present; older probes only listed colors.
+  const measuredShares = Object.entries(variables)
+    .filter(([name]) => /^measured-share-\d+$/.test(name))
+    .map(([, value]) => value.trim().split(/\s+/))
+    .map(([color, weight]) => [color, Number(weight)])
+    .filter(([, weight]) => Number.isFinite(weight));
   const measuredColors = Object.entries(variables)
     .filter(([name]) => /^measured-accent-\d$/.test(name))
-    .map(([, value]) => value);
-  const lightAccents = uniqueColors([
-    ...families.map((family) => resolveFamily(family, [600, 500, 700, 400])),
-    ...measuredColors,
-    ...semanticColors,
-  ]).slice(0, 4);
-  const darkAccents = uniqueColors([
-    ...families.map((family) => resolveFamily(family, [400, 500, 300, 600])),
-    ...measuredColors,
-    ...semanticColors,
-  ]).slice(0, 4);
-  const lightPastels = families
-    .map((family, index) => resolveFamily(family, [100, 50, 200]) || (lightAccents[index] || lightAccents[0] ? `color-mix(in oklab, ${lightAccents[index] || lightAccents[0]} 14%, white)` : undefined))
-    .filter(Boolean);
-  const darkPastels = families
-    .map((family, index) => resolveFamily(family, [900, 950, 800]) || (darkAccents[index] || darkAccents[0] ? `color-mix(in oklab, ${darkAccents[index] || darkAccents[0]} 24%, #18181b)` : undefined))
-    .filter(Boolean);
+    .map(([, value]) => [value, 3]);
+  const weighted = measuredShares.length
+    ? measuredShares
+    : [...utilityWeights, ...semanticWeights, ...measuredColors, ...declaredColorWeights(cssText), ...markupColorWeights(sourceText)];
+
   const warmFamily = families.find((family) => ["amber", "orange", "yellow"].includes(family));
   const lightCanvas = warmFamily ? resolveFamily(warmFamily, [50, 100]) : undefined;
-  // Measured colors exclude the accent, so two of them already make three hues.
-  const mode = uniqueColors([...lightAccents, ...semanticColors]).length >= 3 || measuredColors.length >= 2 ? "multicolor" : "monochrome";
-
-  return { darkAccents, darkPastels, families, lightAccents, lightCanvas, lightPastels, mode, stylesheetHues: stylesheetHues(`${cssText}\n${brandMarkup(sourceText)}`) };
+  const colorShares = colorFamilies(weighted);
+  const mode = colorShares.length >= 2 && colorShares[0].share < MONOCHROME_SHARE ? "multicolor" : "monochrome";
+  return { colorShares, darkShades, families, lightCanvas, measured: measuredShares.length > 0, mode };
 }
 
 // Used when the source exposes no brand token; callers compare against it
 // to tell "measured" from "guessed".
 export const DEFAULT_ACCENT = "#4f46e5";
+
+/**
+ * Accents in order of how much of the page they cover, main color first,
+ * with each one's share. A brand token is the main color whenever it has a
+ * real share of the page; otherwise the largest family is.
+ */
+function rankAccents(primary, colorShares) {
+  const primaryHex = toHex(primary);
+  const own = primaryHex ? colorShares.find((family) => hueGap(family.hex, primaryHex) < 25) : null;
+  const guessed = primary === DEFAULT_ACCENT;
+  const main = !guessed && primaryHex ? { hex: primary, share: own?.share ?? 0 } : colorShares[0] || { hex: primary, share: 1 };
+  const picked = [main];
+  for (const family of colorShares) {
+    if (picked.length >= MAX_ACCENTS) break;
+    if (family === own || (guessed && family === colorShares[0])) continue;
+    if (picked.every((other) => !toHex(other.hex) || hueGap(family.hex, toHex(other.hex)) >= 40)) picked.push(family);
+  }
+  const total = picked.reduce((sum, family) => sum + family.share, 0);
+  return picked.map((family) => ({ hex: family.hex, share: total ? Number((family.share / total).toFixed(4)) : 1 / picked.length }));
+}
 
 function buildPalette(lightVariables, darkVariables, colorSystem = {}) {
   const light = {
@@ -223,10 +211,13 @@ function buildPalette(lightVariables, darkVariables, colorSystem = {}) {
     radius: token(lightVariables, ["radius", "radius-lg"], "12px"),
     surface: token(lightVariables, ["card", "popover", "surface"], "#ffffff"),
   };
+  const ranked = rankAccents(light.accent, colorSystem.colorShares || []);
+  // A page with no brand token takes its most used color as the accent.
+  if (light.accent === DEFAULT_ACCENT && (colorSystem.colorShares || []).length) light.accent = ranked[0].hex;
   const hasSourceDark = Object.keys(darkVariables).length > 0;
   const combinedDark = hasSourceDark ? { ...lightVariables, ...darkVariables } : {};
   const dark = {
-    accent: token(combinedDark, ["primary", "brand", "brand-primary"], `color-mix(in oklab, ${light.accent} 78%, white)`),
+    accent: token(combinedDark, ["primary", "brand", "brand-primary"], mixColors(light.accent, 78, "#ffffff")),
     background: token(combinedDark, ["background", "page", "canvas"], "#111113"),
     border: token(combinedDark, ["border", "input"], "rgb(255 255 255 / 10%)"),
     foreground: token(combinedDark, ["foreground", "text", "card-foreground"], "#fafafa"),
@@ -235,41 +226,17 @@ function buildPalette(lightVariables, darkVariables, colorSystem = {}) {
     radius: token(combinedDark, ["radius", "radius-lg"], light.radius),
     surface: token(combinedDark, ["card", "popover", "surface"], "#202024"),
   };
-  const familyIndex = closestColorIndex(light.accent, colorSystem.lightAccents || []);
-  const lightSupplementals = familyIndex >= 0
-    ? (colorSystem.lightAccents || []).filter((_, index) => index !== familyIndex)
-    : supplementalColors(light.accent, colorSystem.lightAccents || []);
-  const darkSupplementals = familyIndex >= 0
-    ? (colorSystem.darkAccents || []).filter((_, index) => index !== familyIndex)
-    : supplementalColors(dark.accent, colorSystem.darkAccents || []);
-  // Hues seen in the stylesheets top up a palette the tokens left short,
-  // skipping any too close to a color already in it.
-  const topUp = (accents) => {
-    const out = [...accents];
-    for (const hex of colorSystem.stylesheetHues || []) {
-      if (out.length >= 4) break;
-      if (out.every((other) => !/^#[0-9a-f]{6}$/i.test(other) || hueGap(hex, other) >= 40)) out.push(hex);
-    }
-    return out;
-  };
-  // A supplemental accent stands for a hue, so washed-out tints (status
-  // backgrounds, pastels) do not count as one.
-  const vivid = (value) => {
-    if (!/^#[0-9a-f]{6}$/i.test(value)) return true;
-    const [r, g, b] = hexChannels(value.toLowerCase());
-    const top = Math.max(r, g, b);
-    return top > 0 && ((top - Math.min(r, g, b)) / top) * (top / 255) >= 0.3;
-  };
-  light.accents = topUp(uniqueColors([light.accent, ...lightSupplementals.filter(vivid)])).slice(0, 4);
-  dark.accents = topUp(uniqueColors([dark.accent, ...darkSupplementals.filter(vivid)])).slice(0, 4);
-  light.pastels = uniqueColors(colorSystem.lightPastels || []);
-  dark.pastels = dark.accents.map((accent) => `color-mix(in oklab, ${accent} 22%, ${dark.surface})`);
-  light.colorMode = colorSystem.mode === "multicolor" || light.accents.length >= 3 ? "multicolor" : "monochrome";
+  const shades = colorSystem.darkShades || {};
+  light.accents = uniqueColors([light.accent, ...ranked.slice(1).map((family) => family.hex)]);
+  light.shares = light.accents.map((hex, index) => ranked[index]?.share ?? 0);
+  dark.accents = uniqueColors([dark.accent, ...light.accents.slice(1).map((hex) => shades[hex] || hex)]);
+  dark.shares = light.shares.slice(0, dark.accents.length);
+  light.pastels = light.accents.map((accent) => mixColors(accent, 14, light.surface));
+  dark.pastels = dark.accents.map((accent) => mixColors(accent, 22, dark.surface));
+  light.colorMode = light.accents.length >= 2 && light.shares[0] < MONOCHROME_SHARE ? "multicolor" : "monochrome";
   dark.colorMode = light.colorMode;
   light.canvas = colorSystem.lightCanvas;
-  dark.canvas = light.colorMode === "multicolor" && light.canvas
-    ? `color-mix(in oklab, ${dark.background} 92%, ${dark.accents.at(-1) || dark.accent} 8%)`
-    : undefined;
+  dark.canvas = light.colorMode === "multicolor" && light.canvas ? mixColors(dark.background, 92, dark.accents.at(-1) || dark.accent) : undefined;
   return { dark, light };
 }
 

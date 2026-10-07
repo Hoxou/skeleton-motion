@@ -14,7 +14,7 @@ import { FORMATS, frameFor } from "./layout/formats.js";
 // element statuses, values, links, and insert origins in effect.
 
 export const LIMITS = Object.freeze({ elements: 16, label: 22, states: [2, 5], steps: [2, 4] });
-export const STATUSES = Object.freeze(["idle", "pending", "done", "selected", "focused", "on", "dim"]);
+export const STATUSES = Object.freeze(["idle", "pending", "done", "error", "selected", "focused", "on", "dim"]);
 export const OPS = Object.freeze(["insert", "remove", "move", "set", "link", "unlink", "highlight"]);
 export const TONE_NAMES = Object.freeze(["accent", "neutral", "tag-1", "tag-2", "tag-3", "tag-4"]);
 const ID = /^[a-z][a-z0-9-]{0,31}$/;

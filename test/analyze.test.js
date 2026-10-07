@@ -61,7 +61,8 @@ test("builds multicolor roles from color families actually used by a page", () =
   assert.equal(palettes.light.pastels.length, 4);
   assert.equal(palettes.light.canvas, "#fffbeb");
   assert.ok(palettes.dark.accents.includes("#d97706"));
-  assert.ok(palettes.dark.pastels.every((color, index) => color.includes(`${palettes.dark.accents[index]} 22%`)));
+  assert.equal(palettes.dark.pastels.length, palettes.dark.accents.length);
+  assert.ok(palettes.light.shares.every((share) => share > 0), "every accent covers part of the page");
 });
 
 test("derives a restrained dark theme only when the source has none", () => {
@@ -70,7 +71,7 @@ test("derives a restrained dark theme only when the source has none", () => {
   assert.deepEqual(__testing.themeSupport({}), { dark: "derived", light: "source" });
   assert.equal(palettes.dark.background, "#111113");
   assert.equal(palettes.dark.surface, "#202024");
-  assert.match(palettes.dark.accent, /#2563eb 78%/);
+  assert.equal(palettes.dark.accent, "#5589f3", "the light accent lifted toward white");
 });
 
 test("ranks a reachable automation canvas as a flow concept", async (context) => {

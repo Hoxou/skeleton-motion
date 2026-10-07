@@ -393,13 +393,15 @@ function textFit(label, width, size) {
 }
 
 // `surface` is a pill's background, which stays a tint so its label reads;
-// "mark" is a dot or avatar, which shows the brand hue itself.
+// "mark" is a dot or avatar, which shows the brand hue itself. Untoned
+// elements vary only in shade of the main color: other hues are reserved
+// for elements the story tones on purpose.
 function toneFill(element, index, use = "surface") {
-  const scale = use === "mark" ? "mark" : "tag";
   if (element.tone === "accent") return "var(--accent)";
   if (element.tone === "neutral") return use === "mark" ? "var(--border-strong)" : "var(--muted)";
   const tag = /^tag-([1-4])$/.exec(element.tone || "");
-  return `var(--${scale}-${tag ? tag[1] : (index % 4) + 1})`;
+  if (tag) return `var(--${use === "mark" ? "mark" : "tag"}-${tag[1]})`;
+  return `var(--${use === "mark" ? "shade" : "tint"}-${(index % 3) + 1})`;
 }
 
 // Pressed elements shrink slightly; anything drawn around an element must use
@@ -420,6 +422,10 @@ function cornerTrack(element, frames, radius, k) {
 }
 
 const FILLER_LINES = Object.freeze([1, 0.92, 0.97, 0.64, 1, 0.88, 0.71]);
+const CROSS = (cx, cy, size) => {
+  const arm = size * 0.34;
+  return `M${formatNumber(cx - arm)} ${formatNumber(cy - arm)} L${formatNumber(cx + arm)} ${formatNumber(cy + arm)} M${formatNumber(cx + arm)} ${formatNumber(cy - arm)} L${formatNumber(cx - arm)} ${formatNumber(cy + arm)}`;
+};
 const CHECK = (cx, cy, size) => `M${formatNumber(cx - size * 0.45)} ${formatNumber(cy)} L${formatNumber(cx - size * 0.12)} ${formatNumber(cy + size * 0.32)} L${formatNumber(cx + size * 0.48)} ${formatNumber(cy - size * 0.36)}`;
 const TREND = [0.72, 0.58, 0.64, 0.44, 0.5, 0.3, 0.22];
 
@@ -462,7 +468,8 @@ function statusMarkup(element, frames, rx, statuses, timeline, k) {
     const ring = frames.map((frame) => ({ height: frame.height + 6 * k, width: frame.width + 6 * k, x: frame.x - 3 * k, y: frame.y - 3 * k }));
     out.push(layer("focused", "rect", { ...rectTracks(ring), rx: rx.map((value) => value + 3 * k) }, `fill="none" class="ln-base" stroke="var(--accent)"`));
   }
-  if (has("done")) {
+  for (const [name, color] of [["done", "var(--success)"], ["error", "var(--danger)"]]) {
+    if (!has(name)) continue;
     const badge = element.kind === "button"
       ? frames.map((frame) => ({ cx: frame.x + frame.width / 2, cy: frame.y + frame.height / 2, r: 0 }))
       : frames.map((frame) => {
@@ -472,9 +479,12 @@ function statusMarkup(element, frames, rx, statuses, timeline, k) {
         return { cx: frame.x + frame.width - 20 * k, cy: frame.y + frame.height / 2, r: Math.min(9 * k, frame.height / 3) };
       });
     const size = element.kind === "button" ? 14 * k : badge[0].r * 1.3;
-    const check = badge.map((spot) => CHECK(spot.cx, spot.cy, element.kind === "button" ? size : spot.r * 1.3));
-    const done = is("done");
-    out.push(`<g opacity="${done[0]}">${timeline.animate("opacity", done)}${element.kind === "button" ? "" : timeline.element("circle", { cx: badge.map((spot) => spot.cx), cy: badge.map((spot) => spot.cy), r: badge.map((spot) => spot.r) }, `fill="var(--accent)"`)}<path d="${check[0]}" fill="none" stroke="#fff" stroke-width="${formatNumber(Math.max(1.5 * k, size * 0.16))}" stroke-linecap="round" stroke-linejoin="round">${timeline.animateText("d", check)}</path></g>`);
+    const glyph = name === "done" ? CHECK : CROSS;
+    const mark = badge.map((spot) => glyph(spot.cx, spot.cy, element.kind === "button" ? size : spot.r * 1.3));
+    const shown = is(name);
+    // A failed button turns red itself; badges sit on the item.
+    const failed = element.kind === "button" && name === "error" ? timeline.element("rect", { ...rectTracks(frames), rx }, `fill="${color}"`) : "";
+    out.push(`<g opacity="${shown[0]}">${timeline.animate("opacity", shown)}${failed}${element.kind === "button" ? "" : timeline.element("circle", { cx: badge.map((spot) => spot.cx), cy: badge.map((spot) => spot.cy), r: badge.map((spot) => spot.r) }, `fill="${color}"`)}<path d="${mark[0]}" fill="none" stroke="#fff" stroke-width="${formatNumber(Math.max(1.5 * k, size * 0.16))}" stroke-linecap="round" stroke-linejoin="round">${timeline.animateText("d", mark)}</path></g>`);
   }
   return out.join("");
 }
@@ -492,7 +502,7 @@ function elementMarkup(id, index, element, views, keys, timeline, k, radius, typ
   const font = typography?.stack || "ui-sans-serif, system-ui, sans-serif";
   const sized = (offset) => frames.map((rect) => offset(rect));
   const label = element.label ? escapeXml(element.label) : "";
-  const done = statuses.map((status) => (status === "done" ? 1 : 0));
+  const done = statuses.map((status) => (status === "done" || status === "error" ? 1 : 0));
   const hideOnDone = element.kind === "button" && done.some(Boolean) ? (markup) => `<g opacity="${1 - done[0]}">${timeline.animate("opacity", done.map((value) => 1 - value))}${markup}</g>` : (markup) => markup;
   // Pills size to their label, so they keep only their own inner padding.
   const padding = element.kind === "chip" || element.kind === "button" ? 12 : 28;

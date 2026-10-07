@@ -129,7 +129,7 @@ async function main() {
       const dir = `${site}-${index + 1}`;
       const run = { dir, run: index + 1, site };
       try {
-        const design = await designStories(recordingProvider(provider, log), { ...context, colors: 4 });
+        const design = await designStories(recordingProvider(provider, log), { ...context, colors: [0.55, 0.25, 0.12, 0.08] });
         Object.assign(run, { calls: design.calls, product: design.product, rejected: design.rejected, rejections: design.rejections, stories: design.stories });
         run.files = await render(analysis, site, design.stories, path.join(out, dir));
         run.score = scoreSet(design.stories);

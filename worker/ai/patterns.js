@@ -1,7 +1,8 @@
 // Named choreographies the story designer chooses from. Each is a mechanic,
 // not a screen: the model keeps the move's steps and builds the screen from
-// the product's own objects. Patterns are wordless on purpose: skeletons read
-// better than text, and examples are what the model copies most. Every pattern is a complete, valid plan so the
+// the product's own objects. Patterns are wordless and untoned on purpose:
+// skeletons read better than text, untoned items take shades of the main
+// color, and examples are what the model copies most. Every pattern is a complete, valid plan so the
 // model sees the exact syntax, and each comes from a different made-up
 // product so no single screen becomes the template.
 
@@ -17,9 +18,9 @@ export const MOVES = Object.freeze({
         "detail-bar-b": { kind: "bar" },
         "detail-title": { kind: "text" },
         queue: { kind: "panel" },
-        "req-1": { kind: "row", state: "pending", tone: "tag-2" },
-        "req-2": { kind: "row", tone: "tag-3" },
-        "req-3": { kind: "row", tone: "tag-1" },
+        "req-1": { kind: "row", state: "pending" },
+        "req-2": { kind: "row" },
+        "req-3": { kind: "row" },
       },
       label: "Approve request",
       screen: { children: [{ children: ["req-1", "req-2", "req-3"], id: "queue", type: "panel" }, { children: ["detail-title", "detail-bar-a", "detail-bar-b", "approve"], id: "detail", type: "panel" }], type: "row" },
@@ -36,9 +37,9 @@ export const MOVES = Object.freeze({
       elements: {
         composer: { kind: "panel" },
         note: { kind: "field" },
-        "note-new": { kind: "card", tone: "tag-2" },
-        "note-a": { kind: "card", tone: "tag-1" },
-        "note-b": { kind: "card", tone: "tag-3" },
+        "note-new": { kind: "card" },
+        "note-a": { kind: "card" },
+        "note-b": { kind: "card" },
         send: { kind: "button" },
         thread: { kind: "panel" },
       },
@@ -56,9 +57,9 @@ export const MOVES = Object.freeze({
       copy: { description: "Add a step and wire it into the flow.", eyebrow: "Automations", title: "Connect the next step." },
       elements: {
         "add-step": { kind: "button" },
-        "step-a": { kind: "card", tone: "tag-1" },
-        "step-b": { kind: "card", tone: "tag-3" },
-        "step-new": { kind: "card", state: "pending", tone: "tag-2" },
+        "step-a": { kind: "card" },
+        "step-b": { kind: "card" },
+        "step-new": { kind: "card", state: "pending" },
         trigger: { kind: "chip", tone: "accent" },
       },
       label: "Add step",
@@ -77,10 +78,10 @@ export const MOVES = Object.freeze({
         "chip-all": { kind: "chip", state: "on" },
         "chip-open": { kind: "chip" },
         "chip-near": { kind: "chip" },
-        "spot-a": { kind: "image", tone: "tag-1" },
-        "spot-b": { kind: "image", tone: "tag-2" },
-        "spot-c": { kind: "image", tone: "tag-3" },
-        "spot-d": { kind: "image", tone: "tag-4" },
+        "spot-a": { kind: "image" },
+        "spot-b": { kind: "image" },
+        "spot-c": { kind: "image" },
+        "spot-d": { kind: "image" },
       },
       label: "Filter listings",
       screen: { children: [{ children: ["chip-all", "chip-open", "chip-near"], gap: "tight", type: "row" }, { children: ["spot-a", "spot-b"], type: "row" }, { children: ["spot-c", "spot-d"], type: "row" }], type: "column" },
@@ -95,8 +96,8 @@ export const MOVES = Object.freeze({
     plan: {
       copy: { description: "Deploys roll out and the error rate settles on its own.", eyebrow: "Releases", title: "Ship and watch it land." },
       elements: {
-        "build-a": { kind: "row", tone: "tag-1", value: 0.3 },
-        "build-b": { kind: "row", tone: "tag-3", value: 0.8 },
+        "build-a": { kind: "row", value: 0.3 },
+        "build-b": { kind: "row", value: 0.8 },
         builds: { kind: "panel" },
         health: { kind: "trend", value: 0.35 },
         status: { kind: "chip", state: "pending" },
@@ -114,15 +115,15 @@ export const MOVES = Object.freeze({
     plan: {
       copy: { description: "Open a track and its details slide in beside the list.", eyebrow: "Library", title: "Everything about it, at a glance." },
       elements: {
-        cover: { kind: "image", tone: "tag-2" },
+        cover: { kind: "image" },
         detail: { kind: "panel" },
         "detail-bar": { kind: "bar" },
         "detail-title": { kind: "text" },
         library: { kind: "panel" },
         play: { kind: "toggle" },
-        "track-a": { kind: "row", tone: "tag-1" },
-        "track-b": { kind: "row", tone: "tag-2" },
-        "track-c": { kind: "row", tone: "tag-4" },
+        "track-a": { kind: "row" },
+        "track-b": { kind: "row" },
+        "track-c": { kind: "row" },
       },
       label: "Open track",
       screen: { children: [{ children: ["track-a", "track-b", "track-c"], id: "library", type: "panel" }, { children: ["detail-title", "detail-bar"], id: "detail", type: "panel" }], type: "row" },
@@ -138,11 +139,11 @@ export const MOVES = Object.freeze({
       copy: { description: "Orders arrive live and the busiest one is flagged.", eyebrow: "Live orders", title: "Never miss an order." },
       elements: {
         feed: { kind: "panel" },
-        "order-a": { kind: "row", tone: "tag-1" },
-        "order-b": { kind: "row", tone: "tag-3" },
-        "order-c": { kind: "row", tone: "tag-2" },
-        "order-new": { kind: "row", tone: "tag-4" },
-        "order-z": { kind: "row", tone: "tag-2" },
+        "order-a": { kind: "row" },
+        "order-b": { kind: "row" },
+        "order-c": { kind: "row" },
+        "order-new": { kind: "row" },
+        "order-z": { kind: "row" },
         rush: { kind: "chip", tone: "accent" },
         today: { kind: "chart", value: 0.4 },
       },
@@ -160,10 +161,10 @@ export const MOVES = Object.freeze({
       copy: { description: "Drag a ticket forward and the board makes room.", eyebrow: "Support", title: "Keep the queue moving." },
       elements: {
         doing: { kind: "panel" },
-        "t-1": { kind: "card", tone: "tag-1" },
-        "t-2": { kind: "card", tone: "tag-2" },
-        "t-3": { kind: "card", tone: "tag-3" },
-        "t-4": { kind: "card", tone: "tag-4" },
+        "t-1": { kind: "card" },
+        "t-2": { kind: "card" },
+        "t-3": { kind: "card" },
+        "t-4": { kind: "card" },
         todo: { kind: "panel" },
       },
       label: "Move ticket",

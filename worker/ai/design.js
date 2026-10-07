@@ -1,7 +1,7 @@
 import { validatePlan } from "../../src/scene-plan.js";
 import { MOVES } from "./patterns.js";
 import { ProviderError } from "./providers.js";
-import { BRIEF_PROMPT, BRIEF_SCHEMA, briefPrompt, STORY_PROMPT, STORY_SCHEMA, storyPrompt, storyRepairPrompt, SURFACES } from "./prompt.js";
+import { BRIEF_PROMPT, BRIEF_SCHEMA, briefPrompt, colorShares, MONOCHROME_SHARE, STORY_PROMPT, STORY_SCHEMA, storyPrompt, storyRepairPrompt, SURFACES } from "./prompt.js";
 
 const WANTED = 3;
 const REPAIR_ROUNDS = 2;
@@ -67,6 +67,31 @@ export function normalizeBriefs(features) {
 }
 
 const MAX_LABELS = 2;
+// Kinds whose tone shows as a colored dot, avatar, tag, or tile.
+const COLORED = new Set(["avatar", "card", "chip", "image", "row"]);
+
+/**
+ * Keeps a plan's secondary hues to the brand's own mix: a one-color brand
+ * gets none, otherwise about (1 - main share) of the colored elements may
+ * carry tag-2 and up, in the order the model listed them. Tones beyond the
+ * brand's hues, or over budget, fall back to shades of the main color.
+ */
+export function budgetColors(plan, colors) {
+  const shares = colorShares(colors);
+  const colored = Object.values(plan.elements).filter((element) => COLORED.has(element.kind)).length;
+  let allowed = shares.length < 2 || shares[0] >= MONOCHROME_SHARE ? 0 : Math.max(1, Math.round(colored * (1 - shares[0])));
+  const elements = Object.fromEntries(Object.entries(plan.elements).map(([id, element]) => {
+    const hue = Number(/^tag-([2-4])$/.exec(element.tone || "")?.[1]);
+    if (!hue) return [id, element];
+    if (hue <= shares.length && allowed > 0) {
+      allowed -= 1;
+      return [id, element];
+    }
+    const { tone, ...rest } = element;
+    return [id, rest];
+  }));
+  return { ...plan, elements };
+}
 
 /**
  * Caps a validated plan's labels to what the brief allows: none at all, or
@@ -119,7 +144,7 @@ async function designStory(provider, context, input, retry = null) {
     // asked again without it.
     if (draft && (!draft.screen || !draft.elements || Object.keys(draft.elements).length === 0)) schema = null;
     const result = validatePlan(draft, options);
-    if (result.ok) return { calls, draft, plan: limitWords(result.plan, input.brief.words, String(draft?.storyboard?.focus ?? "")) };
+    if (result.ok) return { calls, draft, plan: budgetColors(limitWords(result.plan, input.brief.words, String(draft?.storyboard?.focus ?? "")), context.colors) };
     const errors = result.errors.slice(0, 12);
     if (round >= REPAIR_ROUNDS) return { calls, errors, failure, plan: null };
     calls += 1;
