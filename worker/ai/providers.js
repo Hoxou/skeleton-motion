@@ -4,7 +4,14 @@ import { scrub } from "../log.js";
 // the parsed JSON object the model produced. Keys are used for the single
 // request they arrive with and are never logged or stored.
 
-const TIMEOUT_MS = 90_000;
+// A flash model answers a story in well under a minute; one that has not is
+// stuck, and the next model in the list is the better bet.
+const TIMEOUT_MS = 60_000;
+const MIN_TIMEOUT_MS = 5_000;
+
+// Time left for one call: the per-call cap, or less when the caller's
+// deadline (epoch ms) is closer.
+const timeoutFor = (deadline) => Math.max(MIN_TIMEOUT_MS, Math.min(TIMEOUT_MS, deadline ? deadline - Date.now() : TIMEOUT_MS));
 
 export class ProviderError extends Error {
   /** @param kind "auth" | "rate-limited" | "unavailable" | "bad-output" */
@@ -55,11 +62,11 @@ function cleanReason(text, secret) {
  * provider sends back. Redirects are refused so the credential header can
  * never follow a response to another host.
  */
-export async function request(url, { body, headers, method = "POST", secret }) {
+export async function request(url, { body, headers, method = "POST", secret, timeoutMs = TIMEOUT_MS }) {
   for (let attempt = 0; ; attempt += 1) {
     let response;
     try {
-      response = await fetch(url, { body: body === undefined ? undefined : JSON.stringify(body), headers: { "content-type": "application/json", ...headers }, method, redirect: "manual", signal: AbortSignal.timeout(TIMEOUT_MS) });
+      response = await fetch(url, { body: body === undefined ? undefined : JSON.stringify(body), headers: { "content-type": "application/json", ...headers }, method, redirect: "manual", signal: AbortSignal.timeout(timeoutMs) });
     } catch (error) {
       throw new ProviderError("unavailable", error.name === "TimeoutError" ? "The AI provider took too long to answer." : "The AI provider could not be reached.", error.name === "TimeoutError" ? 408 : 0);
     }
@@ -98,7 +105,7 @@ export function geminiProvider({ key, model = "gemini-3.8-flash,gemini-3.7-flash
   // Models found out of quota stay skipped for this provider's job, so later
   // calls do not wait through the same refusals again.
   const exhausted = new Set();
-  const call = (name, { schema, system, thinking, user }) => {
+  const call = (name, { deadline, schema, system, thinking, user }) => {
     const extras = !plain.has(name);
     return request(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(name)}:generateContent`, {
       body: {
@@ -114,6 +121,7 @@ export function geminiProvider({ key, model = "gemini-3.8-flash,gemini-3.7-flash
       },
       headers: { "x-goog-api-key": key },
       secret: key,
+      timeoutMs: timeoutFor(deadline),
     });
   };
   return {
@@ -124,6 +132,8 @@ export function geminiProvider({ key, model = "gemini-3.8-flash,gemini-3.7-flash
       let lastError;
       const usable = models.filter((name) => !exhausted.has(name));
       for (const name of usable.length ? usable : models) {
+        // Past the caller's deadline, another model would only make it later.
+        if (lastError && options.deadline && Date.now() >= options.deadline) break;
         current = name;
         try {
           let payload;
@@ -155,8 +165,9 @@ export function openAiCompatibleProvider({ baseUrl, key, model }) {
   const root = String(baseUrl || "https://api.openai.com/v1").replace(/\/+$/, "");
   return {
     label: `${new URL(root).hostname} (${model})`,
-    async json({ system, user }) {
+    async json({ deadline, system, user }) {
       const payload = await request(`${root}/chat/completions`, {
+        timeoutMs: timeoutFor(deadline),
         body: {
           messages: [{ content: system, role: "system" }, { content: user, role: "user" }],
           model,

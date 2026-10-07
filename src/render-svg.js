@@ -505,7 +505,13 @@ export function renderSvg(scene) {
   const markAt = (index) => (palette.colorMode === "multicolor" && accents.length > 1 ? accentAt(index) : shadeAt([100, 72, 50, 36][index]));
   const tintAt = (amount) => mixColors(accentAt(0), amount, palette.surface);
   // Checks read green and crosses red; the brand's own green or red when it has one.
-  const brandHue = (test) => accents.map(toHex).find((hex) => hex && test(hexHue(hex)));
+  // Only a strong brand color can stand in: a pale mint or blush reads as a tint, not as success or failure.
+  const strong = (hex) => {
+    const [r, g, b] = [1, 3, 5].map((index) => Number.parseInt(hex.slice(index, index + 2), 16) / 255);
+    const top = Math.max(r, g, b);
+    return top - Math.min(r, g, b) >= 0.45 && 0.2126 * r + 0.7152 * g + 0.0722 * b <= 0.7;
+  };
+  const brandHue = (test) => accents.map(toHex).find((hex) => hex && strong(hex) && test(hexHue(hex)));
   const success = brandHue((hue) => hue >= 90 && hue <= 170) || "#1fa463";
   const danger = brandHue((hue) => hue >= 345 || hue <= 15) || "#e5484d";
   const composed = scene.composed ? composeScene(scene) : undefined;

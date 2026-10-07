@@ -7,6 +7,11 @@ const WANTED = 3;
 const REPAIR_ROUNDS = 2;
 // Planning picks from short candidate lists; designing a story needs a little more thought.
 const THINKING = { brief: "minimal", story: "low" };
+// The whole set's model time. Repairs and redesigns only start while enough
+// is left, so a slow provider costs quality, not a hung page.
+const BUDGET_MS = 180_000;
+const REPAIR_MIN_MS = 25_000;
+const REDESIGN_MIN_MS = 40_000;
 
 function slug(value, taken) {
   const base = String(value || "story").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 28) || "story";
@@ -147,7 +152,7 @@ async function designStory(provider, context, input, retry = null) {
     const result = validatePlan(draft, options);
     if (result.ok) return { calls, draft, plan: budgetColors(limitWords(result.plan, input.brief.words, String(draft?.storyboard?.focus ?? "")), context.colors) };
     const errors = result.errors.slice(0, 12);
-    if (round >= REPAIR_ROUNDS) return { calls, errors, failure, plan: null };
+    if (round >= REPAIR_ROUNDS || provider.remaining() < REPAIR_MIN_MS) return { calls, errors, failure, plan: null };
     calls += 1;
     reply = await ask(storyRepairPrompt(context, input, { errors, plan: draft }));
   }
@@ -160,16 +165,18 @@ async function designStory(provider, context, input, retry = null) {
  * @returns {{ product, stories: Array<{ id, label, copy, plan, move, surface }>, calls, rejected, rejections, timings }}
  *   `timings` lists each model call's duration in ms, in completion order.
  */
-export async function designStories(source, context) {
+export async function designStories(source, context, { budgetMs = BUDGET_MS } = {}) {
   const timings = [];
+  const deadline = Date.now() + budgetMs;
   const provider = {
     get label() {
       return source.label;
     },
+    remaining: () => deadline - Date.now(),
     async json(options) {
       const started = Date.now();
       try {
-        return await source.json(options);
+        return await source.json({ ...options, deadline });
       } finally {
         timings.push(Date.now() - started);
       }
@@ -192,6 +199,7 @@ export async function designStories(source, context) {
       seen.set(mark, index);
       continue;
     }
+    if (provider.remaining() < REDESIGN_MIN_MS) continue;
     const twin = results[seen.get(mark)].plan.label;
     const errors = [`This plan works like the "${twin}" animation in the same set: the same kind of change, triggered the same way. Follow this brief's own move with different changes and another screen layout.`];
     const redo = await designStory(provider, context, inputs[index], { errors, plan: result.draft });

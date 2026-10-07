@@ -285,3 +285,11 @@ test("Gemini moves past a model that times out", async (context) => {
   await provider.json({ system: "s", user: "u" });
   assert.deepEqual(asked, ["fast-model"], "a model that timed out is skipped for the rest of the job");
 });
+
+test("repairs stop when the set's model time runs out", async () => {
+  const provider = fakeProvider({ stories: { "Plan cycles": [broken("Plan cycles"), named("Plan cycles", "Late fix")] } });
+  const slow = { ...provider, async json(request) { assert.ok(request.deadline > 0, "every call carries the deadline"); return provider.json(request); } };
+  const result = await designStories(slow, context, { budgetMs: 1_000 });
+  assert.equal(result.rejected, 1, "no repair starts with too little time left");
+  assert.equal(result.stories.length, 2);
+});
