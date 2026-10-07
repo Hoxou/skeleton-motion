@@ -95,6 +95,9 @@ export function geminiProvider({ key, model = "gemini-3.8-flash,gemini-3.7-flash
   const models = String(model).split(",").map((name) => name.trim()).filter(Boolean);
   let current = models[0];
   const plain = new Set();
+  // Models found out of quota stay skipped for this provider's job, so later
+  // calls do not wait through the same refusals again.
+  const exhausted = new Set();
   const call = (name, { schema, system, thinking, user }) => {
     const extras = !plain.has(name);
     return request(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(name)}:generateContent`, {
@@ -119,7 +122,8 @@ export function geminiProvider({ key, model = "gemini-3.8-flash,gemini-3.7-flash
     },
     async json(options) {
       let lastError;
-      for (const name of models) {
+      const usable = models.filter((name) => !exhausted.has(name));
+      for (const name of usable.length ? usable : models) {
         current = name;
         try {
           let payload;
@@ -138,6 +142,7 @@ export function geminiProvider({ key, model = "gemini-3.8-flash,gemini-3.7-flash
         } catch (error) {
           lastError = error;
           if (!tryNextModel(error)) throw error;
+          if (error.status === 429) exhausted.add(name);
         }
       }
       throw lastError;

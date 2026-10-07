@@ -83,6 +83,7 @@ Output JSON only, fields in this order:
   "label": "2-4 word action name",
   "copy": {"eyebrow": "2-3 words", "title": "headline under 48 characters", "description": "one sentence"},
   "elements": [{"id": "<id>", "kind": "<kind>", "label"?: "1-3 words", "tone"?: "<tone>", "state"?: "<state>", "value"?: 0..1}],
+  (value is how full the element looks: typed text, progress, chart height, line drawn; never a price, count, or amount, which go in the label)
   "screen": <node>,
   "steps": [{"by"?: {"click" | "drag" | "hover": "<id>"}, "do": [<change>, ...]}]
 }

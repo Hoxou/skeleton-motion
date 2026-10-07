@@ -110,3 +110,22 @@ test("a colorful brand's measured colors reach the marks of a designed story", a
   assert.match(svg, /data-plan-id="ana"[^]*?<circle [^>]*fill="var\(--mark-2\)"/);
   assert.match(svg, /data-plan-id="paid"[^]*?<rect [^>]*fill="var\(--tag-2\)"/);
 });
+
+test("a cached probe from before brand colors were measured is measured again", async () => {
+  const { measureBrand } = await import("../worker/brand.js");
+  const fresh = { accent: "#635bff", colors: ["#00d4ff"] };
+  const envFor = (probe) => {
+    const measured = [];
+    return {
+      BROWSER_GATE: { get: () => ({ measure: async (href) => { measured.push(href); return { ms: 1, probe: fresh, via: "session" }; } }), idFromName: () => "global" },
+      DB: { prepare: () => ({ bind: () => ({ first: async () => ({ measured_at: new Date().toISOString(), probe: JSON.stringify(probe), status: "ok" }), run: async () => ({}) }) }) },
+      measured,
+    };
+  };
+  const old = envFor({ accent: "#635bff", background: "#ffffff" });
+  assert.equal((await measureBrand(old, new URL("https://pay.example/"))).source, "session");
+  assert.equal(old.measured.length, 1);
+  const current = envFor({ accent: "#635bff", colors: [] });
+  assert.equal((await measureBrand(current, new URL("https://pay.example/"))).source, "cache");
+  assert.equal(current.measured.length, 0);
+});

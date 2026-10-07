@@ -106,9 +106,24 @@ async function designStory(provider, context, input, retry = null) {
  * Plans candidate features, picks three different ones, then designs each
  * story independently and in parallel so no story is written while looking
  * at another. A story that still works like a sibling is redesigned once.
- * @returns {{ product, stories: Array<{ id, label, copy, plan, move, surface }>, calls, rejected, rejections }}
+ * @returns {{ product, stories: Array<{ id, label, copy, plan, move, surface }>, calls, rejected, rejections, timings }}
+ *   `timings` lists each model call's duration in ms, in completion order.
  */
-export async function designStories(provider, context) {
+export async function designStories(source, context) {
+  const timings = [];
+  const provider = {
+    get label() {
+      return source.label;
+    },
+    async json(options) {
+      const started = Date.now();
+      try {
+        return await source.json(options);
+      } finally {
+        timings.push(Date.now() - started);
+      }
+    },
+  };
   const first = await provider.json({ schema: BRIEF_SCHEMA, system: BRIEF_PROMPT, thinking: THINKING, user: briefPrompt(context) });
   const product = first.data?.product && typeof first.data.product === "object" ? first.data.product : {};
   const briefs = normalizeBriefs(first.data?.candidates ?? first.data?.features);
@@ -147,5 +162,6 @@ export async function designStories(provider, context) {
     rejected: failures.length,
     rejections: failures.map((failure) => failure.errors.slice(0, 6)),
     stories,
+    timings,
   };
 }

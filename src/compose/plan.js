@@ -463,10 +463,12 @@ function elementMarkup(id, index, element, views, keys, timeline, k, radius, typ
   // or leaves, so collapsing items never stack readable text on each other.
   const full = { height: Math.max(...frames.map((rect) => rect.height)), width: Math.max(...frames.map((rect) => rect.width)) };
   const growth = frames.map((rect) => Math.max(0, Math.min(1, rect.height / Math.max(full.height, 1e-6), rect.width / Math.max(full.width, 1e-6))));
+  // A row with a value keeps its label clear of the progress strip on its right.
+  const room = valued && element.kind === "row" ? full.width * 0.55 - 50 * k : full.width - (element.kind === "text" ? 0 : padding * k);
   const text = (size, place, attributes) => {
     if (!label) return "";
     const anchors = sized(place);
-    const fitted = escapeXml(textFit(element.label, full.width - (element.kind === "text" ? 0 : padding * k), size * k));
+    const fitted = escapeXml(textFit(element.label, room, size * k));
     if (!fitted) return "";
     return timeline.element("text", { "font-size": growth.map((scale) => size * k * scale), x: anchors.map((point) => point.x), y: anchors.map((point) => point.y) }, `font-family="${escapeXml(font)}" ${attributes}`, fitted);
   };

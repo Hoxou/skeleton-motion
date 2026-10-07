@@ -188,7 +188,7 @@ export async function createJob(env, ownerHash, body) {
     "INSERT INTO jobs (id, owner_hash, source, name, collection, hero_light, hero_dark, heroes, asset_count, file_count, created_at, visibility) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
   ).bind(job.id, ownerHash, job.source, job.name, job.collection, job.heroLight, job.heroDark, JSON.stringify(heroes), job.assetCount, job.fileCount, job.createdAt, job.visibility).run();
 
-  return { ...job, ai: { calls: design.calls, hosted: access.hosted, provider: access.provider.label, rejected: design.rejected }, brandSource, durationMs: Date.now() - startedAt, url: `/jobs/${id}/` };
+  return { ...job, ai: { calls: design.calls, hosted: access.hosted, provider: access.provider.label, rejected: design.rejected, rejections: design.rejections, timings: design.timings }, brandSource, durationMs: Date.now() - startedAt, url: `/jobs/${id}/` };
 }
 
 function heroesOf(row) {

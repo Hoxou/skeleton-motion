@@ -10,6 +10,9 @@ async function cached(env, host) {
   if (!row) return null;
   const age = Date.now() - Date.parse(row.measured_at);
   if (age > (row.status === "ok" ? OK_TTL_MS : EMPTY_TTL_MS)) return null;
+  // Probes stored before secondary brand colors were measured lack them;
+  // measure again rather than render a colorful brand in one hue.
+  if (row.status === "ok" && !/"colors"\s*:/.test(row.probe || "")) return null;
   return { probe: row.status === "ok" ? parseProbe(row.probe) : null };
 }
 

@@ -230,3 +230,21 @@ test("Gemini moves to the next model when one is out of quota", async (context) 
   assert.deepEqual(asked, ["first-model", "first-model", "second-model"]);
   assert.equal(provider.label, "Gemini (second-model)");
 });
+
+test("a model found out of quota is skipped by later calls", async (context) => {
+  const asked = [];
+  const original = globalThis.fetch;
+  const originalTimeout = globalThis.setTimeout;
+  context.after(() => { globalThis.fetch = original; globalThis.setTimeout = originalTimeout; });
+  globalThis.setTimeout = (callback) => originalTimeout(callback, 0);
+  globalThis.fetch = async (url) => {
+    asked.push(String(url).match(/models\/([^:]+)/)[1]);
+    if (String(url).includes("first-model")) return new Response(JSON.stringify({ error: { message: "quota" } }), { status: 429 });
+    return new Response(JSON.stringify({ candidates: [{ content: { parts: [{ text: "{}" }] } }] }), { status: 200 });
+  };
+  const provider = geminiProvider({ key: "test-key", model: "first-model,second-model" });
+  await provider.json({ system: "s", user: "u" });
+  asked.length = 0;
+  await provider.json({ system: "s", user: "u" });
+  assert.deepEqual(asked, ["second-model"]);
+});
