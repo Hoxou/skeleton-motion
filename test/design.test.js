@@ -212,3 +212,21 @@ test("reads same-site product pages first and skips account, legal, and off-site
   assert.deepEqual(productLinks(html, "https://tracker.example/"), ["https://tracker.example/product", "https://tracker.example/features/issues", "https://docs.tracker.example/guides/start"]);
   assert.deepEqual(pageSummary("<title>Issues</title><h1>Track bugs</h1>", "https://www.tracker.example/features/issues/"), { headings: ["Track bugs"], path: "tracker.example/features/issues", title: "Issues" });
 });
+
+test("Gemini moves to the next model when one is out of quota", async (context) => {
+  const asked = [];
+  const original = globalThis.fetch;
+  const originalTimeout = globalThis.setTimeout;
+  context.after(() => { globalThis.fetch = original; globalThis.setTimeout = originalTimeout; });
+  // The single 429 retry waits 5 s; run it at once.
+  globalThis.setTimeout = (callback) => originalTimeout(callback, 0);
+  globalThis.fetch = async (url) => {
+    asked.push(String(url).match(/models\/([^:]+)/)[1]);
+    if (String(url).includes("first-model")) return new Response(JSON.stringify({ error: { message: "You exceeded your current quota" } }), { status: 429 });
+    return new Response(JSON.stringify({ candidates: [{ content: { parts: [{ text: "{\"ok\":true}" }] } }] }), { status: 200 });
+  };
+  const provider = geminiProvider({ key: "test-key", model: "first-model,second-model" });
+  assert.deepEqual((await provider.json({ system: "s", user: "u" })).data, { ok: true });
+  assert.deepEqual(asked, ["first-model", "first-model", "second-model"]);
+  assert.equal(provider.label, "Gemini (second-model)");
+});

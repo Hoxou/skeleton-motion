@@ -76,8 +76,9 @@ export async function request(url, { body, headers, method = "POST", secret }) {
   }
 }
 
-// Worth trying the next model: this one is overloaded or retired.
-const tryNextModel = (error) => error instanceof ProviderError && (error.status === 404 || error.status >= 500);
+// Worth trying the next model: this one is overloaded, retired, or out of
+// quota (Gemini quotas are per model, so the next one may still have room).
+const tryNextModel = (error) => error instanceof ProviderError && (error.status === 404 || error.status === 429 || error.status >= 500);
 
 // Gemini 3 degrades below its default temperature of 1.0 (Google's Gemini 3
 // guide), and diversity matters more than determinism here.
