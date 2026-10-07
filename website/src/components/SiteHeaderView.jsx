@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "@base-ui/react/button";
+import { Menu } from "@base-ui/react/menu";
 import styles from "./SiteHeader.module.css";
 
 // Framework-free so the Display Room (tools/preview-shell) renders the same
@@ -15,7 +16,7 @@ const LINKS = [
 function ThemeToggle({ isDark, onToggle }) {
   return (
     <Button
-      className={styles.themeToggle}
+      className={styles.iconButton}
       type="button"
       aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
       onClick={onToggle}
@@ -37,6 +38,30 @@ function ThemeToggle({ isDark, onToggle }) {
   );
 }
 
+// Phones only (see the 820px rule in SiteHeader.module.css); the theme toggle stays outside it.
+function BurgerMenu({ LinkComponent }) {
+  return (
+    <Menu.Root>
+      <Menu.Trigger className={`${styles.iconButton} ${styles.burger}`} aria-label="Open menu">
+        <svg viewBox="0 0 18 18" width="18" height="18" aria-hidden="true">
+          <path d="M3 5.5h12M3 9h12M3 12.5h12" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
+        </svg>
+      </Menu.Trigger>
+      <Menu.Portal>
+        <Menu.Positioner className={styles.menuPositioner} align="end" sideOffset={8}>
+          <Menu.Popup className={styles.menuPopup}>
+            {LINKS.map(({ label, ...target }) => (
+              <Menu.LinkItem key={label} className={styles.menuItem} closeOnClick render={<LinkComponent {...target} />}>
+                {label}
+              </Menu.LinkItem>
+            ))}
+          </Menu.Popup>
+        </Menu.Positioner>
+      </Menu.Portal>
+    </Menu.Root>
+  );
+}
+
 /**
  * @param LinkComponent receives `to` (site path) or `href` (external URL).
  * @param onToggleTheme omit to hide the theme toggle.
@@ -55,8 +80,9 @@ export default function SiteHeaderView({ LinkComponent, isDark, onToggleTheme })
     <header className={`${styles.siteHeader} ${hidden ? styles.siteHeaderHidden : ""}`}>
       <LinkComponent className={styles.wordmark} to="/">Skeleton Motion</LinkComponent>
       <nav className={styles.siteNav} aria-label="Main navigation">
-        {LINKS.map(({ label, ...target }) => <LinkComponent key={label} {...target}>{label}</LinkComponent>)}
+        {LINKS.map(({ label, ...target }) => <LinkComponent key={label} className={styles.navLink} {...target}>{label}</LinkComponent>)}
         {onToggleTheme && <ThemeToggle isDark={isDark} onToggle={onToggleTheme} />}
+        <BurgerMenu LinkComponent={LinkComponent} />
       </nav>
     </header>
   );

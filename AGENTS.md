@@ -79,10 +79,12 @@ across pages, not one-off styling per page.
   surface. Don't give it a `background`/`box-shadow` — the "floating" look
   depends on content showing through.
 - The icon-only theme toggle (`ThemeToggle` in `SiteHeaderView.jsx`) is a circular
-  `.themeToggle` button (36px, `border-radius: 50%`, `background:
+  `.iconButton` (36px, `border-radius: 50%`, `background:
   var(--home-soft)`) living inside that same floating nav — same
   hover/focus treatment as the other nav controls, not a different widget
-  style.
+  style. At 820px and below the text links collapse into `BurgerMenu`
+  (Base UI `Menu`), whose trigger is the same `.iconButton`; the theme
+  toggle stays visible next to it.
 - Dialogs, tiles, and CTA bands (`.dialogPopup`, `.tile`, `.finalCta`) all
   use large radii (`14px`–`28px`) and sit as distinct "cards" against a flat
   page background — nothing is flush/edge-to-edge except the page itself.

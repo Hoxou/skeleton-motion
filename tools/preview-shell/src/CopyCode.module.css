@@ -27,17 +27,5 @@
 .tab[data-active] { background: var(--home-page); color: var(--home-ink); }
 
 .label { margin: .3rem 0 -.4rem; color: var(--home-muted); font-size: .8rem; font-weight: 630; letter-spacing: .04em; text-transform: uppercase; }
-.code {
-  margin: 0;
-  padding: 1rem 1.1rem;
-  overflow: auto;
-  border-radius: 16px;
-  background: var(--home-soft);
-  color: var(--home-ink);
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: .8rem;
-  line-height: 1.55;
-  white-space: pre;
-}
 .source { max-height: 300px; }
 .actions { display: flex; flex-wrap: wrap; gap: .5rem; }

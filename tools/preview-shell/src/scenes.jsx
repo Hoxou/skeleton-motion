@@ -1,19 +1,24 @@
 import React from "react";
 import styles from "./scenes.module.css";
 
-// The CLI writes the primary frame shape first; Display/Card/... show it.
-function primaryVariants(asset) {
-  const primary = asset.variants[0].format;
-  return asset.variants.filter((variant) => variant.format === primary);
-}
-
 function formatsOf(asset) {
   return [...new Set(asset.variants.map((variant) => variant.format).filter(Boolean))];
 }
 
+/** Every frame shape in the set, primary (first written by the CLI) first. */
+export function setFormats(assets) {
+  return [...new Set(assets.flatMap(formatsOf))];
+}
+
+// Assets without the chosen shape fall back to their primary (first) one.
+function variantsFor(asset, format) {
+  const chosen = formatsOf(asset).includes(format) ? format : asset.variants[0].format;
+  return asset.variants.filter((variant) => variant.format === chosen);
+}
+
 // A light/dark pair swaps purely in CSS (same pattern as the site's asset
 // galleries); a single-theme asset stays visible in both themes.
-function AssetImage({ asset, variants = primaryVariants(asset), detail = "" }) {
+function AssetImage({ asset, format, variants = variantsFor(asset, format), detail = "" }) {
   const light = variants.find((variant) => variant.theme === "light") || variants[0];
   const dark = variants.find((variant) => variant.theme === "dark");
   const image = (variant, className) => (
@@ -22,6 +27,7 @@ function AssetImage({ asset, variants = primaryVariants(asset), detail = "" }) {
       src={`./${variant.file}`}
       width={variant.width}
       height={variant.height}
+      style={{ "--asset-ratio": variant.width / variant.height }}
       alt={`${asset.label} product motion${detail}, ${variant.theme} theme`}
     />
   );
@@ -39,58 +45,58 @@ function Copy({ asset, heading: Heading = "h2", titleClass = "" }) {
   );
 }
 
-function Display({ asset }) {
-  return <div className={styles.displaySlot}><AssetImage asset={asset} /></div>;
+function Display({ asset, format }) {
+  return <div className={styles.displaySlot}><AssetImage asset={asset} format={format} /></div>;
 }
 
-function Card({ asset }) {
+function Card({ asset, format }) {
   return (
     <article className={`${styles.surface} ${styles.featureCard}`}>
       <Copy asset={asset} />
-      <div><AssetImage asset={asset} /></div>
+      <div><AssetImage asset={asset} format={format} /></div>
     </article>
   );
 }
 
-function Split({ asset }) {
+function Split({ asset, format }) {
   return (
     <div className={styles.splitLayout}>
       <Copy asset={asset} heading="h1" />
-      <div><AssetImage asset={asset} /></div>
+      <div><AssetImage asset={asset} format={format} /></div>
     </div>
   );
 }
 
-function Bento({ asset }) {
+function Bento({ asset, format }) {
   return (
     <div className={styles.bentoLayout}>
-      <div className={`${styles.surface} ${styles.bentoAsset}`}><AssetImage asset={asset} /></div>
+      <div className={`${styles.surface} ${styles.bentoAsset}`}><AssetImage asset={asset} format={format} /></div>
       <div className={`${styles.surface} ${styles.bentoCopy}`}><Copy asset={asset} titleClass={styles.bentoTitle} /></div>
       <div className={`${styles.surface} ${styles.bentoDetail}`} aria-hidden="true" />
     </div>
   );
 }
 
-function Story({ assets }) {
+function Story({ assets, format }) {
   return (
     <div className={styles.storyLayout}>
       {assets.map((asset, index) => (
         <article key={asset.id} className={`${styles.storyRow} ${index % 2 ? styles.storyRowReverse : ""}`}>
           <Copy asset={asset} titleClass={styles.storyTitle} />
-          <div className={styles.storyAsset}><AssetImage asset={asset} /></div>
+          <div className={styles.storyAsset}><AssetImage asset={asset} format={format} /></div>
         </article>
       ))}
     </div>
   );
 }
 
-function Overview({ assets }) {
+function Overview({ assets, format }) {
   return (
     <div className={styles.setGrid}>
       {assets.map((asset) => (
         <article key={asset.id} className={`${styles.surface} ${styles.setCard}`}>
           <div className={styles.setCardLabel}>{asset.label}</div>
-          <AssetImage asset={asset} />
+          <AssetImage asset={asset} format={format} />
         </article>
       ))}
     </div>
@@ -122,7 +128,7 @@ const SCENES = [
   { id: "bento", label: "Bento", Scene: Bento },
   { id: "story", label: "Story", Scene: Story, showsAllAssets: true, available: (assets) => assets.length > 1 },
   { id: "overview", label: "Set", Scene: Overview, showsAllAssets: true, available: (assets) => assets.length > 1 },
-  { id: "formats", label: "Formats", Scene: Formats, available: (assets) => assets.some((asset) => formatsOf(asset).length > 1) },
+  { id: "formats", label: "Formats", Scene: Formats, showsAllFormats: true, available: (assets) => assets.some((asset) => formatsOf(asset).length > 1) },
 ];
 
 export function scenesFor(assets) {

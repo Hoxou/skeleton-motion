@@ -8,12 +8,11 @@ import { Field } from "@base-ui/react/field";
 import { Form } from "@base-ui/react/form";
 import "@fontsource-variable/instrument-sans";
 import AiKeyDialog from "../components/AiKeyDialog";
+import GeneratingStage from "../components/GeneratingStage";
 import { PROVIDERS } from "../components/aiKey";
 import SiteHeader from "../components/SiteHeader";
 import buttons from "../components/buttons.module.css";
 import styles from "./index.module.css";
-
-const STORAGE_KEY = "skeleton-motion:v1:pending-source";
 
 const DIALOGS = {
   folder: {
@@ -37,6 +36,28 @@ async function requestJob(source) {
   return body.job;
 }
 
+// Matches the 820px breakpoint where the source form docks to the bottom.
+const DOCKED_QUERY = "(max-width: 820px)";
+
+// Height of the on-screen keyboard (or any browser UI) covering the bottom of
+// the layout viewport. A fixed bottom bar stays under the iOS keyboard unless
+// it is lifted by this much.
+function useKeyboardInset() {
+  const [inset, setInset] = useState(0);
+  useEffect(() => {
+    const viewport = window.visualViewport;
+    if (!viewport) return undefined;
+    const measure = () => setInset(Math.max(0, Math.round(window.innerHeight - viewport.height - viewport.offsetTop)));
+    viewport.addEventListener("resize", measure);
+    viewport.addEventListener("scroll", measure);
+    return () => {
+      viewport.removeEventListener("resize", measure);
+      viewport.removeEventListener("scroll", measure);
+    };
+  }, []);
+  return inset;
+}
+
 function MotionPicture({ alt, dark, light }) {
   return (
     <span className={styles.assetThemePair}>
@@ -55,6 +76,8 @@ function HomeContent() {
   const [quota, setQuota] = useState(null);
   const [keyDialog, setKeyDialog] = useState({ notice: "", open: false });
   const folderInput = useRef(null);
+  const sourceInput = useRef(null);
+  const keyboardInset = useKeyboardInset();
 
   const asset = (name) => ({
     light: useBaseUrl(`img/landing/${name}.light.svg`),
@@ -72,21 +95,14 @@ function HomeContent() {
 
   useEffect(() => {
     const linked = new URLSearchParams(window.location.search).get("source");
-    const saved = linked || window.localStorage.getItem(STORAGE_KEY);
-    if (saved) setSource(saved);
+    if (linked) setSource(linked);
     if (hosted) fetch("/api/ai/status").then((response) => response.json()).then(setQuota).catch(() => {});
   }, [hosted]);
-
-  function remember(value) {
-    setSource(value);
-    window.localStorage.setItem(STORAGE_KEY, value);
-  }
 
   async function submit(event) {
     event.preventDefault();
     const value = source.trim();
     if (!value || working) return;
-    remember(value);
     // The Pages mirror has no API; generation happens on the app origin.
     if (!hosted) {
       window.location.assign(`${appUrl}/?source=${encodeURIComponent(value)}`);
@@ -98,9 +114,9 @@ function HomeContent() {
       return;
     }
     setWorking(true);
+    window.scrollTo({ top: 0 });
     try {
       const job = await requestJob(value);
-      window.localStorage.removeItem(STORAGE_KEY);
       window.location.assign(job.url);
     } catch (error) {
       setWorking(false);
@@ -113,7 +129,7 @@ function HomeContent() {
     const file = event.target.files?.[0];
     if (!file) return;
     const folderName = file.webkitRelativePath?.split("/")[0] || file.name;
-    remember(folderName);
+    setSource(folderName);
     setDialog(DIALOGS.folder);
     event.target.value = "";
   }
@@ -154,76 +170,83 @@ function HomeContent() {
       <SiteHeader />
 
       <main className={`skeleton-motion-home ${styles.page}`}>
-        <section className={styles.hero} id="create">
-          <div className={styles.composer}>
-            <h1>What should move?</h1>
-            <Form className={styles.sourceForm} onSubmit={submit}>
-              <Field.Root name="source" className={styles.sourceField}>
-                <Field.Control
-                  aria-label="Repository path or public URL"
-                  autoComplete="off"
-                  disabled={working}
-                  onChange={(event) => setSource(event.target.value)}
-                  placeholder="Enter your product's URL"
-                  value={source}
-                />
-              </Field.Root>
-              <div className={styles.formActions}>
-                <Button className={`${buttons.actionButton} ${buttons.folderButton}`} type="button" onClick={() => folderInput.current?.click()}>Locate folder</Button>
-                <Button className={`${buttons.actionButton} ${buttons.createButton}`} type="submit" disabled={working}>{working ? "Generating" : "Create"}</Button>
+        {working ? <GeneratingStage source={source} /> : (
+          <>
+            <section className={styles.hero} id="create">
+              <div className={styles.composer}>
+                <h1>What should move?</h1>
+                <Form className={styles.sourceForm} onSubmit={submit} style={{ "--keyboard-inset": `${keyboardInset}px` }}>
+                  <Field.Root name="source" className={styles.sourceField}>
+                    <Field.Control
+                      ref={sourceInput}
+                      aria-label="Repository path or public URL"
+                      autoComplete="off"
+                      onChange={(event) => setSource(event.target.value)}
+                      placeholder="Enter your product's URL"
+                      value={source}
+                    />
+                  </Field.Root>
+                  <div className={styles.formActions}>
+                    <Button className={`${buttons.actionButton} ${buttons.folderButton} ${styles.locateFolder}`} type="button" onClick={() => folderInput.current?.click()}>Locate folder</Button>
+                    <Button className={`${buttons.actionButton} ${buttons.createButton}`} type="submit">Create</Button>
+                  </div>
+                  <input
+                    ref={folderInput}
+                    className={styles.folderInput}
+                    type="file"
+                    multiple
+                    webkitdirectory=""
+                    directory=""
+                    onChange={chooseFolder}
+                    tabIndex={-1}
+                    aria-hidden="true"
+                  />
+                </Form>
+                <p className={styles.status} aria-live="polite">
+                  {hosted && (
+          <>
+                      {quota?.ownKey ? `Using your own ${PROVIDERS[quota.ownKey.provider]?.label || "AI"} key. ` : quota ? `${quota.remaining} of ${quota.freeUses} free generations left. ` : ""}
+                      <Button className={styles.inlineLink} type="button" onClick={() => setKeyDialog({ notice: "", open: true })}>{quota?.ownKey ? "Manage key" : "Use your own AI key"}</Button>
+                      <span className={styles.statusNote}>Generations are listed in the public gallery with their page URL.</span>
+          </>
+                  )}
+                </p>
               </div>
-              <input
-                ref={folderInput}
-                className={styles.folderInput}
-                type="file"
-                multiple
-                webkitdirectory=""
-                directory=""
-                onChange={chooseFolder}
-                tabIndex={-1}
-                aria-hidden="true"
-              />
-            </Form>
-            <p className={styles.status} aria-live="polite">
-              {working ? "Reading the product and designing its animations. This can take a minute." : hosted && (
-                <>
-                  {quota?.ownKey ? `Using your own ${PROVIDERS[quota.ownKey.provider]?.label || "AI"} key. ` : quota ? `${quota.remaining} of ${quota.freeUses} free generations left. ` : ""}
-                  <Button className={styles.inlineLink} type="button" onClick={() => setKeyDialog({ notice: "", open: true })}>{quota?.ownKey ? "Manage key" : "Use your own AI key"}</Button>
-                  <span className={styles.statusNote}>Generations are listed in the public gallery with their page URL.</span>
-                </>
-              )}
-            </p>
-          </div>
-        </section>
+            </section>
 
-        <section className={styles.story} aria-label="How Skeleton Motion works">
-          {features.map((feature, index) => (
-            <article className={`${styles.feature} ${index % 2 ? styles.featureReverse : ""}`} key={feature.title}>
-              <div className={styles.featureCopy}>
-                <p className={styles.eyebrow}>{feature.eyebrow}</p>
-                <h2>{feature.title}</h2>
-                <p>{feature.body}</p>
-              </div>
-              <div className={styles.featureAsset}>
-                <MotionPicture {...feature.asset} alt={feature.alt} />
-              </div>
-            </article>
-          ))}
-        </section>
+            <section className={styles.story} aria-label="How Skeleton Motion works">
+              {features.map((feature, index) => (
+                <article className={`${styles.feature} ${index % 2 ? styles.featureReverse : ""}`} key={feature.title}>
+                  <div className={styles.featureCopy}>
+                    <p className={styles.eyebrow}>{feature.eyebrow}</p>
+                    <h2>{feature.title}</h2>
+                    <p>{feature.body}</p>
+                  </div>
+                  <div className={styles.featureAsset}>
+                    <MotionPicture {...feature.asset} alt={feature.alt} />
+                  </div>
+                </article>
+              ))}
+            </section>
 
-        <section className={styles.finalCta}>
-          <div>
-            <span>Make the useful moment move.</span>
-            <strong>Start with your product.</strong>
-          </div>
-          <Button
-            className={`${buttons.actionButton} ${buttons.createButton} ${styles.ctaButton}`}
-            type="button"
-            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-          >
-            Create
-          </Button>
-        </section>
+            <section className={styles.finalCta}>
+              <div>
+                <span>Make the useful moment move.</span>
+                <strong>Start with your product.</strong>
+              </div>
+              <Button
+                className={`${buttons.actionButton} ${buttons.createButton} ${styles.ctaButton}`}
+                type="button"
+                onClick={() => {
+                    if (window.matchMedia(DOCKED_QUERY).matches) sourceInput.current?.focus();
+                    else window.scrollTo({ top: 0, behavior: "smooth" });
+                  }}
+              >
+                Create
+              </Button>
+            </section>
+          </>
+        )}
       </main>
 
       <AiKeyDialog

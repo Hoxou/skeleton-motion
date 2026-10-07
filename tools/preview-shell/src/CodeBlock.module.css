@@ -1,0 +1,27 @@
+/* Chrome only: syntax colors derive from the --home-* tokens so both themes follow the site. */
+.code {
+  overflow: auto;
+  border-radius: 16px;
+  background: var(--home-soft);
+  color: var(--home-ink);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: .8rem;
+  line-height: 1.55;
+}
+.code :global(.ProseMirror) { outline: none; }
+/* Beats Tiptap's injected `.ProseMirror pre { white-space: pre-wrap }` so long lines scroll. */
+.code :global(.ProseMirror) pre { margin: 0; padding: 1rem 1.1rem; white-space: pre; background: none; }
+.code pre, .code code { color: inherit; font-family: inherit; font-size: inherit; line-height: inherit; }
+
+.code :global(.hljs-keyword),
+.code :global(.hljs-tag),
+.code :global(.hljs-name),
+.code :global(.hljs-built_in) { color: var(--home-blue); }
+.code :global(.hljs-attr),
+.code :global(.hljs-property),
+.code :global(.hljs-title) { color: color-mix(in oklab, var(--home-blue) 55%, var(--home-ink)); }
+.code :global(.hljs-string),
+.code :global(.hljs-number),
+.code :global(.hljs-literal) { color: color-mix(in oklab, var(--home-ink) 72%, var(--home-blue)); font-style: italic; }
+.code :global(.hljs-comment),
+.code :global(.hljs-meta) { color: var(--home-muted); }

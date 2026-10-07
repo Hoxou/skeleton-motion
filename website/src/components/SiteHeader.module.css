@@ -30,7 +30,7 @@
 .siteNav a { font-size: .9rem; font-weight: 560; letter-spacing: -.02em; }
 .wordmark:hover, .siteNav a:hover { color: var(--home-blue); text-decoration: none; }
 
-.themeToggle {
+.iconButton {
   display: grid;
   place-items: center;
   width: 36px;
@@ -44,20 +44,51 @@
   transition: background 160ms ease, color 160ms ease, transform 180ms ease;
 }
 
-.themeToggle:hover { background: var(--home-soft-hover); transform: translateY(-1px); }
-.themeToggle:focus-visible { outline: 3px solid color-mix(in oklab, var(--home-blue) 40%, transparent); outline-offset: 2px; }
+.iconButton:hover,
+.iconButton[data-popup-open] { background: var(--home-soft-hover); transform: translateY(-1px); }
+.iconButton:focus-visible { outline: 3px solid color-mix(in oklab, var(--home-blue) 40%, transparent); outline-offset: 2px; }
 .themeToggleIcon { display: block; }
+
+.siteNav .burger { display: none; }
+
+/* Portaled to <body>, so it sits on chrome tokens above the fixed header. */
+.menuPositioner { z-index: 30; outline: 0; }
+.menuPopup {
+  min-width: 180px;
+  padding: 5px;
+  border: 1px solid var(--home-soft-hover);
+  border-radius: 18px;
+  background: var(--home-page);
+  box-shadow: 0 18px 48px -18px rgb(0 0 0 / 28%);
+  outline: 0;
+  transform-origin: var(--transform-origin);
+  transition: opacity 160ms ease, transform 200ms cubic-bezier(.22, 1, .36, 1);
+}
+.menuPopup[data-starting-style],
+.menuPopup[data-ending-style] { opacity: 0; transform: translateY(-4px) scale(.98); }
+.menuItem {
+  display: flex;
+  align-items: center;
+  min-height: 42px;
+  padding: 0 .85rem;
+  border-radius: 12px;
+  color: var(--home-ink);
+  font-family: "Instrument Sans Variable", "Instrument Sans", ui-sans-serif, system-ui, sans-serif;
+  font-size: .95rem;
+  font-weight: 560;
+  letter-spacing: -.02em;
+  text-decoration: none;
+  outline: 0;
+}
+.menuItem:hover,
+.menuItem[data-highlighted] { background: var(--home-soft); color: var(--home-ink); text-decoration: none; }
 
 @media (max-width: 820px) {
   .siteHeader { padding: 22px; }
-  .siteNav { gap: .75rem; }
-  .siteNav a { font-size: .78rem; }
-}
-
-@media (max-width: 560px) {
-  .siteHeader { align-items: flex-start; gap: .9rem; }
   .wordmark { white-space: nowrap; }
-  .siteNav { max-width: 220px; justify-content: flex-end; flex-wrap: wrap; row-gap: .4rem; }
+  .siteNav { gap: .5rem; }
+  .siteNav .navLink { display: none; }
+  .siteNav .burger { display: grid; }
 }
 
 @media (prefers-reduced-motion: reduce) {

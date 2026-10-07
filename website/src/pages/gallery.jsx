@@ -152,7 +152,7 @@ function MyGenerations({ onBrowseAll }) {
             ))}
           </section>
           <div className={styles.recovery}>
-            <p>No account needed. This gallery lives in this browser. Public generations also appear under All; private ones are only listed here. Keep the gallery link to manage them from another browser, and keep it private: it also lets someone generate with an AI key you saved (they still cannot see the key).</p>
+            <p>Saved in this browser. Keep this link private.</p>
             <Button className={`${buttons.actionButton} ${buttons.folderButton} ${styles.copyButton}`} type="button" onClick={copyLink}>
               {copied ? "Link copied" : "Copy gallery link"}
             </Button>

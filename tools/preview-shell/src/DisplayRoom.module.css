@@ -20,8 +20,12 @@
 .stage {
   container-type: inline-size;
   display: grid;
+  --stage-padding: clamp(24px, 4vw, 56px);
+  /* Height a scene's asset can use without scrolling: viewport minus the room's
+     top/bottom padding, the stage padding, and its border. */
+  --stage-fit: calc(100svh - 118px - 2 * var(--stage-padding) - 2px);
   min-height: calc(100vh - 118px);
-  padding: clamp(24px, 4vw, 56px);
+  padding: var(--stage-padding);
   border: 1px solid var(--home-soft-hover);
   border-radius: 28px;
   background: var(--page);
@@ -43,12 +47,13 @@
 @media (max-width: 900px) {
   .room { grid-template-columns: 1fr; padding: 80px 22px 22px; }
   .panel { position: static; order: -1; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto; align-items: end; }
-  .stage { min-height: 0; }
+  /* The panel stacks above the stage here, so only the header is subtracted. */
+  .stage { --stage-fit: calc(100svh - 102px - 2 * var(--stage-padding) - 2px); min-height: 0; }
 }
 
 @media (max-width: 560px) {
   .room { gap: 12px; padding: 112px 14px 14px; }
   .panel { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
   .download { grid-column: 1 / -1; }
-  .stage { padding: 18px; border-radius: 22px; }
+  .stage { --stage-padding: 18px; --stage-fit: calc(100svh - 126px - 2 * var(--stage-padding) - 2px); border-radius: 22px; }
 }

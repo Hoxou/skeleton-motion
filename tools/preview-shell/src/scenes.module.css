@@ -1,7 +1,15 @@
 /* Scene layouts. Everything here is source-styled: colors, font, and radius
    come from the stage's custom properties (see DisplayRoom.jsx). */
 
-.asset { display: block; width: 100%; height: auto; }
+/* Tall shapes shrink so the whole frame fits the stage's visible height;
+   wide ones hit 100% first and keep filling the slot. --fit-inset subtracts
+   the scene's own padding around the asset. */
+.asset {
+  display: block;
+  width: min(100%, calc((var(--stage-fit, 100svh) - var(--fit-inset, 0px)) * var(--asset-ratio, 1)));
+  height: auto;
+  margin-inline: auto;
+}
 .darkAsset { display: none; }
 :global([data-theme="dark"]) .lightAsset { display: none; }
 :global([data-theme="dark"]) .darkAsset { display: block; }
@@ -14,12 +22,12 @@
 
 .displaySlot { width: min(100%, 760px); }
 
-.featureCard { width: min(100%, 900px); display: grid; grid-template-columns: .72fr 1.28fr; align-items: center; gap: 36px; padding: 34px; }
+.featureCard { --fit-inset: 70px; width: min(100%, 900px); display: grid; grid-template-columns: .72fr 1.28fr; align-items: center; gap: 36px; padding: 34px; }
 .splitLayout { width: min(100%, 1020px); display: grid; grid-template-columns: .8fr 1.2fr; align-items: center; gap: clamp(42px, 7cqi, 94px); }
 
 .bentoLayout { width: min(100%, 960px); display: grid; grid-template-columns: 1.42fr .58fr; grid-template-rows: 1fr 1fr; gap: 14px; }
 .bentoAsset, .bentoCopy, .bentoDetail { min-height: 180px; overflow: hidden; }
-.bentoAsset { grid-row: 1 / 3; display: grid; align-items: center; padding: 22px; }
+.bentoAsset { --fit-inset: 46px; grid-row: 1 / 3; display: grid; align-items: center; padding: 22px; }
 .bentoCopy { display: flex; flex-direction: column; justify-content: flex-end; padding: 26px; }
 .bentoTitle { max-width: 8ch; font-size: 30px; }
 .bentoDetail { position: relative; padding: 26px; }
@@ -33,13 +41,13 @@
 .storyTitle { font-size: clamp(28px, 3.8cqi, 44px); }
 
 .setGrid { width: min(100%, 1000px); display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
-.setCard { position: relative; min-height: 280px; display: grid; align-items: center; padding: 22px; overflow: hidden; }
+.setCard { --fit-inset: 46px; position: relative; min-height: 280px; display: grid; align-items: center; padding: 22px; overflow: hidden; }
 .setCardLabel { position: absolute; z-index: 1; top: 18px; left: 20px; color: var(--copy); font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
 
 .formatsRow { width: 100%; display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: center; gap: 24px; }
 .formatFigure { margin: 0; display: grid; gap: 10px; justify-items: start; }
 .formatFrame { height: min(46vh, 320px); }
-.formatFrame .asset { height: 100%; }
+.formatFrame .asset { width: 100%; height: 100%; }
 .formatCaption { color: var(--copy); font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
 
 /* Sized against the stage, not the viewport: the panel takes width too. */

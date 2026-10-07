@@ -2,13 +2,14 @@ import React, { useEffect, useState } from "react";
 import { Button } from "@base-ui/react/button";
 import { Dialog } from "@base-ui/react/dialog";
 import { Tabs } from "@base-ui/react/tabs";
+import CodeBlock from "./CodeBlock.jsx";
 import buttons from "../../../website/src/components/buttons.module.css";
 import { componentName, elementName, groupVariants, htmlCode, reactCode } from "./exportCode.js";
 import styles from "./CopyCode.module.css";
 
 const FORMATS = {
-  react: { build: reactCode, extension: "jsx", label: "React", type: "text/javascript" },
-  html: { build: htmlCode, extension: "html", label: "HTML", type: "text/html" },
+  react: { build: reactCode, extension: "jsx", label: "React", language: "javascript", type: "text/javascript" },
+  html: { build: htmlCode, extension: "html", label: "HTML", language: "xml", type: "text/html" },
 };
 
 async function loadSvgs(shapes) {
@@ -54,7 +55,7 @@ export default function CopyCode({ asset }) {
 
   useEffect(() => setCopied(false), [format, asset.id]);
 
-  const { build, extension, label, type } = FORMATS[format];
+  const { build, extension, label, language, type } = FORMATS[format];
   const code = svgs ? build({ ...input, svgByFile: svgs }) : "";
 
   async function copy() {
@@ -87,11 +88,14 @@ export default function CopyCode({ asset }) {
             </Tabs.List>
           </Tabs.Root>
           <p className={styles.label}>Use it</p>
-          <pre className={styles.code}><code>{usageLine(format, asset.label)}</code></pre>
+          <CodeBlock code={usageLine(format, asset.label)} label="Usage" language={language} />
           <p className={styles.label}>{componentName(asset.label)}.{extension}</p>
-          <pre className={`${styles.code} ${styles.source}`}>
-            <code>{error || (svgs ? build({ ...input, svgByFile: elided(svgs) }) : "Loading animation files")}</code>
-          </pre>
+          <CodeBlock
+            className={styles.source}
+            code={error || (svgs ? build({ ...input, svgByFile: elided(svgs) }) : "Loading animation files")}
+            label={`${componentName(asset.label)}.${extension}`}
+            language={svgs ? language : "plaintext"}
+          />
           <div className={styles.actions}>
             <Button className={`${buttons.actionButton} ${buttons.createButton}`} type="button" disabled={!svgs} onClick={copy}>
               {copied ? "Copied" : `Copy ${label}`}

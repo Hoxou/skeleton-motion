@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import SiteHeaderView from "../../../website/src/components/SiteHeaderView.jsx";
 import buttons from "../../../website/src/components/buttons.module.css";
+import AspectButton from "./AspectButton.jsx";
 import CopyCode from "./CopyCode.jsx";
 import RoomSelect from "./RoomSelect.jsx";
-import { scenesFor } from "./scenes.jsx";
+import { scenesFor, setFormats } from "./scenes.jsx";
 import styles from "./DisplayRoom.module.css";
 
 // Hosted generations live under /jobs/ on the app origin and link back to
@@ -12,9 +13,10 @@ const SITE = typeof window !== "undefined" && window.location.pathname.startsWit
   ? window.location.origin
   : "https://hoxou.github.io/skeleton-motion";
 
-function SiteLink({ href, to, ...props }) {
-  return <a href={href ?? `${SITE}${to}`} {...props} />;
-}
+// Forwards its ref so Base UI's menu can focus the header links.
+const SiteLink = React.forwardRef(function SiteLink({ href, to, ...props }, ref) {
+  return <a ref={ref} href={href ?? `${SITE}${to}`} {...props} />;
+});
 
 function useTheme() {
   const [theme, setThemeState] = useState(() => document.documentElement.dataset.theme);
@@ -27,20 +29,23 @@ function useTheme() {
 }
 
 // Set asset ids carry the collection prefix; `?asset=insert-step` works too.
-function viewFromUrl(scenes, assets) {
+function viewFromUrl(scenes, assets, aspects) {
   const params = new URLSearchParams(location.search);
   const scene = params.get("scene");
   const asset = params.get("asset");
+  const aspect = params.get("aspect");
   return {
+    aspect: aspects.includes(aspect) ? aspect : aspects[0] ?? null,
     assetId: assets.find((item) => item.id === asset || item.id.endsWith(`.${asset}`))?.id ?? assets[0].id,
     sceneId: scenes.find((item) => item.id === scene)?.id ?? scenes[0].id,
   };
 }
 
-function writeUrl({ assetId, sceneId }) {
+function writeUrl({ aspect, assetId, sceneId }) {
   const params = new URLSearchParams(location.search);
   params.set("scene", sceneId);
   params.set("asset", assetId);
+  if (aspect) params.set("aspect", aspect);
   history.replaceState(null, "", `?${params}`);
 }
 
@@ -66,8 +71,9 @@ function stageStyle(source, theme) {
 export default function DisplayRoom({ data }) {
   const { archive, assets, source } = data;
   const scenes = scenesFor(assets);
+  const aspects = setFormats(assets);
   const [theme, setTheme] = useTheme();
-  const [view, setView] = useState(() => viewFromUrl(scenes, assets));
+  const [view, setView] = useState(() => viewFromUrl(scenes, assets, aspects));
   const scene = scenes.find((item) => item.id === view.sceneId);
   const asset = assets.find((item) => item.id === view.assetId);
   const update = (change) => {
@@ -86,8 +92,8 @@ export default function DisplayRoom({ data }) {
       <div className={styles.room}>
         <main className={styles.stage} style={stageStyle(source, theme)} aria-label="Display Room">
           {source.fontFile && <style>{`@font-face { font-family: "Source Preview"; src: url("./${source.fontFile}"); font-display: swap; }`}</style>}
-          <section key={scene.id} className={styles.scene}>
-            <scene.Scene asset={asset} assets={assets} />
+          <section key={`${scene.id}:${view.aspect}`} className={styles.scene}>
+            <scene.Scene asset={asset} assets={assets} format={view.aspect} />
           </section>
         </main>
         <aside className={styles.panel} aria-label="Display controls">
@@ -104,6 +110,14 @@ export default function DisplayRoom({ data }) {
             value={asset.id}
             onValueChange={(assetId) => update({ assetId })}
           />
+          {aspects.length > 1 && (
+            <AspectButton
+              aspects={aspects}
+              disabled={Boolean(scene.showsAllFormats)}
+              value={view.aspect}
+              onChange={(aspect) => update({ aspect })}
+            />
+          )}
           <a className={`${buttons.actionButton} ${buttons.createButton} ${styles.download}`} href={`./${archive}`} download>
             Download ZIP
           </a>
