@@ -79,31 +79,57 @@ export async function request(url, { body, headers, method = "POST", secret }) {
 // Worth trying the next model: this one is overloaded or retired.
 const tryNextModel = (error) => error instanceof ProviderError && (error.status === 404 || error.status >= 500);
 
+// Gemini 3 degrades below its default temperature of 1.0 (Google's Gemini 3
+// guide), and diversity matters more than determinism here.
+const TEMPERATURE = 1;
+
 /**
  * @param model one model id or a comma-separated fallback list, tried in
  *   order while a model is overloaded or no longer offered.
+ * `json({ schema, thinking })` adds a response JSON schema and a thinking
+ * level; a model that rejects either (400) is asked again without them, and
+ * this provider stops sending them.
  */
 export function geminiProvider({ key, model = "gemini-3.8-flash,gemini-3.7-flash,gemini-flash-latest" }) {
   const models = String(model).split(",").map((name) => name.trim()).filter(Boolean);
   let current = models[0];
+  const plain = new Set();
+  const call = (name, { schema, system, thinking, user }) => {
+    const extras = !plain.has(name);
+    return request(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(name)}:generateContent`, {
+      body: {
+        contents: [{ parts: [{ text: user }], role: "user" }],
+        generationConfig: {
+          maxOutputTokens: 16384,
+          responseMimeType: "application/json",
+          temperature: TEMPERATURE,
+          ...(extras && schema ? { responseJsonSchema: schema } : {}),
+          ...(extras && thinking ? { thinkingConfig: { thinkingLevel: thinking } } : {}),
+        },
+        systemInstruction: { parts: [{ text: system }] },
+      },
+      headers: { "x-goog-api-key": key },
+      secret: key,
+    });
+  };
   return {
     get label() {
       return `Gemini (${current})`;
     },
-    async json({ system, user }) {
+    async json(options) {
       let lastError;
       for (const name of models) {
         current = name;
         try {
-          const payload = await request(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(name)}:generateContent`, {
-            body: {
-              contents: [{ parts: [{ text: user }], role: "user" }],
-              generationConfig: { maxOutputTokens: 16384, responseMimeType: "application/json", temperature: 0.8 },
-              systemInstruction: { parts: [{ text: system }] },
-            },
-            headers: { "x-goog-api-key": key },
-            secret: key,
-          });
+          let payload;
+          try {
+            payload = await call(name, options);
+          } catch (error) {
+            const hadExtras = (options.schema || options.thinking) && !plain.has(name);
+            if (!(error instanceof ProviderError && error.status === 400 && hadExtras)) throw error;
+            plain.add(name);
+            payload = await call(name, options);
+          }
           const candidate = payload?.candidates?.[0];
           const text = (candidate?.content?.parts || []).map((part) => part.text || "").join("");
           if (!text) throw new ProviderError("bad-output", `The model returned no content${candidate?.finishReason ? ` (${candidate.finishReason})` : ""}.`);
@@ -129,7 +155,7 @@ export function openAiCompatibleProvider({ baseUrl, key, model }) {
           messages: [{ content: system, role: "system" }, { content: user, role: "user" }],
           model,
           response_format: { type: "json_object" },
-          temperature: 0.8,
+          temperature: TEMPERATURE,
         },
         headers: { authorization: `Bearer ${key}` },
         secret: key,

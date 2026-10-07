@@ -59,6 +59,38 @@ const PROBE_BODY = `(() => {
   }
   for (const shape of [...document.querySelectorAll("header svg *, nav svg *")].slice(0, 80)) tally(hex(getComputedStyle(shape).fill), 2);
   const top = (map) => [...map].sort((a, b) => b[1] - a[1])[0]?.[0] || null;
+  // Secondary brand colors live outside the controls too: icons, badges,
+  // illustrations, gradient stops. One color per hue family, distinct from
+  // the accent, so a colorful brand keeps its range.
+  const hue = (h) => {
+    const [r, g, b] = [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16) / 255);
+    const max = Math.max(r, g, b);
+    const d = max - Math.min(r, g, b);
+    if (!d) return 0;
+    const x = max === r ? ((g - b) / d + 6) % 6 : max === g ? (b - r) / d + 2 : (r - g) / d + 4;
+    return x * 60;
+  };
+  const apart = (a, b) => Math.min(Math.abs(hue(a) - hue(b)), 360 - Math.abs(hue(a) - hue(b))) >= 35;
+  const range = new Map();
+  const note = (color, weight) => {
+    if (color && color !== surface && chroma(color) >= 0.25) range.set(color, (range.get(color) || 0) + weight);
+  };
+  for (const node of [...document.querySelectorAll("body *")].slice(0, 1500)) {
+    if (!shown(node)) continue;
+    const style = getComputedStyle(node);
+    note(hex(style.backgroundColor), 1);
+    for (const color of gradientColors(style.backgroundImage)) note(color, 1);
+    if (node instanceof SVGElement) {
+      note(hex(style.fill), 1);
+      note(hex(style.stroke), 0.5);
+    }
+  }
+  const accent = top(vivid) || top(neutral);
+  const colors = [];
+  for (const [color, weight] of [...range].sort((a, b) => b[1] - a[1])) {
+    if (colors.length >= 3 || weight < 2) break;
+    if ([accent, ...colors].every((other) => !other || apart(color, other))) colors.push(color);
+  }
   radii.sort((a, b) => a - b);
   const bodyStyle = getComputedStyle(document.body);
   const heading = document.querySelector("h1, h2");
@@ -74,8 +106,9 @@ const PROBE_BODY = `(() => {
     title: document.title,
   };
   return {
-    accent: top(vivid) || top(neutral),
+    accent,
     background: surface,
+    colors,
     content,
     fontBody: bodyStyle.fontFamily,
     fontHeading: heading ? getComputedStyle(heading).fontFamily : null,
@@ -144,6 +177,7 @@ export function parseProbe(json) {
   const probe = {
     accent: color(raw.accent),
     background: color(raw.background),
+    colors: [...new Set((Array.isArray(raw.colors) ? raw.colors : []).map(color).filter(Boolean))].filter((value) => value !== color(raw.accent)).slice(0, 3),
     fontBody: cleanFont(raw.fontBody),
     fontHeading: cleanFont(raw.fontHeading),
     foreground: color(raw.foreground),
@@ -191,7 +225,11 @@ export function probeToCss(probe) {
     `--border: ${mix(page, ink, dark ? 0.16 : 0.12)};`,
     `--muted-foreground: ${mix(ink, page, 0.45)};`,
   ].join(" ");
-  const shared = [probe.accent && `--primary: ${probe.accent};`, probe.radius && `--radius: ${probe.radius};`].filter(Boolean).join(" ");
+  const shared = [
+    probe.accent && `--primary: ${probe.accent};`,
+    probe.radius && `--radius: ${probe.radius};`,
+    ...(probe.colors || []).map((value, index) => `--measured-accent-${index + 1}: ${value};`),
+  ].filter(Boolean).join(" ");
   const font = probe.fontHeading || probe.fontBody;
   return [
     `:root { ${shared}${dark ? "" : ` ${theme}`} }`,

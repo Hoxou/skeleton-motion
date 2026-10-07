@@ -1,0 +1,123 @@
+{
+  "label": "Approve payout",
+  "copy": {
+    "eyebrow": "Payouts",
+    "title": "Approve and pay in one pass.",
+    "description": "Review a pending payout, approve it, and watch the balance settle."
+  },
+  "elements": {
+    "queue": {
+      "kind": "panel",
+      "label": "Pending"
+    },
+    "payout-ana": {
+      "kind": "row",
+      "label": "Ana Ruiz",
+      "tone": "tag-2",
+      "state": "pending"
+    },
+    "payout-li": {
+      "kind": "row",
+      "tone": "tag-3"
+    },
+    "payout-mo": {
+      "kind": "row",
+      "tone": "tag-4"
+    },
+    "approve": {
+      "kind": "button",
+      "label": "Approve"
+    },
+    "balance": {
+      "kind": "trend",
+      "value": 0.45
+    },
+    "amount": {
+      "kind": "field",
+      "label": "Amount"
+    }
+  },
+  "screen": {
+    "type": "row",
+    "children": [
+      {
+        "type": "panel",
+        "id": "queue",
+        "children": [
+          "payout-ana",
+          "payout-li",
+          "payout-mo"
+        ]
+      },
+      {
+        "type": "column",
+        "id": "side",
+        "children": [
+          "balance",
+          "amount",
+          "approve"
+        ]
+      }
+    ]
+  },
+  "steps": [
+    {
+      "by": {
+        "click": "amount"
+      },
+      "do": [
+        {
+          "op": "set",
+          "id": "amount",
+          "state": "focused",
+          "value": 0.6
+        },
+        {
+          "op": "set",
+          "id": "payout-ana",
+          "state": "selected"
+        }
+      ]
+    },
+    {
+      "by": {
+        "click": "approve"
+      },
+      "do": [
+        {
+          "op": "set",
+          "id": "approve",
+          "state": "done"
+        },
+        {
+          "op": "set",
+          "id": "amount",
+          "state": "idle"
+        },
+        {
+          "op": "link",
+          "from": "payout-ana",
+          "to": "balance"
+        }
+      ]
+    },
+    {
+      "do": [
+        {
+          "op": "set",
+          "id": "payout-ana",
+          "state": "done"
+        },
+        {
+          "op": "set",
+          "id": "balance",
+          "value": 1
+        },
+        {
+          "op": "highlight",
+          "id": "balance"
+        }
+      ]
+    }
+  ]
+}

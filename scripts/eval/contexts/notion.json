@@ -1,0 +1,96 @@
+{
+ "actions": [
+  "Product",
+  "Notion AI AI tools for work",
+  "Agents Automate busywork",
+  "AI Meeting Notes Perfectly written by AI",
+  "Enterprise Search Find answers instantly",
+  "Knowledge Base Centralize your knowledge",
+  "Docs Simple and powerful",
+  "Projects Manage any project",
+  "Connections Connect your apps",
+  "Security Safe and scalable",
+  "Notion Calendar It's time",
+  "See what’s new →",
+  "Notion App →",
+  "AI",
+  "For work",
+  "For life",
+  "Resources",
+  "Enterprise",
+  "Small businesses",
+  "Startups",
+  "Developers",
+  "What's New",
+  "Customer stories",
+  "Webinars",
+  "Templates",
+  "Consultants",
+  "Academy",
+  "Product tours",
+  "Help Center",
+  "Pricing"
+ ],
+ "description": "Build Custom Agents, search across all your apps, and automate busywork. The AI workspace where teams get more done, faster.",
+ "headings": [
+  "Where teams and agents Think together.",
+  "AI where your team works.",
+  "Bring everything into one system of record.",
+  "Get answers, instantly—with citations.",
+  "Keep work moving 24/7 with agents.",
+  "See what Notion can do",
+  "Triage product feedback →",
+  "Resolve support tickets in Slack →",
+  "Respond to security alerts faster →",
+  "Automate weekly reporting →",
+  "Create your own developer tools →",
+  "Trusted by teams that ship."
+ ],
+ "text": "Where teams and agents Think together. Capture context, find answers, and automate tasks with AI built for your team. Get Notion free Request a demo Play The most ambitious companies run on Notion. AI where your team works. Capture knowledge Bring everything into one system of record. → Find answers Get answers, instantly—with citations. → Automate busywork Keep work moving 24/7 with agents. → See what Notion can do Triage product feedback → Resolve support tickets in Slack → Respond to security alerts faster → Automate weekly reporting → Create your own developer tools → Trusted by teams that ship. Using the most AI-native tools like Notion is an important competitive advantage for us to stay small while doing a lot. Michael Truell Co-founder & CEO Notion’s thoughtful design speeds up collaboration and decisions so we can deliver impact to our customers faster. Renee Solorzano Sr. Director of Product Design Notion Custom Agents help our team go beyond doing work with AI to building AI tools that do the work for them. Ben Levick Head of Operations & Internal AI G2’s #1 knowledge base for 3 consecutive years 100M users in over 50 countries Over 50% of YC companies 1.4M+ community members 62% of Fortune 100 use Notion G2’s #1 knowledge base for 3 consecutive years 100M users in over 50 countries Over 50% of YC companies 1.4M+ community members 62% of Fortune 100 use Notion G2’s #1 knowledge base for 3 consecutive years 100M users in over 50 countries Over 50% of YC companies 1.4M+ community members 62% of Fortune 100 use Notion",
+ "title": "The AI workspace that works for you. | Notion",
+ "url": "https://www.notion.com/",
+ "pages": [
+  {
+   "headings": [
+    "Discover",
+    "Work smarter with Notion experts",
+    "More than meeting notes",
+    "Akshay Raveendran",
+    "Personal Productivity",
+    "25,098 templates",
+    "Student Life",
+    "7,663 templates"
+   ],
+   "path": "notion.com/templates",
+   "title": "Choose from 30,000+ Notion templates | Notion Marketplace"
+  },
+  {
+   "headings": [
+    "Meet your 24/7 AI team",
+    "AI that works where your team works. Try for free.",
+    "Free",
+    "Business Recommended",
+    "Custom Agents automate work that repeats.",
+    "Your Notion Agent can build, edit, and take action.",
+    "Enterprise Search finds answers across all your apps.",
+    "AI Meeting Notes gives your team perfect meeting memory."
+   ],
+   "path": "notion.com/product/ai",
+   "title": "Meet your AI team | Notion"
+  },
+  {
+   "headings": [
+    "/dev/notion",
+    "Sync any data source into Notion.",
+    "Build any tool for your agents.",
+    "Trigger Notion workflows from anywhere.",
+    "All of this, on a hosted runtime.",
+    "Bring your favorite agents into Notion.",
+    "Mention",
+    "Assign"
+   ],
+   "path": "notion.com/product/dev",
+   "title": "Build with Notion’s Developer Platform – Notion"
+  }
+ ]
+}

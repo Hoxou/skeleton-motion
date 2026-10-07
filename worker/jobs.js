@@ -6,7 +6,7 @@ import { previewInputFromManifest } from "../src/room-data.js";
 import { createZip } from "../src/zip.js";
 import previewShell from "../src/preview-shell.html";
 import { recordHostedUse, resolveProvider } from "./ai/access.js";
-import { githubRepo, isThin, pageDigest, repoContext } from "./ai/context.js";
+import { githubRepo, isThin, pageDigest, pageSummary, productLinks, repoContext } from "./ai/context.js";
 import { designStories } from "./ai/design.js";
 import { ProviderError } from "./ai/providers.js";
 import { measureBrand } from "./brand.js";
@@ -67,6 +67,20 @@ function contentType(file) {
   return CONTENT_TYPES[file.split(".").pop()] || "application/octet-stream";
 }
 
+const PAGE_TIMEOUT_MS = 5_000;
+
+async function readProductPages(fetchOnce, html, base) {
+  const read = async (href) => {
+    const response = await Promise.race([
+      fetchOnce(href, { headers: { "accept-language": "en-US,en;q=0.8" } }),
+      new Promise((resolve) => { setTimeout(() => resolve(null), PAGE_TIMEOUT_MS); }),
+    ]).catch(() => null);
+    return response?.ok ? pageSummary(await response.text(), response.url || href) : null;
+  };
+  const pages = await Promise.all(productLinks(html, base).map(read));
+  return pages.filter((page) => page && (page.title || page.headings.length));
+}
+
 /**
  * Analyzes a public URL, renders the full set, and stores it under
  * `jobs/<id>/` in R2 with one D1 row for the owner's gallery.
@@ -108,7 +122,11 @@ export async function createJob(env, ownerHash, body) {
   } catch (error) {
     throw new UserError(`Could not read ${pageUrl.hostname}: ${error.message}`);
   }
-  const digest = pageDigest(await (await fetchOnce(pageUrl.href)).text());
+  const homeHtml = await (await fetchOnce(pageUrl.href)).text();
+  const digest = pageDigest(homeHtml);
+  // A few public product pages (features, solutions, docs) name the
+  // product's other areas, so the three stories can come from different ones.
+  const pagesPromise = repo ? Promise.resolve([]) : readProductPages(fetchOnce, homeHtml, pageUrl.href);
   const needsBrand = analysis.palettes.light.accent === DEFAULT_ACCENT;
   const needsText = isThin(digest);
   // Raw HTML rarely carries the brand or the copy of JS-rendered apps; only
@@ -124,10 +142,11 @@ export async function createJob(env, ownerHash, body) {
     }
   }
   const content = needsText && rendered?.content ? rendered.content : digest;
+  const pages = await pagesPromise;
 
   let design;
   try {
-    design = await designStories(access.provider, { ...content, repo: repoInfo, url: url.href });
+    design = await designStories(access.provider, { ...content, colors: analysis.palettes.light.accents?.length || 1, pages, repo: repoInfo, url: url.href });
   } catch (error) {
     if (error instanceof ProviderError) {
       // The reason is the provider's short status text; keys never appear in it.

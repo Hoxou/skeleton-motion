@@ -1,0 +1,108 @@
+{
+ "actions": [
+  "Skip to main content",
+  "Products",
+  "Design and explore",
+  "Build and ship products",
+  "Dev Mode Translate designs into code",
+  "Figma Motion New Animate your designs",
+  "Figma Slides Co-create presentations",
+  "AI workflows",
+  "Release notes",
+  "Downloads",
+  "Solutions",
+  "Design systems",
+  "Prototyping",
+  "UX design",
+  "Web design",
+  "Wireframing",
+  "Online whiteboard",
+  "Agile",
+  "Strategic planning",
+  "Brainstorming",
+  "Diagramming",
+  "Product development",
+  "Web development",
+  "Design handoff",
+  "See all solutions",
+  "Design",
+  "Engineering",
+  "Product managers",
+  "Enterprise",
+  "Education"
+ ],
+ "description": "Figma is the canvas where design, code, and AI come together. From first idea to shipped product — go from concept to production with your whole team, in one place.",
+ "headings": [
+  "What you can do in figma",
+  "Explore all products",
+  "Additional product resources",
+  "Use cases",
+  "Roles",
+  "Organizations",
+  "Get started",
+  "Learn",
+  "The full-stack creative canvas",
+  "Move fast in the right direction on an AI-native canvas.",
+  "One workspace for your entire product development process.",
+  "Design anything you can imagine",
+  "Build with intention",
+  "Powerfully expressive. Incredibly precise.",
+  "Start with design context. Build with consistency.",
+  "The products you love are designed in Figma",
+  "Explore what you can do in Figma.",
+  "UI kits",
+  "Websites",
+  "Social media",
+  "Mobile apps",
+  "Presentations",
+  "Wireframes",
+  "Illustrations"
+ ],
+ "text": "The full-stack creative canvas Get started Move fast in the right direction on an AI-native canvas. Teammates and AI agents work in the same space with shared context. Generate new design directions, refine, and align—together. Your built-in creative collaborator Ask Figma’s agent to iterate on ideas, build from design systems, implement feedback, and more. Explore Figma's agent One workspace for your entire product development process. Made so your whole team can go from WIP to ship, together. Design anything you can imagine Turn your ideas into apps, websites, and products. Explore design tools Build with intention Dev tools that take you all the way to production. Explore build tools Powerfully expressive. Incredibly precise. Every technical tool you need to dial in the details. Explore Figma Design Start with design context. Build with consistency. Your context, codebase, and agents stay connected so what you design is what gets shipped. Explore Figma Make The products you love are designed in Figma Everyone is able to influence, inspire, and give input without ever leaving the design file. That creates a really transparent, open, and honest process throughout the whole project. Francisco Seiz Senior Design Director, Code and Theory 95% 95 % 95% of the Fortune 500 uses Figma Based on data from March 2025. Explore what you can do in Figma. Browse resources made by the community. Browse all templates Slide 1 of 10 1 of 10 UI kits UI Kits Websites Websites Social media Social media Mobile apps Mobile apps Presentations Presentations Wireframes Wireframes Illustrations Illustrations Portfolios Portfolios Web ads Web ads Icons Icons",
+ "title": "Figma: The collaborative canvas for design, code, and AI",
+ "url": "https://www.figma.com/",
+ "pages": [
+  {
+   "headings": [
+    "What you can do in figma",
+    "Explore all products",
+    "Additional product resources",
+    "Use cases",
+    "Roles",
+    "Organizations",
+    "Get started",
+    "Learn"
+   ],
+   "path": "figma.com/solutions",
+   "title": "Figma Solutions - From Concept to Launch, All in One Place"
+  },
+  {
+   "headings": [
+    "What you can do in figma",
+    "Explore all products",
+    "Additional product resources",
+    "Use cases",
+    "Roles",
+    "Organizations",
+    "Get started",
+    "Learn"
+   ],
+   "path": "figma.com/templates",
+   "title": "Explore 300+ free design and white board templates | Figma"
+  },
+  {
+   "headings": [
+    "What you can do in figma",
+    "Explore all products",
+    "Additional product resources",
+    "Use cases",
+    "Roles",
+    "Organizations",
+    "Get started",
+    "Learn"
+   ],
+   "path": "figma.com/product-managers",
+   "title": "Figma for Product Managers: Explore, Validate & Ship Faster"
+  }
+ ]
+}

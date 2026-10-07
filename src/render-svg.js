@@ -495,6 +495,9 @@ export function renderSvg(scene) {
   const pastels = palette.pastels?.length ? palette.pastels : [];
   const accentAt = (index) => accents[index] || accents[index % accents.length] || palette.accent;
   const tagAt = (index) => pastels[index] || `color-mix(in oklab, ${accentAt(index)} 14%, ${palette.surface})`;
+  // Small identity marks (avatars, category dots) carry a multicolor brand's
+  // own hues at full strength; a single-accent brand keeps them as tints.
+  const markAt = (index) => (palette.colorMode === "multicolor" && accents.length > 1 ? accentAt(index) : tagAt(index));
   const composed = scene.composed ? composeScene(scene) : undefined;
   const viewBox = composed?.viewBox || (scene.concept === "flow"
     ? { height: COMPACT_HEIGHT, width: COMPACT_WIDTH }
@@ -533,6 +536,10 @@ export function renderSvg(scene) {
       --tag-2: ${tagAt(1)};
       --tag-3: ${tagAt(2)};
       --tag-4: ${tagAt(3)};
+      --mark-1: ${markAt(0)};
+      --mark-2: ${markAt(1)};
+      --mark-3: ${markAt(2)};
+      --mark-4: ${markAt(3)};
       ${sizeVariables(viewBox.width, viewport.width, viewport.width, viewport.width, reference)}
     }
     ${sizeTierCss(viewBox.width, reference)}

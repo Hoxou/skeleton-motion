@@ -1,0 +1,108 @@
+{
+ "actions": [
+  "Skip to content",
+  "Sign in",
+  "Platform",
+  "GitHub Copilot Write better code with AI",
+  "MCP Registry Integrate external tools",
+  "Actions Automate any workflow",
+  "Codespaces Instant dev environments",
+  "Issues Plan and track work",
+  "Code Review Manage code changes",
+  "Code Quality Enforce quality at merge",
+  "Why GitHub",
+  "Documentation",
+  "Blog",
+  "Changelog",
+  "Marketplace",
+  "View all features",
+  "Solutions",
+  "Enterprises",
+  "Small and medium teams",
+  "Startups",
+  "Nonprofits",
+  "App Modernization",
+  "DevSecOps",
+  "DevOps",
+  "CI/CD",
+  "View all use cases",
+  "Healthcare",
+  "Financial services",
+  "Manufacturing",
+  "Government"
+ ],
+ "description": "Join the world's most widely adopted, AI-powered developer platform where millions of developers, businesses, and the largest open source community build software that advances humanity.",
+ "headings": [
+  "Navigation Menu",
+  "The future of building happens together",
+  "GitHub features",
+  "GitHub customers",
+  "Accelerate your entire workflow",
+  "Your AI partner everywhere. Copilot is ready to work with you at each step of the software development lifecycle.",
+  "Automate your path to production",
+  "Code instantly from anywhere",
+  "Keep momentum on the go",
+  "Shape your toolchain",
+  "Built-in application security where found means fixed",
+  "Apply fixes in seconds. Spend less time debugging and more time building features with Copilot Autofix.",
+  "Work together, achieve more",
+  "Plan with clarity. Organize everything from high-level roadmaps to everyday tasks.",
+  "Keep track of your tasks",
+  "Share ideas and ask questions",
+  "Review code changes together",
+  "Fund open source projects",
+  "From startups to enterprises, GitHub scales with teams of any size in any industry.",
+  "Millions of developers and businesses call GitHub home",
+  "Site-wide Links",
+  "The developer newsletter",
+  "Platform",
+  "Ecosystem"
+ ],
+ "text": "The future of building happens together Tools and trends evolve, but collaboration endures. With GitHub, developers, agents, and code come together on one platform. Enter your email Sign up for GitHub Download GitHub Copilot app GitHub features A demonstration animation of a code editor using GitHub Copilot Chat, where the user requests GitHub Copilot to refactor duplicated logic and extract it into a reusable function for a given code snippet. Code Plan Collaborate Automate Secure Code Write, test, and fix code quickly with GitHub Copilot, from simple boilerplate to complex features. GitHub customers Accelerate your entire workflow From your first line of code to final deployment, GitHub provides AI and automation tools to help you build and ship better software faster. A Copilot chat window with the 'Ask' mode enabled. The user switches from 'Ask' mode to 'Agent' mode from a dropdown menu, then sends the prompt 'Update the website to allow searching for running races by name.' Copilot analyzes the codebase, then explains the required edits for three files before generating them. Copilot then confirms completion and summarizes the implemented changes for the new functionality allowing users to search races by name and view paginated, filtered results. Your AI partner everywhere. Copilot is ready to work with you at each step of the software development lifecycle. Explore GitHub Copilot Duolingo boosts developer speed by 25% with GitHub Copilot Read customer story 2025 Gartner® Magic Quadrant™ for AI Code Assistants Read industry report Automate your path to production Ship faster with secure, reliable CI/CD. Explore GitHub Actions Code instantly from anywhere Launch a full, cloud-based development environment in seconds. Explore GitHub Codespaces Keep momentum on the go Manage projects and assign tasks to Copilot, all from your mobile device. Explore GitHub Mobile Shape your toolchain Extend your stack with apps, actions, and AI models. Explore GitHub Marketplace Built-in application security where found means fixed Use AI to find and fix vulnerabilities so your team can ship more secure software faster. Apply fixes in seconds. Spend less time debugging and more time building features with Copilot Autofix. Explore GitHub Advanced Security Security debt, solved. Leverage security campaigns and Copilot Autofix to reduce application vulnerabilities. Learn about GitHub Code Security Dependencies you can depend on. Update vulnerable dependencies with supported fixes for breaking changes. Learn about Dependabot Your secrets, your business. Detect, prevent, and remediate leaked secrets across your organization. Learn about GitHub Secret Protection 70% MTTR reduction with Copilot Autofix 8.3M secret leaks stopped in the past 12 months with push protection Work together, achieve more From planning and discussion to code review, GitHub keeps your team’s conversation and context next to your code. Plan with clarity. Organize everything from high-level roadmaps to everyday tasks. Explore GitHub Projects “ It helps us onboard new software engineers and get them productive right away. We have all our source code, issues, and pull requests in one place... GitHub is a complete platform that frees us from menial tasks and enables us to do our best work. Fabian Faulhaber Application manager at Mercedes-Benz Keep track of your tasks Create issues and manage projects with tools that adapt to your code. Explore GitHub Issues Share ideas and ask questions Create space for open-ended conversations alongside your project. Explore GitHub Discussions Review code changes together Assign initial reviews to Copilot for greater speed and quality. Explore code review Fund open source projects Become an open source partner and support the tools and libraries that power your work. Explore GitHub Sponsors From startups to enterprises, GitHub scales with teams of any size in any industry. By industry By size By use case By industry Technology Figma streamlines development and strengthens security Read customer story Automotive Mercedes-Benz standardizes source code and automates onboarding Read customer story Financial services Mercado Libre cuts coding time by 50% Read customer story Explore customer stories View all solutions Millions of developers and businesses call GitHub home Whether you’re scaling your development process or just learning how to code, GitHub is where you belong. Join the world’s most widely adopted developer platform to build the technologies that shape what’s next. Enter your email Sign up for GitHub Download GitHub Copilot app",
+ "title": "GitHub · Change is constant. GitHub keeps you ahead. · GitHub · GitHub",
+ "url": "https://github.com/",
+ "pages": [
+  {
+   "headings": [
+    "Navigation Menu",
+    "The tools you need to build what you want",
+    "Experience AI with Copilot Chat",
+    "The latest GitHub previews",
+    "Collaborative Coding",
+    "/features Flex - Collaborative Coding - River Breakout",
+    "GitHub Codespaces",
+    "GitHub Copilot"
+   ],
+   "path": "github.com/features",
+   "title": "GitHub Features · GitHub"
+  },
+  {
+   "headings": [
+    "Navigation Menu",
+    "AI-powered platform solutions to solve your company’s challenges",
+    "GitHub scales with teams of any size",
+    "Enterprises",
+    "Teams",
+    "Startups",
+    "Solving industry-specific challenges",
+    "Healthcare"
+   ],
+   "path": "github.com/solutions",
+   "title": "GitHub · Scalable AI-Powered Enterprise Platform Solutions · GitHub"
+  },
+  {
+   "headings": [
+    "Navigation Menu",
+    "GitHub Issues",
+    "Manage complex work from start to finish",
+    "Break issues into sub-issues",
+    "Streamline conversations",
+    "Projects that adapt to the way you work",
+    "Custom fields",
+    "Track progress with project insights"
+   ],
+   "path": "github.com/features/issues",
+   "title": "GitHub Issues · Project planning for developers · GitHub"
+  }
+ ]
+}

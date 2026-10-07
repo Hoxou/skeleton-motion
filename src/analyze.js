@@ -125,12 +125,19 @@ function inferColorSystem(sourceText, cssText = "") {
   const semanticColors = Object.entries(variables)
     .filter(([name]) => /(?:^|[-_])(chart|tag|status|success|warning|info)(?:[-_]|$)/i.test(name) && sourceText.includes(`--${name}`))
     .map(([, value]) => resolveVariable(value, variables));
+  // Colors a rendered page showed (see worker/brand-probe.js), for brands
+  // whose palette is not in utility classes or named tokens.
+  const measuredColors = Object.entries(variables)
+    .filter(([name]) => /^measured-accent-\d$/.test(name))
+    .map(([, value]) => value);
   const lightAccents = uniqueColors([
     ...families.map((family) => resolveFamily(family, [600, 500, 700, 400])),
+    ...measuredColors,
     ...semanticColors,
   ]).slice(0, 4);
   const darkAccents = uniqueColors([
     ...families.map((family) => resolveFamily(family, [400, 500, 300, 600])),
+    ...measuredColors,
     ...semanticColors,
   ]).slice(0, 4);
   const lightPastels = families
@@ -141,7 +148,8 @@ function inferColorSystem(sourceText, cssText = "") {
     .filter(Boolean);
   const warmFamily = families.find((family) => ["amber", "orange", "yellow"].includes(family));
   const lightCanvas = warmFamily ? resolveFamily(warmFamily, [50, 100]) : undefined;
-  const mode = uniqueColors([...lightAccents, ...semanticColors]).length >= 3 ? "multicolor" : "monochrome";
+  // Measured colors exclude the accent, so two of them already make three hues.
+  const mode = uniqueColors([...lightAccents, ...semanticColors]).length >= 3 || measuredColors.length >= 2 ? "multicolor" : "monochrome";
 
   return { darkAccents, darkPastels, families, lightAccents, lightCanvas, lightPastels, mode };
 }

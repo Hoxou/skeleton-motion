@@ -1,5 +1,9 @@
 import assert from "node:assert/strict";
 import test from "node:test";
+import { analyzeSource } from "../src/analyze.js";
+import { parseArgs } from "../src/args.js";
+import { generateCollection } from "../src/generate.js";
+import { validatePlan } from "../src/scene-plan.js";
 import { parseProbe, probeToCss, readProbe } from "../worker/brand-probe.js";
 import { allowsSession, chargeEntries, readLimits, refusal, RESERVE_MS } from "../worker/budget.js";
 
@@ -79,4 +83,30 @@ test("a dark page fills the dark theme so the light variant is derived", () => {
   const css = probeToCss({ accent: "#5e6ad2", background: "#08090a", fontBody: null, fontHeading: "Inter", foreground: "#f7f8f8", radius: null });
   assert.match(css, /^:root \{ --primary: #5e6ad2; \}/);
   assert.match(css, /\.dark \{ --background: #08090a; --foreground: #f7f8f8; --card: #161718;/);
+});
+
+test("keeps only distinct hex secondary colors from a probe", () => {
+  const probe = parseProbe(JSON.stringify({ accent: "#635bff", colors: ["#00D4FF", "#635bff", "red", "#ff5996", "#00d4ff", "#ffb800", "#11efe3"] }));
+  assert.deepEqual(probe.colors, ["#00d4ff", "#ff5996", "#ffb800"]);
+});
+
+test("a colorful brand's measured colors reach the marks of a designed story", async () => {
+  const page = "<html><head><title>Payments</title></head><body><main><h1>Payments</h1></main></body></html>";
+  const fetch = async () => new Response(page, { headers: { "content-type": "text/html" } });
+  const measuredCss = probeToCss({ accent: "#635bff", background: "#ffffff", colors: ["#00d4ff", "#ff5996"], foreground: "#0a2540" });
+  const analysis = await analyzeSource("https://pay.example/", { fetch, measuredCss });
+  assert.equal(analysis.palettes.light.colorMode, "multicolor");
+  assert.deepEqual(analysis.palettes.light.accents, ["#635bff", "#00d4ff", "#ff5996"]);
+
+  const plan = validatePlan({
+    copy: { title: "Get paid" },
+    elements: { ana: { kind: "avatar", tone: "tag-2" }, list: { kind: "panel" }, paid: { kind: "chip", label: "Paid", tone: "tag-2" } },
+    label: "Payment lands",
+    states: [{ layout: { children: ["ana"], id: "list", type: "panel" } }, { highlight: ["paid"], layout: { children: ["ana", "paid"], id: "list", type: "panel" } }],
+  }, { driver: "system" }).plan;
+  const options = parseArgs(["https://pay.example/", "--set", "--name", "pay"], "/");
+  const svg = generateCollection(analysis, options, { stories: [{ copy: plan.copy, id: "pay", label: plan.label, plan }] }).files.find((file) => file.name.endsWith(".light.svg")).data;
+  assert.match(svg, /--mark-2: #00d4ff;/);
+  assert.match(svg, /data-plan-id="ana"[^]*?<circle [^>]*fill="var\(--mark-2\)"/);
+  assert.match(svg, /data-plan-id="paid"[^]*?<rect [^>]*fill="var\(--tag-2\)"/);
 });
